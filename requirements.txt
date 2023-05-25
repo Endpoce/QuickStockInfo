@@ -1,0 +1,11 @@
+streamlit
+tkinter
+docx
+datetime
+yfinance
+pandas
+openai
+bs4
+json
+requests
+wikipedia
