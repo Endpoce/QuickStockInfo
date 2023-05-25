@@ -6,6 +6,5 @@ yfinance
 pandas
 openai
 bs4
-json
 requests
 wikipedia
