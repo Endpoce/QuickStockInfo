@@ -1,5 +1,5 @@
 streamlit
-tkinter
+tk
 docx
 datetime
 yfinance
