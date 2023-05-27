@@ -5,3 +5,4 @@ config.py
 /MONEYBOTS/dist
 /MONEYBOTS/build
 /MONEYBOTS/Basic_info_Getter
+.env

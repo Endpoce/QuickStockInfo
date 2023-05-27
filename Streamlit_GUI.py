@@ -19,7 +19,7 @@ def get_stock_data(symbol, start_date, end_date):
     ticker = yf.download(symbol, start_date, end_date)
 
     # save stock data to csv
-    file = ticker.to_csv("Price_data\\"+symbol + '_Price_Data.csv')
+    file = ticker.to_csv(symbol + '_Price_Data.csv')
 
     return file
 
@@ -58,7 +58,7 @@ def main():
         st.write(wiki_url)
 
         # read stock price data from csv
-        filename = "Price_Data\\" + ticker_symbol + '_Price_Data.csv'
+        filename = ticker_symbol + '_Price_Data.csv'
         df = pd.read_csv(filename)
 
         # plot price stock data
