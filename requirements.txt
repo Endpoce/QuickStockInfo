@@ -8,3 +8,4 @@ openai
 bs4
 requests
 wikipedia
+matplotlib

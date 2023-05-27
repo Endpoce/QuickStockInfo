@@ -62,7 +62,7 @@ def main():
         df = pd.read_csv(filename)
 
         # get wiki info
-        wiki_url = get_wiki_info(ticker_symbol)
+        wiki_url = get_wiki_info(info['name'])
 
         # Add wiki url to document
         doc.add_heading('Wikipedia Information', 1)

@@ -6,12 +6,13 @@ from Company_Info_Web_Scraper import get_company_info, get_wiki_info, summarize_
 from GetArticles import get_MW_Articles
 from Stock_Analyzer import *
 import config
+import os
 
 
 yf.pdr_override()
 
 # set openai api key
-openai.api_key = config.API_KEY
+openai.api_key = os.environ.get('API_KEY')
 
 
 def get_stock_data(symbol, start_date, end_date):
@@ -67,7 +68,7 @@ def main():
         st.write(analyze_stock(filename))
 
         # get articles
-        articles = get_MW_Articles(ticker_symbol)
+        articles = get_MW_Articles(ticker_symbol, 5)
 
         # display articles
         for article in articles:
