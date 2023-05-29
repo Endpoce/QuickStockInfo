@@ -37,7 +37,7 @@ def main():
     start_date = st.sidebar.date_input(
         "Start date", value=pd.to_datetime("2020-01-01"))
     end_date = st.sidebar.date_input(
-        "End date", value=datetime.today().strftime('%Y-%m-%d'))
+        "End date", value=pd.to_datetime(datetime.today().strftime('%Y-%m-%d')))
     fetch_button = st.sidebar.button("Get Stock Data")
 
     # Main Page
