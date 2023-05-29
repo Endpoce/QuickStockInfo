@@ -14,6 +14,10 @@ yf.pdr_override()
 # set openai api key
 openai.api_key = os.environ.get('API_KEY')
 
+# set dates
+start_date = pd.to_datetime("2020-01-01")
+end_date = datetime.today().strftime('%Y-%m-%d')
+
 
 def get_stock_data(symbol, start_date, end_date):
     ticker = yf.download(symbol, start_date, end_date)
@@ -25,7 +29,7 @@ def get_stock_data(symbol, start_date, end_date):
 
 
 def main():
-    st.title("Stock Information App")
+    st.title("Quick Stock Info")
 
     # Sidebar
     st.sidebar.header("User Input")

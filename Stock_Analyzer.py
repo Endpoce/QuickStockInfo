@@ -4,10 +4,11 @@ import openai
 from datetime import datetime
 import matplotlib.pyplot as plt
 import yfinance as yf
+import os
 
 # %%
 # Set up your OpenAI API credentials
-openai.api_key = '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'
+openai.api_key = os.environ.get('API_KEY')
 
 
 def analyze_stock(filename):

@@ -11,7 +11,7 @@ import os
 
 # %%
 # Set up your OpenAI API credentials
-openai.api_key = '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'
+openai.api_key = os.environ.get('API_KEY')
 
 # %%
 # set search query (must be ticker symbol or list of symbols)
@@ -22,11 +22,10 @@ search_query = ['WKHS']
 
 def get_wiki_info(search_query):
     try:
-        for stock in search_query:
-            # wikipedia search request
-            page_url = wikipedia.page(stock).url
+        # wikipedia search request
+        page_url = wikipedia.page(search_query).url
 
-            return page_url
+        return page_url
 
     except requests.exceptions.RequestException as e:
         print(f"Request error: {e}")
