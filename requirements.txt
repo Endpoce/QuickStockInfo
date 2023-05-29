@@ -9,3 +9,4 @@ bs4
 requests
 wikipedia
 matplotlib
+dotenv
