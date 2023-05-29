@@ -3,8 +3,10 @@ import pandas as pd
 import openai
 from datetime import datetime
 import matplotlib.pyplot as plt
-import yfinance as yf
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # %%
 # Set up your OpenAI API credentials

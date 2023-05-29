@@ -1,6 +1,5 @@
 # %%
 import json
-import pandas as pd
 import openai
 import requests
 import yfinance as yf
@@ -8,6 +7,9 @@ import wikipedia
 import textwrap
 from GetArticles import *
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # %%
 # Set up your OpenAI API credentials
