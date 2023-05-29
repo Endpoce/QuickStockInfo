@@ -5,9 +5,10 @@ import openai
 from Company_Info_Web_Scraper import get_company_info, get_wiki_info, summarize_article
 from GetArticles import get_MW_Articles
 from Stock_Analyzer import *
-# import config
 import os
+from dotenv import load_dotenv, dotenv_values
 
+load_dotenv()
 
 yf.pdr_override()
 
