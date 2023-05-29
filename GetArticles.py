@@ -60,33 +60,34 @@ def get_Google_articles(symbols):
         pass
 
 
-def get_MW_Articles(symbol):
-    if symbol != "^GSPC":
+def get_MW_Articles(symbol, amount):
+    for i in range(amount):
+        if symbol != "^GSPC":
 
-        base_url = 'https://www.marketwatch.com'
-        search_url = f'{base_url}/search?q={symbol}'
+            base_url = 'https://www.marketwatch.com'
+            search_url = f'{base_url}/search?q={symbol}'
 
-        # Send a GET request to the search URL and get the response HTML content
-        response = requests.get(search_url)
-        html_content = response.content
+            # Send a GET request to the search URL and get the response HTML content
+            response = requests.get(search_url)
+            html_content = response.content
 
-        # Parse the HTML content with BeautifulSoup
-        soup = BeautifulSoup(html_content, 'html.parser')
+            # Parse the HTML content with BeautifulSoup
+            soup = BeautifulSoup(html_content, 'html.parser')
 
-        # Find the article elements
-        article_elements = soup.find_all(
-            'h3', {'class': 'article__headline'})
+            # Find the article elements
+            article_elements = soup.find_all(
+                'h3', {'class': 'article__headline'})
 
-        articles = []
+            articles = []
 
-        # Extract article information
-        for article_element in article_elements:
-            article_title = article_element.text.strip()
-            article_url = base_url + article_element.find('a')['href']
+            # Extract article information
+            for article_element in article_elements:
+                article_title = article_element.text.strip()
+                article_url = base_url + article_element.find('a')['href']
 
-            articles.append({'title': article_title, 'url': article_url})
+                articles.append({'title': article_title, 'url': article_url})
 
-        return articles
+            return articles
 
 
 def get_Paragraphs(soup, site, symbol):
