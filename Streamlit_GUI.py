@@ -8,7 +8,7 @@ from Stock_Analyzer import *
 import os
 from dotenv import load_dotenv
 import time
-from Twitter_Sentiment import twitterclient
+from Sentiment import twitterclient
 
 load_dotenv()
 
@@ -24,6 +24,11 @@ twitterclient.auth = os.environ.get('Bearer_token')
 # set dates
 start_date = pd.to_datetime("2020-01-01")
 end_date = datetime.today().strftime('%Y-%m-%d')
+
+
+# Page config (Title at top and icon at top )
+st.set_page_config(page_title="Tweet Analysis", page_icon="chart_with_upwards_trend",
+                   layout='wide', initial_sidebar_state="expanded")
 
 
 def get_stock_data(symbol, start_date, end_date):

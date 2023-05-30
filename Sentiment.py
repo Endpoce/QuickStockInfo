@@ -2,99 +2,14 @@ import streamlit as st
 import yfinance as yf
 import tweepy
 import matplotlib.pyplot as plt
+from Sentiment import twitterclient
 import dotenv
 import os
+import praw
 import textblob
-import re
 
 # Load Bearer token
 dotenv.load_dotenv()
-
-# Authorize Twitter Clients via class
-
-
-class twitterclient(object):
-
-    def __init__(self):
-
-        self.auth = tweepy.OAuth2BearerHandler(os.environ.get('Bearer_token'))
-        self.api = tweepy.API(self.auth)
-
-    # first func, Clean tweets of hyperlinks
-    def clean_tweet(self, tweet):
-
-        return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
-
-    # Second func, Analyze tweets for sentiment
-    def get_tweet_sentiment(self, tweet):
-
-        # Use textblob to analyze sentiment
-        analysis = textblob.TextBlob(self.clean_tweet(tweet))
-        if analysis.sentiment.polarity > 0:
-            return 'positive'
-        elif analysis.sentiment.polarity == 0:
-            return 'neutral'
-        else:
-            return 'negative'
-
-    # third func, get retweet count
-    def get_retweet_count(self, tweet):
-
-        count = self.api.get_status(tweet)
-        return count
-
-    # fourth func, get last tweet of user
-    def get_last_tweet(self, account):
-
-        tweets = []
-
-        tweet = self.api.user_timeline(
-            id=account, count=1, tweet_mode="extended")[0]
-
-        tweets.append(tweet)
-
-        for tweet in tweets:
-
-            parsed_tweet = {}
-            parsed_tweet['text'] = tweet.full_text
-            parsed_tweet['sentiment'] = self.get_tweet_sentiment(
-                tweet.full_text)
-            parsed_tweet['retweet_count'] = tweet.retweet_count
-
-            print("Date: " + str(tweet.created_at))
-            print("Text: "+str(parsed_tweet['text']) + "\n")
-            print("Sentiment: "+str(parsed_tweet['sentiment']))
-            print("Retweets: "+str(parsed_tweet['retweet_count']))
-            print("Likes: " + str(tweet.favorite_count))
-
-    # fifth func, retrieve tweets
-
-    def get_tweets(self, query, count=5):
-
-        # create tweet list
-        tweets = []
-
-        # get tweets containing phrase
-        try:
-            fetched_tweets = self.api.search_tweets(
-                q=query, count=count, tweet_mode='extended')
-            for tweet in fetched_tweets:
-                parsed_tweet = {}
-                parsed_tweet['text'] = tweet.full_text
-                parsed_tweet['sentiment'] = self.get_tweet_sentiment(
-                    tweet.full_text)
-                parsed_tweet['retweet_count'] = tweet.retweet_count
-
-                if tweet.retweet_count > 0:
-                    if parsed_tweet not in tweets:
-                        tweets.append(parsed_tweet)
-                else:
-                    tweets.append(parsed_tweet)
-            return tweets
-        except tweepy.TweepyException as e:
-            print("ERROR: " + str(e))
-
-# create function to create tweet styles
 
 
 def create_tweet_styles():
@@ -117,13 +32,13 @@ def create_tweet_styles():
 # Use the class from TwitterSentiment file to get sentiment of tweets
 
 
-def main_twitter(symbol):
+def main_twitter():
 
     # Oauth
     api = twitterclient()
 
     # for each tweet in tweets, if tweet is positive, add to ptweets, if negative, add to ntweets
-    tweets = api.get_tweets(symbol, count=3000)
+    tweets = api.get_tweets(search, count=3000)
     ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
     ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
 
@@ -206,29 +121,32 @@ def main_twitter(symbol):
         neutral_tweet_percent = (
             100*(len(tweets)-(len(ntweets)+len(ptweets)))/len(tweets))
 
-        # NOTE: CLEAN UP ASAP
-        labels = ['Positive', 'Negative', 'Neutral']
-        sizes = [positive_tweet_percent,
-                 negative_tweet_percent, neutral_tweet_percent]
-        max_percent = max(
-            [positive_tweet_percent, negative_tweet_percent, neutral_tweet_percent])
-        pos_explode = 0
-        neg_explode = 0
-        neutral_explode = 0
-        if max_percent == positive_tweet_percent:
-            pos_explode = 0.05
-        elif max_percent == negative_tweet_percent:
-            neg_explode = 0.05
-        elif max_percent == neutral_tweet_percent:
-            neutral_explode = 0.05
-        explode = [pos_explode, neg_explode, neutral_explode]
-        fig1, ax1 = plt.subplots()
-        ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
-                shadow=True, startangle=90, textprops=dict(color="w"))
-        ax1.axis('equal')
-        fig1.set_facecolor('#0e1117')
+        with col1:
+            # Add chart #1
 
-        st.pyplot(fig1)
+            # NOTE: CLEAN UP ASAP
+            labels = ['Positive', 'Negative', 'Neutral']
+            sizes = [positive_tweet_percent,
+                     negative_tweet_percent, neutral_tweet_percent]
+            max_percent = max(
+                [positive_tweet_percent, negative_tweet_percent, neutral_tweet_percent])
+            pos_explode = 0
+            neg_explode = 0
+            neutral_explode = 0
+            if max_percent == positive_tweet_percent:
+                pos_explode = 0.05
+            elif max_percent == negative_tweet_percent:
+                neg_explode = 0.05
+            elif max_percent == neutral_tweet_percent:
+                neutral_explode = 0.05
+            explode = [pos_explode, neg_explode, neutral_explode]
+            fig1, ax1 = plt.subplots()
+            ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
+                    shadow=True, startangle=90, textprops=dict(color="w"))
+            ax1.axis('equal')
+            fig1.set_facecolor('#0e1117')
+
+            st.pyplot(fig1)
 
         st.write("---")
 
@@ -250,7 +168,7 @@ def main_twitter(symbol):
                 st.write(tweet["text"])
                 st.write("---")
 
-        st.write("There were no tweets found.")
+        st.subheader("There were no tweets found.")
     except TypeError as e:
         st.write(e)
 
@@ -417,118 +335,115 @@ def sidebar_Stocks():
     sidebar_tweets(stock_search)
 
 
-# # Sidebar dropdown option for twitter, display twitter stats
-# if option == "Twitter":
+# Sidebar dropdown option for twitter, display twitter stats
+if option == "Twitter":
 
-#     # subheader
-#     st.subheader("Twitter Stats:")
+    # subheader
+    st.subheader("Twitter Stats:")
 
-#     # Sidebar dropdown for types of searching
-#     search = st.sidebar.text_input("Search a phrase:", value=search1)
+    # Sidebar dropdown for types of searching
+    search = st.sidebar.text_input("Search a phrase:", value=search1)
 
-#     # subheader for stock title
-#     st.subheader('Phrase: {}'.format(search.upper()))
+    # subheader for stock title
+    st.subheader('Phrase: {}'.format(search.upper()))
 
-#     # use twitter function to get tweets, or display an error message
-#     if search.startswith('@'):
-#         for_users()
-#     else:
-#         try:
-#             main_twitter()
-#         except TypeError as e:
-#             st.text(e)
+    # use twitter function to get tweets, or display an error message
+    if search.startswith('@'):
+        for_users()
+    else:
+        try:
+            main_twitter()
+        except TypeError as e:
+            st.text(e)
 
-# # Reddit
-# if option == "Reddit":
+# Reddit
+if option == "Reddit":
 
-#     # subheader
-#     st.subheader("Reddit Mentions:")
+    # subheader
+    st.subheader("Reddit Mentions:")
 
-#     sub = st.sidebar.text_input("Input a subreddit:", value=search1)
+    sub = st.sidebar.text_input("Input a subreddit:", value=search1)
 
-#     phrase = st.sidebar.text_input("Input a phrase:")
+    phrase = st.sidebar.text_input("Input a phrase:")
 
-#     try:
-#         reddit = praw.Reddit(
-#             client_id=os.environ.get("Reddit_token"),
-#             client_secret=os.environ.get("Reddit_secret"),
-#             user_agent="SentimentAnalysis",
-#         )
+    try:
+        reddit = praw.Reddit(
+            client_id=os.environ.get("Reddit_token"),
+            client_secret=os.environ.get("Reddit_secret"),
+            user_agent="SentimentAnalysis",
+        )
 
-#         Sub = reddit.subreddit(sub)
-#         subreddittexts = []
+        Sub = reddit.subreddit(sub)
+        subreddittexts = []
 
-#         for submission in Sub.hot(limit=100):
-#             if phrase in submission.title or phrase in submission.selftext:
-#                 subreddittexts.append(submission.selftext)
+        for submission in Sub.hot(limit=100):
+            if phrase in submission.title or phrase in submission.selftext:
+                subreddittexts.append(submission.selftext)
 
-#         pie_Graph(Sub)
+        pie_Graph(Sub)
 
-#         for submission in Sub.hot(limit=100):
-#             if phrase in submission.title or phrase in submission.selftext:
+        for submission in Sub.hot(limit=100):
+            if phrase in submission.title or phrase in submission.selftext:
 
-#                 st.write("Title: ")
-#                 st.write(submission.title)
-#                 st.write("Score: ", submission.score)
-#                 st.write("Sentiment: " +
-#                          get_text_sentiment(str(submission.selftext)))
-#                 st.image(submission.url)
-#                 st.write("Link:")
-#                 st.write("https://www.reddit.com" + submission.permalink)
+                st.write("Title: ")
+                st.write(submission.title)
+                st.write("Score: ", submission.score)
+                st.write("Sentiment: " +
+                         get_text_sentiment(str(submission.selftext)))
+                st.image(submission.url)
+                st.write("Link:")
+                st.write("https://www.reddit.com" + submission.permalink)
 
-#                 if submission.selftext:
-#                     st.write("Text: ")
-#                     st.write(submission.selftext)
-#                 st.write("---")
+                if submission.selftext:
+                    st.write("Text: ")
+                    st.write(submission.selftext)
+                st.write("---")
 
-#             else:
-#                 st.write("No submissions found!")
-#                 break
+            else:
+                st.write("No submissions found!")
+                break
 
-#     except ValueError as e:
-#         st.write("Search for something!")
-
-
-# # Sidebar stock analysis
-
-#     st.sidebar.write("---")
-#     st.sidebar.subheader("Stock Analysis: ")
-
-#     stock_search = st.sidebar.text_input("Ticker: ", value="TSLA", max_chars=5)
-
-#     # NOTE: RESOLVED...Incorporate a function to change it to company name instead of their ticker.  Makes more user-friendly for people not "stock saavy"
-#     st.sidebar.markdown("Ticker: " + stock_search)
-
-#     def sidebar_tweets(tweets):
-
-#         st.sidebar.image(f"https://finviz.com/chart.ashx?t={stock_search}")
-#         # Oauth
-#         api = twitterclient()
-#         tweets = api.get_tweets(query=stock_search, count=300)
-#         try:
-#             for tweet in tweets:
-
-#                 with st.container():
-
-#                     create_tweet_styles()
-
-#                     # Markdown
-#                     st.sidebar.image(tweet["profile_pic"])
-#                     st.sidebar.markdown(
-#                         'Username: ' + tweet["screen_name"], unsafe_allow_html=False)
-#                     st.sidebar.write(f"Number of likes: {tweet['num_likes']}")
-#                     # st.markdown(tweet, unsafe_allow_html=False)
-
-#                     # Text
-#                     st.sidebar.write(tweet["text"])
-#                     st.sidebar.write("---")
-
-#         except:
-
-#             st.subheader("There were no tweets found.")
-#             st.write("---")
-
-#     sidebar_tweets(stock_search)
+    except ValueError as e:
+        st.write("Search for something!")
 
 
-sidebar_Stocks()
+# Sidebar stock analysis
+
+    st.sidebar.write("---")
+    st.sidebar.subheader("Stock Analysis: ")
+
+    stock_search = st.sidebar.text_input("Ticker: ", value="TSLA", max_chars=5)
+
+    # NOTE: RESOLVED...Incorporate a function to change it to company name instead of their ticker.  Makes more user-friendly for people not "stock saavy"
+    st.sidebar.markdown("Ticker: " + stock_search)
+
+    def sidebar_tweets(tweets):
+
+        st.sidebar.image(f"https://finviz.com/chart.ashx?t={stock_search}")
+        # Oauth
+        api = twitterclient()
+        tweets = api.get_tweets(query=stock_search, count=300)
+        try:
+            for tweet in tweets:
+
+                with st.container():
+
+                    create_tweet_styles()
+
+                    # Markdown
+                    st.sidebar.image(tweet["profile_pic"])
+                    st.sidebar.markdown(
+                        'Username: ' + tweet["screen_name"], unsafe_allow_html=False)
+                    st.sidebar.write(f"Number of likes: {tweet['num_likes']}")
+                    # st.markdown(tweet, unsafe_allow_html=False)
+
+                    # Text
+                    st.sidebar.write(tweet["text"])
+                    st.sidebar.write("---")
+
+        except:
+
+            st.subheader("There were no tweets found.")
+            st.write("---")
+
+    sidebar_tweets(stock_search)
