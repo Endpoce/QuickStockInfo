@@ -95,10 +95,24 @@ def main():
         tweets = get_tweets(str(ticker_symbol), 5)
 
         # display tweets
-        if len(tweets) > 1:
-            for tweet in tweets:
-                col3.write(tweet.full_text)
+        # display tweet text
+        for tweet in tweets:
+
+            with st.container():
+
+                create_tweet_styles()
+
+                # Markdown
+                st.image(tweet["profile_pic"])
+                st.markdown('Username: ' +
+                            tweet["screen_name"], unsafe_allow_html=False)
+                st.write(f"Number of likes: {tweet['num_likes']}")
+                # st.markdown(tweet, unsafe_allow_html=False)
+
+                # Text
                 col3.write("Sentiment: "+get_tweet_sentiment(tweet.full_text))
+                st.write(tweet["text"])
+                st.write("---")
                 time.sleep(5)
         else:
             col3.write("No tweets found")
