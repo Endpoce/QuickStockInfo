@@ -117,13 +117,13 @@ def create_tweet_styles():
 # Use the class from TwitterSentiment file to get sentiment of tweets
 
 
-def main_twitter():
+def main_twitter(symbol):
 
     # Oauth
     api = twitterclient()
 
     # for each tweet in tweets, if tweet is positive, add to ptweets, if negative, add to ntweets
-    tweets = api.get_tweets(search, count=3000)
+    tweets = api.get_tweets(symbol, count=3000)
     ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
     ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
 
