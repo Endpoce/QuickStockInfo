@@ -11,11 +11,6 @@ import re
 dotenv.load_dotenv()
 
 
-auth = tweepy.OAuth2BearerHandler(os.environ.get("Bearer_token"))
-
-api = tweepy.API(auth)
-
-
 # first func, Clean tweets of hyperlinks
 
 
