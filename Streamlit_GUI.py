@@ -136,8 +136,8 @@ def main():
                     # st.markdown(tweet, unsafe_allow_html=False)
 
                     # Text
-                    col3.write("Sentiment: " +
-                               get_tweet_sentiment(tweet["text"]))
+                    st.write("Sentiment: " +
+                             get_tweet_sentiment(tweet["text"]))
                     st.write(tweet["text"])
                     st.write("---")
                     time.sleep(5)
