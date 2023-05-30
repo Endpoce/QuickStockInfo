@@ -12,3 +12,4 @@ matplotlib
 python-dotenv
 textblob
 tweepy
+praw
