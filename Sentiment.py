@@ -86,9 +86,10 @@ def get_tweets(query, count):
         q=query, count=count, tweet_mode='extended', result_type='popular')
     for tweet in fetched_tweets:
         parsed_tweet = {}
+        # parsed_tweet = clean_tweet(tweet.full_text)
         parsed_tweet['text'] = tweet.full_text
-        parsed_tweet['sentiment'] = get_tweet_sentiment(
-            tweet.full_text)
+        # parsed_tweet['sentiment'] = get_tweet_sentiment(
+        #     tweet.full_text)
         parsed_tweet['retweet_count'] = tweet.retweet_count
         parsed_tweet['user'] = tweet.user
         parsed_tweet['screen_name'] = tweet.user.screen_name
