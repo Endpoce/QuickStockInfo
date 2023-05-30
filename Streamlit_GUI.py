@@ -82,7 +82,7 @@ def main():
 
         # display tweets
         col3.write("Tweets:")
-        col3.container(twitterclient.get_tweets(ticker_symbol, 5))
+        # col3.container(twitterclient.get_tweets(ticker_symbol, 5))
 
         # get articles
         articles = get_MW_Articles(ticker_symbol, 5)
