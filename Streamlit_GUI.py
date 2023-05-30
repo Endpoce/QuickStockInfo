@@ -121,7 +121,6 @@ def main():
 
         # display tweets
         # display tweet text
-        st.write(tweets)
         for tweet in tweets:
 
             with st.container():
