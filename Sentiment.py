@@ -2,7 +2,6 @@ import streamlit as st
 import yfinance as yf
 import tweepy
 import matplotlib.pyplot as plt
-from Sentiment import twitterclient
 import dotenv
 import os
 import praw
@@ -418,120 +417,6 @@ def sidebar_Stocks():
 
             st.subheader("There were no tweets found.")
 
-            st.write("---")
-
-    sidebar_tweets(stock_search)
-
-
-# Sidebar dropdown option for twitter, display twitter stats
-if option == "Twitter":
-
-    # subheader
-    st.subheader("Twitter Stats:")
-
-    # Sidebar dropdown for types of searching
-    search = st.sidebar.text_input("Search a phrase:", value=search1)
-
-    # subheader for stock title
-    st.subheader('Phrase: {}'.format(search.upper()))
-
-    # use twitter function to get tweets, or display an error message
-    if search.startswith('@'):
-        for_users()
-    else:
-        try:
-            main_twitter()
-        except TypeError as e:
-            st.text(e)
-
-# Reddit
-if option == "Reddit":
-
-    # subheader
-    st.subheader("Reddit Mentions:")
-
-    sub = st.sidebar.text_input("Input a subreddit:", value=search1)
-
-    phrase = st.sidebar.text_input("Input a phrase:")
-
-    try:
-        reddit = praw.Reddit(
-            client_id=os.environ.get("Reddit_token"),
-            client_secret=os.environ.get("Reddit_secret"),
-            user_agent="SentimentAnalysis",
-        )
-
-        Sub = reddit.subreddit(sub)
-        subreddittexts = []
-
-        for submission in Sub.hot(limit=100):
-            if phrase in submission.title or phrase in submission.selftext:
-                subreddittexts.append(submission.selftext)
-
-        pie_Graph(Sub)
-
-        for submission in Sub.hot(limit=100):
-            if phrase in submission.title or phrase in submission.selftext:
-
-                st.write("Title: ")
-                st.write(submission.title)
-                st.write("Score: ", submission.score)
-                st.write("Sentiment: " +
-                         get_text_sentiment(str(submission.selftext)))
-                st.image(submission.url)
-                st.write("Link:")
-                st.write("https://www.reddit.com" + submission.permalink)
-
-                if submission.selftext:
-                    st.write("Text: ")
-                    st.write(submission.selftext)
-                st.write("---")
-
-            else:
-                st.write("No submissions found!")
-                break
-
-    except ValueError as e:
-        st.write("Search for something!")
-
-
-# Sidebar stock analysis
-
-    st.sidebar.write("---")
-    st.sidebar.subheader("Stock Analysis: ")
-
-    stock_search = st.sidebar.text_input("Ticker: ", value="TSLA", max_chars=5)
-
-    # NOTE: RESOLVED...Incorporate a function to change it to company name instead of their ticker.  Makes more user-friendly for people not "stock saavy"
-    st.sidebar.markdown("Ticker: " + stock_search)
-
-    def sidebar_tweets(tweets):
-
-        st.sidebar.image(f"https://finviz.com/chart.ashx?t={stock_search}")
-        # Oauth
-        api = twitterclient()
-        tweets = api.get_tweets(query=stock_search, count=300)
-        try:
-            for tweet in tweets:
-
-                with st.container():
-
-                    create_tweet_styles()
-
-                    # Markdown
-                    st.sidebar.image(tweet["profile_pic"])
-                    st.sidebar.markdown(
-                        'Username: ' + tweet["screen_name"], unsafe_allow_html=False)
-                    st.sidebar.write(f"Number of likes: {tweet['num_likes']}")
-                    # st.markdown(tweet, unsafe_allow_html=False)
-
-                    # Text
-                    st.sidebar.write(tweet["text"])
-                    st.sidebar.write("---")
-
-        except:
-
-            st.subheader("There were no tweets found.")
             st.write("---")
 
     sidebar_tweets(stock_search)
