@@ -45,15 +45,13 @@ def get_tweets(query, count):
         parsed_tweet = {}
         # parsed_tweet = clean_tweet(tweet.full_text)
         parsed_tweet['text'] = tweet.full_text
-        # parsed_tweet['sentiment'] = get_tweet_sentiment(
-        #     tweet.full_text)
         parsed_tweet['retweet_count'] = tweet.retweet_count
         parsed_tweet['user'] = tweet.user
         parsed_tweet['screen_name'] = tweet.user.screen_name
         parsed_tweet['profile_pic'] = tweet.user.profile_image_url
         parsed_tweet['num_likes'] = tweet.favorite_count
 
-        print(parsed_tweet['text'])
+        # print(parsed_tweet['text'])
 
         if parsed_tweet not in tweets:
             tweets.__add__(parsed_tweet)
@@ -124,6 +122,7 @@ def main():
 
         # display tweets
         # display tweet text
+        st.write(tweets)
         for tweet in tweets:
 
             with st.container():
