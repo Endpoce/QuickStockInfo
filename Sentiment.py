@@ -21,7 +21,7 @@ api = tweepy.API(auth)
 # first func, Clean tweets of hyperlinks
 
 
-def clean_tweet(self, tweet):
+def clean_tweet(tweet):
 
     return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
 
@@ -429,3 +429,7 @@ def sidebar_Stocks():
             st.write("---")
 
     sidebar_tweets(stock_search)
+
+
+if __name__ == "__main__":
+    get_tweets("AAPL")
