@@ -18,11 +18,6 @@ yf.pdr_override()
 # set openai api key
 openai.api_key = os.environ.get('API_KEY')
 
-# set twitter api keys
-bearer_token = os.environ.get('Bearer_token')
-auth = tweepy.OAuth2BearerHandler(bearer_token)
-api = tweepy.API(auth)
-
 # set dates
 start_date = pd.to_datetime("2020-01-01")
 end_date = datetime.today().strftime('%Y-%m-%d')
