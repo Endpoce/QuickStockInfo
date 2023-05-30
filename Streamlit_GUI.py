@@ -9,6 +9,7 @@ import os
 from dotenv import load_dotenv
 import time
 from Sentiment import *
+import tweepy
 
 load_dotenv()
 
@@ -16,6 +17,11 @@ yf.pdr_override()
 
 # set openai api key
 openai.api_key = os.environ.get('API_KEY')
+
+# set twitter api keys
+bearer_token = os.environ.get('Bearer_token')
+auth = tweepy.OAuth2BearerHandler(bearer_token)
+api = tweepy.API(auth)
 
 # set dates
 start_date = pd.to_datetime("2020-01-01")
@@ -86,15 +92,17 @@ def main():
 
         # display tweets
         col3.write("Tweets:")
-        tweets = get_tweets(ticker_symbol, 5)
+        tweets = api.search_tweets(
+            ticker_symbol, 5, tweet_mode='extended', result_type='recent')
 
         print(tweets)
 
         # display tweets
         if len(tweets) > 1:
-            col3.write(tweets)
-            col3.write("Sentiment: "+get_tweet_sentiment(tweets))
-            time.sleep(5)
+            for tweet in tweets:
+                col3.write(tweet.full_text)
+                col3.write("Sentiment: "+get_tweet_sentiment(tweet.full_text))
+                time.sleep(5)
         else:
             col3.write("No tweets found")
 
