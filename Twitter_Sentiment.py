@@ -206,32 +206,29 @@ def main_twitter(symbol):
         neutral_tweet_percent = (
             100*(len(tweets)-(len(ntweets)+len(ptweets)))/len(tweets))
 
-        with col1:
-            # Add chart #1
+        # NOTE: CLEAN UP ASAP
+        labels = ['Positive', 'Negative', 'Neutral']
+        sizes = [positive_tweet_percent,
+                 negative_tweet_percent, neutral_tweet_percent]
+        max_percent = max(
+            [positive_tweet_percent, negative_tweet_percent, neutral_tweet_percent])
+        pos_explode = 0
+        neg_explode = 0
+        neutral_explode = 0
+        if max_percent == positive_tweet_percent:
+            pos_explode = 0.05
+        elif max_percent == negative_tweet_percent:
+            neg_explode = 0.05
+        elif max_percent == neutral_tweet_percent:
+            neutral_explode = 0.05
+        explode = [pos_explode, neg_explode, neutral_explode]
+        fig1, ax1 = plt.subplots()
+        ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
+                shadow=True, startangle=90, textprops=dict(color="w"))
+        ax1.axis('equal')
+        fig1.set_facecolor('#0e1117')
 
-            # NOTE: CLEAN UP ASAP
-            labels = ['Positive', 'Negative', 'Neutral']
-            sizes = [positive_tweet_percent,
-                     negative_tweet_percent, neutral_tweet_percent]
-            max_percent = max(
-                [positive_tweet_percent, negative_tweet_percent, neutral_tweet_percent])
-            pos_explode = 0
-            neg_explode = 0
-            neutral_explode = 0
-            if max_percent == positive_tweet_percent:
-                pos_explode = 0.05
-            elif max_percent == negative_tweet_percent:
-                neg_explode = 0.05
-            elif max_percent == neutral_tweet_percent:
-                neutral_explode = 0.05
-            explode = [pos_explode, neg_explode, neutral_explode]
-            fig1, ax1 = plt.subplots()
-            ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
-                    shadow=True, startangle=90, textprops=dict(color="w"))
-            ax1.axis('equal')
-            fig1.set_facecolor('#0e1117')
-
-            st.pyplot(fig1)
+        st.pyplot(fig1)
 
         st.write("---")
 
@@ -253,7 +250,7 @@ def main_twitter(symbol):
                 st.write(tweet["text"])
                 st.write("---")
 
-        st.subheader("There were no tweets found.")
+        st.write("There were no tweets found.")
     except TypeError as e:
         st.write(e)
 
