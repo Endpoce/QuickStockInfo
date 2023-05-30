@@ -271,23 +271,22 @@ def main_twitter():
 # If twitter phrase starts with '@' then search users
 
 
-def for_users():
+def for_users(query):
 
     # Oauth
     auth = tweepy.OAuth2BearerHandler('Bearer_token')
     api = tweepy.API(auth)
-    twitterapi = twitterclient()
 
     try:
         # Gets user's last tweet
         tweets = api.user_timeline(
-            screen_name=search[1:], count=1, tweet_mode='extended')
+            screen_name=query[1:], count=1, tweet_mode='extended')
 
         # Must be formatted into for loop or a new variable must be set equal to index of it because "user_timeline" returns a list.
         for tweet in tweets:
 
             # Getting the tweet sentiment using the function from the TwitterSentiment file.
-            tweet_sentiment = twitterapi.get_tweet_sentiment(tweet.full_text)
+            tweet_sentiment = get_tweet_sentiment(tweet.full_text)
 
             st.markdown(tweet.user.screen_name +
                         "'s most recent tweet/reply was:")
