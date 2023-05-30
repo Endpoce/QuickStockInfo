@@ -58,9 +58,6 @@ def main():
         # download and save stock data
         stock_data = get_stock_data(ticker_symbol, start_date, end_date)
 
-        # display stock data
-        st.write(f"Displaying data for {ticker_symbol}:")
-
         # Get company info and stock data
         info = get_company_info(ticker_symbol)
 
@@ -82,10 +79,10 @@ def main():
         col2.pyplot(plot_stock_with_moving_averages_from_csv(filename))
 
         # analyze stock data
-        time.sleep(5)
+        # time.sleep(5)
         # col2.markdown(analyze_stock(filename))
         col2.write("Placeholder text for stock analysis")
-        time.sleep(5)
+        # time.sleep(5)
 
         # display tweets
         col3.write("Tweets:")
@@ -93,20 +90,20 @@ def main():
 
         # display tweets
         for tweet in tweets:
-            col3.write(tweet['user'])
+            col3.write(tweet['text'])
             col3.write(tweet['sentiment'])
 
         # get articles
         articles = get_MW_Articles(ticker_symbol, 5)
 
         # display articles
-        col3.write("Articles:")
+        st.write("Articles:")
 
         # display articles
         for article in articles:
-            col3.write(article['title'])
-            col3.write(article['url'])
-            col3.markdown(summarize_article(article))
+            st.write(article['title'])
+            st.write(article['url'])
+            st.markdown(summarize_article(article))
             time.sleep(5)
 
 
