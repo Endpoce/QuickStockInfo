@@ -97,7 +97,7 @@ class twitterclient(object):
                     tweets.append(parsed_tweet)
             return tweets
         except tweepy.TweepyException as e:
-            print("ERROR: " + str(e))
+            return ("ERROR: " + str(e))
 
 
 def create_tweet_styles():
