@@ -99,8 +99,7 @@ def main():
             col1.write(info['summary'])
 
             # get wiki info
-            print(info['name'])
-            search_query = info['name'].replace(" ", "_")
+            search_query = info['name'].replace(" ", "+")
             wiki_url = get_wiki_info(search_query)
             col1.write("Wikipedia URL:")
             col1.write(wiki_url)
