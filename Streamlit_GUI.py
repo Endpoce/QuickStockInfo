@@ -71,7 +71,7 @@ def main():
         st.pyplot(plot_stock_with_moving_averages_from_csv(filename))
 
         # analyze stock data
-        st.write(analyze_stock(filename))
+        st.markdown(analyze_stock(filename))
         time.sleep(5)
 
         # get articles
@@ -81,7 +81,7 @@ def main():
         for article in articles:
             st.write(article['title'])
             st.write(article['url'])
-            st.write(summarize_article(article))
+            st.markdown(summarize_article(article))
             time.sleep(5)
 
 
