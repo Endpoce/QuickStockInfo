@@ -88,7 +88,7 @@ def get_tweets(query, count=5):
         for tweet in fetched_tweets:
             parsed_tweet = {}
             parsed_tweet['text'] = tweet.full_text
-            parsed_tweet['sentiment'] = self.get_tweet_sentiment(
+            parsed_tweet['sentiment'] = get_tweet_sentiment(
                 tweet.full_text)
             parsed_tweet['retweet_count'] = tweet.retweet_count
             parsed_tweet['user'] = tweet.user
