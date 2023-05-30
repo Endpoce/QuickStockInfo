@@ -88,9 +88,12 @@ def main():
         col3.write("Tweets:")
         tweets = get_tweets(ticker_symbol, 5)
 
+        print(tweets)
+
         # display tweets
-        col3.write(tweets['text'])
-        # col3.write(tweet)
+        for tweet in tweets:
+            col3.write(tweet)
+            # col3.write(tweet)
 
         # get articles
         articles = get_MW_Articles(ticker_symbol, 5)
