@@ -8,6 +8,7 @@ from Stock_Analyzer import *
 import os
 from dotenv import load_dotenv
 import time
+from Twitter_Sentiment import TwitterClient, TweetAnalyzer, main_twitter
 
 load_dotenv()
 
@@ -33,6 +34,8 @@ def get_stock_data(symbol, start_date, end_date):
 def main():
     st.title("Quick Stock Info")
 
+    col1, col2, col3 = st.columns((2, 1, 1))
+
     # Sidebar
     st.sidebar.header("User Input")
     ticker_symbol = st.sidebar.text_input("Enter Ticker Symbol:").upper()
@@ -54,34 +57,38 @@ def main():
         # Get company info and stock data
         info = get_company_info(ticker_symbol)
 
-        st.write(info['name'])
-        st.write(info['sector'])
-        st.write(info['industry'])
-        st.write(info['summary'])
+        col1.write(info['name'])
+        col1.write(info['sector'])
+        col1.write(info['industry'])
+        col1.write(info['summary'])
 
         # get wiki info
         wiki_url = get_wiki_info(ticker_symbol)
-        st.write(wiki_url)
+        col1.write("Wikipedia URL:")
+        col1.write(wiki_url)
 
         # read stock price data from csv
         filename = ticker_symbol + '_Price_Data.csv'
         df = pd.read_csv(filename)
 
         # plot price stock data
-        st.pyplot(plot_stock_with_moving_averages_from_csv(filename))
+        col2.pyplot(plot_stock_with_moving_averages_from_csv(filename))
 
         # analyze stock data
-        st.markdown(analyze_stock(filename))
+        col2.markdown(analyze_stock(filename))
         time.sleep(5)
 
         # get articles
         articles = get_MW_Articles(ticker_symbol, 5)
 
         # display articles
+        col3.write("Articles:")
+
+        # display articles
         for article in articles:
-            st.write(article['title'])
-            st.write(article['url'])
-            st.markdown(summarize_article(article))
+            col3.write(article['title'])
+            col3.write(article['url'])
+            col3.markdown(summarize_article(article))
             time.sleep(5)
 
 
