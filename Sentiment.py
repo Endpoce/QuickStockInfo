@@ -11,12 +11,12 @@ import re
 dotenv.load_dotenv()
 
 
-auth = tweepy.OAuth2BearerHandler(os.environ.get('Bearer_token'))
-api_key = os.environ.get('TWITTER_API_KEY')
-api_secret_key = os.environ.get('TWITTER_API_SECRET_KEY')
-
-# Authenticate to Twitter
+auth = tweepy.OAuthHandler(os.environ.get("TWITTER_API_KEY"),
+                           os.environ.get("TWITTER_API_SECRET"))
+auth.set_access_token(os.environ.get("Access_token"),
+                      os.environ.get("Access_token_secret"))
 api = tweepy.API(auth)
+
 
 # first func, Clean tweets of hyperlinks
 
