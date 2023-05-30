@@ -2,7 +2,7 @@ import streamlit as st
 import yfinance as yf
 import tweepy
 import matplotlib.pyplot as plt
-from TwitterSentiment import twitterclient
+from Twitter_Sentiment import twitterclient
 import dotenv
 import os
 import praw
