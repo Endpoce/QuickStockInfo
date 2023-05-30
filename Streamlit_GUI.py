@@ -8,7 +8,7 @@ from Stock_Analyzer import *
 import os
 from dotenv import load_dotenv
 import time
-from Twitter_Sentiment import TwitterClient, TweetAnalyzer, main_twitter
+from Twitter_Sentiment import twitterclient, main_twitter
 
 load_dotenv()
 
@@ -32,6 +32,8 @@ def get_stock_data(symbol, start_date, end_date):
 
 
 def main():
+
+    # Title
     st.title("Quick Stock Info")
 
     col1, col2, col3 = st.columns((2, 1, 1))
@@ -77,6 +79,10 @@ def main():
         # analyze stock data
         col2.markdown(analyze_stock(filename))
         time.sleep(5)
+
+        # display tweets
+        col3.write("Tweets:")
+        col3.container(main_twitter(ticker_symbol, 5))
 
         # get articles
         articles = get_MW_Articles(ticker_symbol, 5)

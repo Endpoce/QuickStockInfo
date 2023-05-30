@@ -4,8 +4,8 @@ import tweepy
 import matplotlib.pyplot as plt
 import dotenv
 import os
-import praw
 import textblob
+import re
 
 # Load Bearer token
 dotenv.load_dotenv()
