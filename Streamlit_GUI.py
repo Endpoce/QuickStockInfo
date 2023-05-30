@@ -45,7 +45,7 @@ def main():
     # Title
     st.title("Quick Stock Info")
 
-    col1, col2, col3 = st.columns((2, 1, 1))
+    col1, col2, col3 = st.columns((1, 2, 1))
 
     # Sidebar
     st.sidebar.header("User Input")
@@ -92,6 +92,8 @@ def main():
         # display tweets
         col3.write("Tweets:")
         tweets = twitterclient.get_tweets(ticker_symbol, 5)
+
+        # display tweets
         for tweet in tweets:
             col3.write(tweet['text'])
             col3.write(tweet['sentiment'])

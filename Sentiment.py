@@ -4,21 +4,21 @@ import tweepy
 import matplotlib.pyplot as plt
 import dotenv
 import os
-import praw
 import textblob
 import re
 
 # Load Bearer token
 dotenv.load_dotenv()
 
-# Authorize Twitter Clients via class
+# set twitter api keys
+bearer_token = os.environ.get('Bearer_token')
 
 
 class twitterclient(object):
 
     def __init__(self):
 
-        self.auth = tweepy.OAuth2BearerHandler(os.environ.get('Bearer_token'))
+        self.auth = tweepy.OAuth2BearerHandler(bearer_token)
         self.api = tweepy.API(self.auth)
 
     # first func, Clean tweets of hyperlinks
