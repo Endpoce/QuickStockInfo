@@ -7,6 +7,7 @@ from GetArticles import get_MW_Articles
 from Stock_Analyzer import *
 import os
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 
@@ -71,6 +72,7 @@ def main():
 
         # analyze stock data
         st.write(analyze_stock(filename))
+        time.sleep(5)
 
         # get articles
         articles = get_MW_Articles(ticker_symbol, 5)
@@ -80,6 +82,7 @@ def main():
             st.write(article['title'])
             st.write(article['url'])
             st.write(summarize_article(article))
+            time.sleep(5)
 
 
 if __name__ == "__main__":
