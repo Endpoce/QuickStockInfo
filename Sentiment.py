@@ -11,10 +11,7 @@ import re
 dotenv.load_dotenv()
 
 
-auth = tweepy.OAuth2AppHandler(os.environ.get("TWITTER_API_KEY"),
-                               os.environ.get("TWITTER_API_SECRET"))
-auth.set_access_token(os.environ.get("Access_token"),
-                      os.environ.get("Access_token_secret"))
+auth = tweepy.OAuth2BearerHandler(os.environ.get("Bearer_token"))
 
 api = tweepy.API(auth)
 
