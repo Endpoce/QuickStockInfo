@@ -8,7 +8,7 @@ from Stock_Analyzer import *
 import os
 from dotenv import load_dotenv
 import time
-from Twitter_Sentiment import twitterclient, main_twitter
+from Twitter_Sentiment import twitterclient
 
 load_dotenv()
 
@@ -82,7 +82,11 @@ def main():
 
         # display tweets
         col3.write("Tweets:")
-        # col3.container(twitterclient.get_tweets(ticker_symbol, 5))
+        tweets = twitterclient.get_tweets(ticker_symbol, 5)
+        for tweet in tweets:
+            col3.write(tweet['text'])
+            col3.write(tweet['sentiment'])
+            time.sleep(5)
 
         # get articles
         articles = get_MW_Articles(ticker_symbol, 5)
