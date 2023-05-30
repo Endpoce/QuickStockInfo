@@ -66,7 +66,7 @@ class twitterclient(object):
             print("Likes: " + str(tweet.favorite_count))
 
     # fifth func, retrieve tweets
-    def get_tweets(self, query, count=3000):
+    def get_tweets(self, query, count=5):
 
         # create tweet list
         tweets = []
