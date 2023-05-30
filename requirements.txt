@@ -10,3 +10,5 @@ requests
 wikipedia
 matplotlib
 python-dotenv
+textblob
+tweepy
