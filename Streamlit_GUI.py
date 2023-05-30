@@ -115,32 +115,34 @@ def main():
         col2.write("Placeholder text for stock analysis")
         # time.sleep(5)
 
-        # display tweets
-        col3.write("Tweets:")
-        tweets = get_tweets(str(ticker_symbol), 5)
+        with col3.container():
+            # display tweets
+            st.write("Tweets:")
+            tweets = get_tweets(str(ticker_symbol), 5)
 
-        # display tweets
-        # display tweet text
-        for tweet in tweets:
+            # display tweets
+            # display tweet text
+            for tweet in tweets:
 
-            with st.container():
+                with st.container():
 
-                create_tweet_styles()
+                    create_tweet_styles()
 
-                # Markdown
-                st.image(tweet["profile_pic"])
-                st.markdown('Username: ' +
-                            tweet["screen_name"], unsafe_allow_html=False)
-                st.write(f"Number of likes: {tweet['num_likes']}")
-                # st.markdown(tweet, unsafe_allow_html=False)
+                    # Markdown
+                    st.image(tweet["profile_pic"])
+                    st.markdown('Username: ' +
+                                tweet["screen_name"], unsafe_allow_html=False)
+                    st.write(f"Number of likes: {tweet['num_likes']}")
+                    # st.markdown(tweet, unsafe_allow_html=False)
 
-                # Text
-                col3.write("Sentiment: "+get_tweet_sentiment(tweet.full_text))
-                st.write(tweet["text"])
-                st.write("---")
-                time.sleep(5)
-        else:
-            col3.write("No tweets found")
+                    # Text
+                    col3.write("Sentiment: " +
+                               get_tweet_sentiment(tweet.full_text))
+                    st.write(tweet["text"])
+                    st.write("---")
+                    time.sleep(5)
+            else:
+                st.write("No tweets found")
 
         # get articles
         articles = get_MW_Articles(ticker_symbol, 5)
