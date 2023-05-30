@@ -76,7 +76,7 @@ class twitterclient(object):
 
         # get tweets containing phrase
         try:
-            fetched_tweets = self.api.search_full_archive(
+            fetched_tweets = self.api.search_tweets(
                 q=query, count=count, tweet_mode='extended', result_type='popular')
             for tweet in fetched_tweets:
                 parsed_tweet = {}
