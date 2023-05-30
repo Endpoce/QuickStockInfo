@@ -103,7 +103,7 @@ def get_tweets(query, count):
                     tweets.append(parsed_tweet)
             else:
                 tweets.append(parsed_tweet)
-        return tweets
+            return tweets
     except tweepy.TweepyException as e:
         return ("ERROR: " + str(e))
 

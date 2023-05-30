@@ -103,7 +103,7 @@ def main():
         for article in articles:
             st.write(article['title'])
             st.write(article['url'])
-            st.markdown(summarize_article(article))
+            st.container(summarize_article(article))
             time.sleep(5)
 
 
