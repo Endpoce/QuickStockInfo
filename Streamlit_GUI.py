@@ -99,7 +99,7 @@ def main():
             col1.write(info['summary'])
 
             # get wiki info
-            wiki_url = get_wiki_info(info['name'])
+            wiki_url = get_wiki_info("$" + ticker_symbol")
             col1.write("Wikipedia URL:")
             col1.write(wiki_url)
 
