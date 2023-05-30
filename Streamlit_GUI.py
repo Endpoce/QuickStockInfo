@@ -93,9 +93,7 @@ def main():
         # display tweets
         col3.write("Tweets:")
         tweets = api.search_tweets(
-            ticker_symbol, 5, tweet_mode='extended', result_type='recent')
-
-        print(tweets)
+            q=ticker_symbol, count=5, tweet_mode='extended', result_type='recent')
 
         # display tweets
         if len(tweets) > 1:
