@@ -138,7 +138,7 @@ def main():
                     # Text
                     st.write("Sentiment: " +
                              get_tweet_sentiment(tweet["text"]))
-                    st.write(tweet["text"])
+                    st.markdown(tweet["text"])
                     st.write("---")
                     time.sleep(5)
             else:
