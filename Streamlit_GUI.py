@@ -84,7 +84,7 @@ def main():
         # analyze stock data
         time.sleep(5)
         # col2.markdown(analyze_stock(filename))
-        col2.markdown("Placeholder text for stock analysis")
+        col2.write("Placeholder text for stock analysis")
         time.sleep(5)
 
         # display tweets
