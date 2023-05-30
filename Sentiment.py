@@ -11,93 +11,99 @@ import re
 dotenv.load_dotenv()
 
 
-class twitterclient(object):
+auth = tweepy.OAuth2BearerHandler(os.environ.get('Bearer_token'))
+api_key = os.environ.get('TWITTER_API_KEY')
+api_secret_key = os.environ.get('TWITTER_API_SECRET_KEY')
 
-    def __init__(self):
+# Authenticate to Twitter
+api = tweepy.API(auth)
 
-        self.auth = tweepy.OAuth2BearerHandler(os.environ.get('Bearer_token'))
-        try:
-            self.api = tweepy.API(self.auth)
+# first func, Clean tweets of hyperlinks
 
-        except tweepy.TweepyException as e:
-            return "ERROR: " + str(e)
-    # first func, Clean tweets of hyperlinks
 
-    def clean_tweet(self, tweet):
+def clean_tweet(self, tweet):
 
-        return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
+    return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
 
-    # Second func, Analyze tweets for sentiment
-    def get_tweet_sentiment(self, tweet):
+# Second func, Analyze tweets for sentiment
 
-        # Use textblob to analyze sentiment
-        analysis = textblob.TextBlob(self.clean_tweet(tweet))
-        if analysis.sentiment.polarity > 0:
-            return 'positive'
-        elif analysis.sentiment.polarity == 0:
-            return 'neutral'
-        else:
-            return 'negative'
 
-    # third func, get retweet count
-    def get_retweet_count(self, tweet):
+def get_tweet_sentiment(tweet):
 
-        count = self.api.get_status(tweet)
-        return count
+    # Use textblob to analyze sentiment
+    analysis = textblob.TextBlob(clean_tweet(tweet))
+    if analysis.sentiment.polarity > 0:
+        return 'positive'
+    elif analysis.sentiment.polarity == 0:
+        return 'neutral'
+    else:
+        return 'negative'
 
-    # fourth func, get last tweet of user
-    def get_last_tweet(self, account):
+# third func, get retweet count
 
-        tweets = []
 
-        tweet = self.api.user_timeline(
-            id=account, count=1, tweet_mode="extended")[0]
+def get_retweet_count(tweet):
 
-        tweets.append(tweet)
+    count = api.get_status(tweet)
+    return count
 
-        for tweet in tweets:
+# fourth func, get last tweet of user
 
+
+def get_last_tweet(account):
+
+    tweets = []
+
+    tweet = api.user_timeline(
+        id=account, count=1, tweet_mode="extended")[0]
+
+    tweets.append(tweet)
+
+    for tweet in tweets:
+
+        parsed_tweet = {}
+        parsed_tweet['text'] = tweet.full_text
+        parsed_tweet['sentiment'] = self.get_tweet_sentiment(
+            tweet.full_text)
+        parsed_tweet['retweet_count'] = tweet.retweet_count
+
+        print("Date: " + str(tweet.created_at))
+        print("Text: "+str(parsed_tweet['text']) + "\n")
+        print("Sentiment: "+str(parsed_tweet['sentiment']))
+        print("Retweets: "+str(parsed_tweet['retweet_count']))
+        print("Likes: " + str(tweet.favorite_count))
+
+# fifth func, retrieve tweets
+
+
+def get_tweets(query, count=5):
+
+    # create tweet list
+    tweets = []
+
+    # get tweets containing phrase
+    try:
+        fetched_tweets = api.search_tweets(
+            q=query, count=count, tweet_mode='extended', result_type='popular')
+        for tweet in fetched_tweets:
             parsed_tweet = {}
             parsed_tweet['text'] = tweet.full_text
             parsed_tweet['sentiment'] = self.get_tweet_sentiment(
                 tweet.full_text)
             parsed_tweet['retweet_count'] = tweet.retweet_count
+            parsed_tweet['user'] = tweet.user
+            parsed_tweet['screen_name'] = tweet.user.screen_name
+            parsed_tweet['profile_pic'] = tweet.user.profile_image_url
+            parsed_tweet['num_likes'] = tweet.favorite_count
 
-            print("Date: " + str(tweet.created_at))
-            print("Text: "+str(parsed_tweet['text']) + "\n")
-            print("Sentiment: "+str(parsed_tweet['sentiment']))
-            print("Retweets: "+str(parsed_tweet['retweet_count']))
-            print("Likes: " + str(tweet.favorite_count))
-
-    # fifth func, retrieve tweets
-    def get_tweets(self, query, count=5):
-
-        # create tweet list
-        tweets = []
-
-        # get tweets containing phrase
-        try:
-            fetched_tweets = self.api.search_tweets(
-                q=query, count=count, tweet_mode='extended', result_type='popular')
-            for tweet in fetched_tweets:
-                parsed_tweet = {}
-                parsed_tweet['text'] = tweet.full_text
-                parsed_tweet['sentiment'] = self.get_tweet_sentiment(
-                    tweet.full_text)
-                parsed_tweet['retweet_count'] = tweet.retweet_count
-                parsed_tweet['user'] = tweet.user
-                parsed_tweet['screen_name'] = tweet.user.screen_name
-                parsed_tweet['profile_pic'] = tweet.user.profile_image_url
-                parsed_tweet['num_likes'] = tweet.favorite_count
-
-                if tweet.retweet_count > 0:
-                    if parsed_tweet not in tweets:
-                        tweets.append(parsed_tweet)
-                else:
+            if tweet.retweet_count > 0:
+                if parsed_tweet not in tweets:
                     tweets.append(parsed_tweet)
-            return tweets
-        except tweepy.TweepyException as e:
-            return ("ERROR: " + str(e))
+            else:
+                tweets.append(parsed_tweet)
+        return tweets
+    except tweepy.TweepyException as e:
+        return ("ERROR: " + str(e))
 
 
 def create_tweet_styles():
