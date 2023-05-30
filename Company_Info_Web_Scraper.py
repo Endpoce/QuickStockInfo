@@ -25,22 +25,24 @@ search_query = ['WKHS']
 def get_wiki_info(search_query):
     try:
         # wikipedia search request
-        query = search_query + ' stock'
-        query.strip()
+        search_results = wikipedia.search(search_query)
+        if search_results:
+            # get the first result
+            page_url = wikipedia.page(search_results[0]).url
+            return page_url, search_results
+        else:
+            print("No search results found for the query")
+            return '', []
 
-        page_url = wikipedia.page(search_query).url
-
-        return page_url
-
-    except requests.exceptions.RequestException as e:
-        print(f"Request error: {e}")
-        return ''
-    except json.JSONDecodeError as e:
-        print(f"JSON decode error: {e}")
-        return ''
-    except KeyError as e:
-        print(f"Key error: {e}")
-        return ''
+    except wikipedia.exceptions.DisambiguationError as e:
+        print(f"Disambiguation error: {e}")
+        return '', []
+    except wikipedia.exceptions.PageError as e:
+        print(f"Page does not exist: {e}")
+        return '', []
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return '', []
 
 # %%
 
