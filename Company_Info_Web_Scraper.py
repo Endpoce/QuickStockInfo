@@ -25,6 +25,9 @@ search_query = ['WKHS']
 def get_wiki_info(search_query):
     try:
         # wikipedia search request
+        query = search_query + ' stock'
+        query.strip()
+
         page_url = wikipedia.page(search_query).url
 
         return page_url

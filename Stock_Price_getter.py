@@ -28,4 +28,4 @@ def save_stock_data(symbol, filename):
 
 
 # Use the function
-save_stock_data('AAPL', 'AAPL_3_years.csv')
+# save_stock_data('AAPL', 'AAPL_3_years.csv')
