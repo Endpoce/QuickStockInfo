@@ -98,12 +98,12 @@ def get_tweets(query, count):
 
             print(parsed_tweet)
 
-            if tweet.retweet_count > 0:
+            if parsed_tweet['retweet_count'] > 0:
                 if parsed_tweet not in tweets:
                     tweets.append(parsed_tweet)
             else:
                 tweets.append(parsed_tweet)
-            return tweets
+        return tweets
     except tweepy.TweepyException as e:
         return ("ERROR: " + str(e))
 
