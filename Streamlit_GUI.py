@@ -92,28 +92,30 @@ def main():
         # Get company info and stock data
         info = get_company_info(ticker_symbol)
 
-        col1.write(info['name'])
-        col1.write(info['sector'])
-        col1.write(info['industry'])
-        col1.write(info['summary'])
+        with col1.container():
+            col1.write(info['name'])
+            col1.write(info['sector'])
+            col1.write(info['industry'])
+            col1.write(info['summary'])
 
-        # get wiki info
-        wiki_url = get_wiki_info(ticker_symbol)
-        col1.write("Wikipedia URL:")
-        col1.write(wiki_url)
+            # get wiki info
+            wiki_url = get_wiki_info(ticker_symbol)
+            col1.write("Wikipedia URL:")
+            col1.write(wiki_url)
 
         # read stock price data from csv
         filename = ticker_symbol + '_Price_Data.csv'
         df = pd.read_csv(filename)
 
-        # plot price stock data
-        col2.pyplot(plot_stock_with_moving_averages_from_csv(filename))
+        with col2.container():
+            # plot price stock data
+            col2.pyplot(plot_stock_with_moving_averages_from_csv(filename))
 
-        # analyze stock data
-        # time.sleep(5)
-        # col2.markdown(analyze_stock(filename))
-        col2.write("Placeholder text for stock analysis")
-        # time.sleep(5)
+            # analyze stock data
+            # time.sleep(5)
+            # col2.markdown(analyze_stock(filename))
+            col2.write("Placeholder text for stock analysis")
+            # time.sleep(5)
 
         with col3.container():
             # display tweets
@@ -143,20 +145,20 @@ def main():
                     time.sleep(5)
             else:
                 st.write("No tweets found")
+        with col2.container():
+            # get articles
+            articles = get_MW_Articles(ticker_symbol, 5)
 
-        # get articles
-        articles = get_MW_Articles(ticker_symbol, 5)
+            # display articles
+            st.write("Articles:")
 
-        # display articles
-        st.write("Articles:")
-
-        # display articles
-        # for article in articles:
-        # st.write(article['title'])
-        # st.write(article['url'])
-        # st.container(summarize_article(article))
-        # time.sleep(5)
-        st.write("Placeholder text for article analysis")
+            # display articles
+            for article in articles:
+                st.write(article['title'])
+                st.write(article['url'])
+                st.container(summarize_article(article))
+                time.sleep(5)
+            st.write("Placeholder text for article analysis")
 
 
 if __name__ == "__main__":
