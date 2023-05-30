@@ -102,7 +102,7 @@ def main():
             search_term = info['name'].replace(" ", "_")
             search_term = search_term.replace(",", "")
             search_term = search_term.replace(".", "")
-            wiki_url = get_wiki_info(search_term)
+            wiki_url = get_wiki_info(search_term)[0]
             col1.write("Wikipedia URL:")
             col1.write(wiki_url)
 
