@@ -96,6 +96,8 @@ def get_tweets(query, count=5):
             parsed_tweet['profile_pic'] = tweet.user.profile_image_url
             parsed_tweet['num_likes'] = tweet.favorite_count
 
+            print(parsed_tweet)
+
             if tweet.retweet_count > 0:
                 if parsed_tweet not in tweets:
                     tweets.append(parsed_tweet)
