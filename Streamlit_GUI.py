@@ -91,9 +91,13 @@ def main():
         print(tweets)
 
         # display tweets
-        for tweet in tweets:
-            col3.write(tweet)
-            # col3.write(tweet)
+        if len(tweets) > 1:
+            for tweet in tweets:
+                col3.write(tweet)
+                col3.write("Sentiment: "+get_tweet_sentiment(tweet))
+                time.sleep(5)
+        else:
+            col3.write("No tweets found")
 
         # get articles
         articles = get_MW_Articles(ticker_symbol, 5)
