@@ -84,7 +84,7 @@ def get_tweets(query, count):
     # get tweets containing phrase
     try:
         fetched_tweets = api.search_tweets(
-            q=str(query), count=count, tweet_mode='extended', result_type='popular')
+            q=query, count=count, tweet_mode='extended', result_type='popular')
         for tweet in fetched_tweets:
             parsed_tweet = {}
             parsed_tweet['text'] = tweet.full_text
@@ -98,11 +98,9 @@ def get_tweets(query, count):
 
             print(parsed_tweet)
 
-            if parsed_tweet['retweet_count'] > 0:
-                if parsed_tweet not in tweets:
-                    tweets.append(parsed_tweet)
-            else:
+            if parsed_tweet not in tweets:
                 tweets.append(parsed_tweet)
+
         return tweets
     except tweepy.TweepyException as e:
         return ("ERROR: " + str(e))
@@ -430,5 +428,5 @@ def sidebar_Stocks():
     sidebar_tweets(stock_search)
 
 
-if __name__ == "__main__":
-    get_tweets("AAPL")
+if __name__ == '__main__':
+    get_tweets("AAPL", 2)
