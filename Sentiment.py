@@ -16,9 +16,13 @@ class twitterclient(object):
     def __init__(self):
 
         self.auth = tweepy.OAuth2BearerHandler(os.environ.get('Bearer_token'))
-        self.api = tweepy.API(self.auth)
+        try:
+            self.api = tweepy.API(self.auth)
 
+        except tweepy.TweepyException as e:
+            return "ERROR: " + str(e)
     # first func, Clean tweets of hyperlinks
+
     def clean_tweet(self, tweet):
 
         return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
