@@ -29,7 +29,7 @@ def get_wiki_info(search_query):
         if search_results:
             # get the first result
             page_url = wikipedia.page(search_results[0]).url
-            return page_url, search_results
+            return page_url
         else:
             print("No search results found for the query")
             return '', []
@@ -94,31 +94,31 @@ def summarize_article(url):
 # print(summarize_article('https://www.marketwatch.comhttps://www.marketwatch.com/story/tech-stock-picks-that-are-small-and-focused-this-fund-invests-in-unsung-innovators-here-are-2-top-choices-2028d2aa?mod=search_headline'))
 
 # %%
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    for stock in search_query:
-        with open("Company_info\\" + stock + '.txt', 'w') as f:
-            f.write("Company Name: " + get_company_info(stock)['name'] + "\n")
-            f.write("Sector: " + get_company_info(stock)['sector'] + "\n")
-            f.write("Industry: " + get_company_info(stock)['industry'] + "\n")
-            f.write("Description: " +
-                    textwrap.fill(get_company_info(stock)['summary']) + "\n")
-            f.write("Wiki: " + get_wiki_info(stock) + "\n")
-            f.write("\n")
-            f.write("MarketWatch Links:\n\n")
-            for article in get_MW_Articles(stock)[:10]:
-                # print(article['title'])
-                f.write(textwrap.fill(article['title']) + "\n")
-                f.write("\t" + article['url'] + "\n\n")
-                f.write(textwrap.fill(
-                    summarize_article(article)) + "\n\n")
+#     for stock in search_query:
+#         with open("Company_info\\" + stock + '.txt', 'w') as f:
+#             f.write("Company Name: " + get_company_info(stock)['name'] + "\n")
+#             f.write("Sector: " + get_company_info(stock)['sector'] + "\n")
+#             f.write("Industry: " + get_company_info(stock)['industry'] + "\n")
+#             f.write("Description: " +
+#                     textwrap.fill(get_company_info(stock)['summary']) + "\n")
+#             f.write("Wiki: " + get_wiki_info(stock) + "\n")
+#             f.write("\n")
+#             f.write("MarketWatch Links:\n\n")
+#             for article in get_MW_Articles(stock)[:10]:
+#                 # print(article['title'])
+#                 f.write(textwrap.fill(article['title']) + "\n")
+#                 f.write("\t" + article['url'] + "\n\n")
+#                 f.write(textwrap.fill(
+#                     summarize_article(article)) + "\n\n")
 
-        # print("Company Name: " + get_company_info(stock)['name'])
-        # print("Sector: " + get_company_info(stock)['sector'])
-        # print("Industry: " + get_company_info(stock)['industry'])
-        # print("Description: " + get_company_info(stock)['summary'])
-        # print("Wiki: " + get_wiki_info(stock))
-        # print("\n")
-        # for article in get_MW_Articles(stock)[:10]:
-        #     print(textwrap.fill(article['title']) + "\n")
-        #     print("\t" + article['url'] + "\n\n")
+    # print("Company Name: " + get_company_info(stock)['name'])
+    # print("Sector: " + get_company_info(stock)['sector'])
+    # print("Industry: " + get_company_info(stock)['industry'])
+    # print("Description: " + get_company_info(stock)['summary'])
+    # print("Wiki: " + get_wiki_info(stock))
+    # print("\n")
+    # for article in get_MW_Articles(stock)[:10]:
+    #     print(textwrap.fill(article['title']) + "\n")
+    #     print("\t" + article['url'] + "\n\n")
