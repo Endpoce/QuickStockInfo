@@ -13,4 +13,4 @@ python-dotenv
 textblob
 tweepy
 praw
-re
+regex
