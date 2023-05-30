@@ -106,10 +106,11 @@ def main():
 
         # display articles
         for article in articles:
-            st.write(article['title'])
-            st.write(article['url'])
-            st.container(summarize_article(article))
-            time.sleep(5)
+            # st.write(article['title'])
+            # st.write(article['url'])
+            # st.container(summarize_article(article))
+            # time.sleep(5)
+            st.write("Placeholder text for article analysis")
 
 
 if __name__ == "__main__":
