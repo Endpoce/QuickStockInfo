@@ -11,6 +11,11 @@ import re
 dotenv.load_dotenv()
 
 
+auth = tweepy.OAuth2BearerHandler(os.environ.get("Bearer_token"))
+
+api = tweepy.API(auth)
+
+
 # first func, Clean tweets of hyperlinks
 
 
@@ -117,13 +122,10 @@ def create_tweet_styles():
 # Use the class from TwitterSentiment file to get sentiment of tweets
 
 
-def main_twitter():
-
-    # Oauth
-    api = twitterclient()
+def main_twitter(query):
 
     # for each tweet in tweets, if tweet is positive, add to ptweets, if negative, add to ntweets
-    tweets = api.get_tweets(search, count=3000)
+    tweets = api.get_tweets(query, count=3000)
     ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
     ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
 
@@ -206,34 +208,27 @@ def main_twitter():
         neutral_tweet_percent = (
             100*(len(tweets)-(len(ntweets)+len(ptweets)))/len(tweets))
 
-        with col1:
-            # Add chart #1
-
-            # NOTE: CLEAN UP ASAP
-            labels = ['Positive', 'Negative', 'Neutral']
-            sizes = [positive_tweet_percent,
-                     negative_tweet_percent, neutral_tweet_percent]
-            max_percent = max(
-                [positive_tweet_percent, negative_tweet_percent, neutral_tweet_percent])
-            pos_explode = 0
-            neg_explode = 0
-            neutral_explode = 0
-            if max_percent == positive_tweet_percent:
-                pos_explode = 0.05
-            elif max_percent == negative_tweet_percent:
-                neg_explode = 0.05
-            elif max_percent == neutral_tweet_percent:
-                neutral_explode = 0.05
-            explode = [pos_explode, neg_explode, neutral_explode]
-            fig1, ax1 = plt.subplots()
-            ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
-                    shadow=True, startangle=90, textprops=dict(color="w"))
-            ax1.axis('equal')
-            fig1.set_facecolor('#0e1117')
-
-            st.pyplot(fig1)
-
-        st.write("---")
+        # NOTE: CLEAN UP ASAP
+        labels = ['Positive', 'Negative', 'Neutral']
+        sizes = [positive_tweet_percent,
+                 negative_tweet_percent, neutral_tweet_percent]
+        max_percent = max(
+            [positive_tweet_percent, negative_tweet_percent, neutral_tweet_percent])
+        pos_explode = 0
+        neg_explode = 0
+        neutral_explode = 0
+        if max_percent == positive_tweet_percent:
+            pos_explode = 0.05
+        elif max_percent == negative_tweet_percent:
+            neg_explode = 0.05
+        elif max_percent == neutral_tweet_percent:
+            neutral_explode = 0.05
+        explode = [pos_explode, neg_explode, neutral_explode]
+        fig1, ax1 = plt.subplots()
+        ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
+                shadow=True, startangle=90, textprops=dict(color="w"))
+        ax1.axis('equal')
+        fig1.set_facecolor('#0e1117')
 
         # display tweet text
         for tweet in tweets:
