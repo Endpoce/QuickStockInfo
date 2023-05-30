@@ -91,7 +91,7 @@ def main():
         # display tweets
         for tweet in tweets:
             col3.write(tweet)
-            col3.write(tweet['sentiment'])
+            # col3.write(tweet)
 
         # get articles
         articles = get_MW_Articles(ticker_symbol, 5)
