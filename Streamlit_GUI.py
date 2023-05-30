@@ -137,7 +137,7 @@ def main():
 
                     # Text
                     col3.write("Sentiment: " +
-                               get_tweet_sentiment(tweet.full_text))
+                               get_tweet_sentiment(tweet["text"]))
                     st.write(tweet["text"])
                     st.write("---")
                     time.sleep(5)
