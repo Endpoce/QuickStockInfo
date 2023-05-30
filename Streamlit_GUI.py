@@ -20,7 +20,6 @@ openai.api_key = os.environ.get('API_KEY')
 
 
 auth = tweepy.OAuth2BearerHandler(os.environ.get("Bearer_token"))
-
 api = tweepy.API(auth)
 
 # set dates
@@ -54,7 +53,7 @@ def get_tweets(query, count):
         # print(parsed_tweet['text'])
 
         if parsed_tweet not in tweets:
-            tweets.__add__(parsed_tweet)
+            tweets.append(parsed_tweet)
 
     return tweets
 
