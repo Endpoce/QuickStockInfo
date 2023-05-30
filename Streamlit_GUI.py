@@ -93,7 +93,7 @@ def main():
 
         # display tweets
         for tweet in tweets:
-            col3.write(tweet['text'])
+            col3.write(tweet['user'])
             col3.write(tweet['sentiment'])
 
         # get articles
