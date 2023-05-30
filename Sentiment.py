@@ -76,7 +76,7 @@ def get_last_tweet(account):
 # fifth func, retrieve tweets
 
 
-def get_tweets(query, count=5):
+def get_tweets(query, count):
 
     # create tweet list
     tweets = []
