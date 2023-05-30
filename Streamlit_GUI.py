@@ -92,10 +92,9 @@ def main():
 
         # display tweets
         if len(tweets) > 1:
-            for tweet in tweets:
-                col3.write(tweet)
-                col3.write("Sentiment: "+get_tweet_sentiment(tweet))
-                time.sleep(5)
+            col3.write(tweets)
+            col3.write("Sentiment: "+get_tweet_sentiment(tweets))
+            time.sleep(5)
         else:
             col3.write("No tweets found")
 
