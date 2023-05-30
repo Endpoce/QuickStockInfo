@@ -84,7 +84,7 @@ def get_tweets(query, count):
     # get tweets containing phrase
     try:
         fetched_tweets = api.search_tweets(
-            q=query, count=count, tweet_mode='extended', result_type='popular')
+            q=str(query), count=count, tweet_mode='extended', result_type='popular')
         for tweet in fetched_tweets:
             parsed_tweet = {}
             parsed_tweet['text'] = tweet.full_text
