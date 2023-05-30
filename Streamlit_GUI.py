@@ -86,6 +86,7 @@ def main():
         col2.pyplot(plot_stock_with_moving_averages_from_csv(filename))
 
         # analyze stock data
+        time.sleep(5)
         col2.markdown(analyze_stock(filename))
         time.sleep(5)
 
@@ -97,7 +98,6 @@ def main():
         for tweet in tweets:
             col3.write(tweet['text'])
             col3.write(tweet['sentiment'])
-            time.sleep(5)
 
         # get articles
         articles = get_MW_Articles(ticker_symbol, 5)
