@@ -88,7 +88,11 @@ def analyze_stock(filename, ticker):
 
     # Use the OpenAI API to generate a response
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo", prompt=prompt, max_tokens=500)
+        model="gpt-3.5-turbo",
+        messages=[{"role":"system","content":"You are analyzing a stock."}
+                  {"role": "user", "content": prompt}],
+        max_tokens=500
+        )
 
     return response.choices[0].text.strip()
 
