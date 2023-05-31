@@ -15,14 +15,16 @@ openai.api_key = os.environ.get('API_KEY')
 
 
 def get_stock_data(symbol, start_date, end_date):
-    ticker = yf.download(symbol, start_date, end_date)
+    ticker = yf.Ticker(symbol, start_date, end_date)
 
     info = ticker.info
 
-    # save stock data to csv
-    file = ticker.to_csv(symbol + '_Price_Data.csv')
+    hist = ticker.history(period="1d", start=start_date, end=end_date)
 
-    return ticker, info, file
+    # save stock data to csv
+    file = hist.to_csv(symbol + '_Price_Data.csv')
+
+    return ticker, info, hist, file
 
 
 def analyze_stock(filename, ticker):

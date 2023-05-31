@@ -78,7 +78,7 @@ def main():
     if fetch_button:
 
         # download and save stock data
-        ticker, info, file = get_stock_data(
+        ticker, info, hist, file = get_stock_data(
             ticker_symbol, start_date, end_date)
 
         # get company info
