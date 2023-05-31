@@ -102,7 +102,7 @@ def main():
             search_term = info['name'].replace(" ", "_")
             search_term = search_term.replace(",", "")
             search_term = search_term.replace(".", "")
-            wiki_url = get_wiki_info(search_term)[0]
+            wiki_url = get_wiki_info(search_term)
             col1.write("Wikipedia URL:")
             col1.write(wiki_url)
 
@@ -115,10 +115,10 @@ def main():
             col2.pyplot(plot_stock_with_moving_averages_from_csv(filename))
 
             # analyze stock data
-            # time.sleep(5)
-            # col2.markdown(analyze_stock(filename))
-            col2.write("Placeholder text for stock analysis")
-            # time.sleep(5)
+            time.sleep(5)
+            col2.markdown(analyze_stock(filename))
+            # col2.write("Placeholder text for stock analysis")
+            time.sleep(5)
 
         with col3.container():
             # display tweets
