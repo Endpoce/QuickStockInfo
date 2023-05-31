@@ -58,15 +58,6 @@ def get_tweets(query, count):
     return tweets
 
 
-def get_stock_data(symbol, start_date, end_date):
-    ticker = yf.download(symbol, start_date, end_date)
-
-    # save stock data to csv
-    file = ticker.to_csv(symbol + '_Price_Data.csv')
-
-    return file
-
-
 def main():
 
     # Title
@@ -87,10 +78,8 @@ def main():
     if fetch_button:
 
         # download and save stock data
-        stock_data = get_stock_data(ticker_symbol, start_date, end_date)
-
-        # Get company info and stock data
-        info = get_company_info(ticker_symbol)
+        ticker, info, file = get_stock_data(
+            ticker_symbol, start_date, end_date)
 
         with col1.container():
             col1.write(info['name'])
@@ -116,7 +105,7 @@ def main():
 
             # analyze stock data
             time.sleep(5)
-            col2.markdown(analyze_stock(filename))
+            col2.markdown(analyze_stock(filename, ticker))
             # col2.write("Placeholder text for stock analysis")
 
         with col3.container():

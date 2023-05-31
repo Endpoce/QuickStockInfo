@@ -47,10 +47,8 @@ def get_wiki_info(search_query):
 # %%
 
 
-def get_company_info(stock):
+def get_company_info(ticker):
     try:
-        # Create a Ticker object for the specified symbol
-        ticker = yf.Ticker(stock)
 
         # Get company info from the Ticker object
         info = ticker.info

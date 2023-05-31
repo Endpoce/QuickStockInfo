@@ -5,6 +5,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import os
 from dotenv import load_dotenv
+import yfinance as yf
 
 load_dotenv()
 
@@ -13,7 +14,18 @@ load_dotenv()
 openai.api_key = os.environ.get('API_KEY')
 
 
-def analyze_stock(filename):
+def get_stock_data(symbol, start_date, end_date):
+    ticker = yf.download(symbol, start_date, end_date)
+
+    info = ticker.info
+
+    # save stock data to csv
+    file = ticker.to_csv(symbol + '_Price_Data.csv')
+
+    return ticker, info, file
+
+
+def analyze_stock(filename, ticker):
 
     # read and Load the CSV data into a DataFrame
     df = pd.read_csv(filename)
@@ -37,8 +49,6 @@ def analyze_stock(filename):
     avg_close = df['Close'].mean()
 
     stock_data = {}
-
-    ticker = yf.Ticker(symbol)
 
     # Get basic info
     info = ticker.info
@@ -75,8 +85,8 @@ def analyze_stock(filename):
     prompt = f"{summary} What could these figures suggest about the stock's performance and potential future trends?"
 
     # Use the OpenAI API to generate a response
-    response = openai.Completion.create(
-        engine="gpt-3.5-turbo", prompt=prompt, max_tokens=300)
+    response = openai.ChatCompletion.create(
+        engine="gpt-3.5-turbo", prompt=prompt, max_tokens=500)
 
     return response.choices[0].text.strip()
 
