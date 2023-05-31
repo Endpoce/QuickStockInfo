@@ -81,6 +81,9 @@ def main():
         ticker, info, file = get_stock_data(
             ticker_symbol, start_date, end_date)
 
+        # get company info
+        info = ticker.info
+
         with col1.container():
             col1.write(info['name'])
             col1.write(info['sector'])
