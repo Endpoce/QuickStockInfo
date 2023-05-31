@@ -94,7 +94,7 @@ def analyze_stock(filename, ticker):
         max_tokens=500
     )
 
-    return response.choices[0].text.strip()
+    return response['choices'][0]['text']
 
 
 # Use the function
