@@ -15,7 +15,7 @@ openai.api_key = os.environ.get('API_KEY')
 
 
 def get_stock_data(symbol, start_date, end_date):
-    ticker = yf.Ticker(symbol, start=start_date, end=end_date)
+    ticker = yf.Ticker(symbol)
 
     info = ticker.info
 
