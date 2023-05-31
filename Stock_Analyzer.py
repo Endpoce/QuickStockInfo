@@ -36,17 +36,47 @@ def analyze_stock(filename):
     # Calculate the average closing price
     avg_close = df['Close'].mean()
 
+    stock_data = {}
+
+    ticker = yf.Ticker(symbol)
+
+    # Get basic info
+    info = ticker.info
+
+    # Get historical market data
+    hist = ticker.history(period="5d")
+
+    # Fundamental Indicators
+    stock_data['P/E Ratio'] = info.get('trailingPE')
+    stock_data['P/B Ratio'] = info.get('priceToBook')
+    stock_data['Dividend Yield'] = info.get('dividendYield')
+    stock_data['EPS'] = info.get('trailingEps')
+    stock_data['D/E Ratio'] = info.get('debtToEquity')
+
+    # Technical Indicators
+    stock_data['52 Week High'] = info.get('fiftyTwoWeekHigh')
+    stock_data['52 Week Low'] = info.get('fiftyTwoWeekLow')
+
+    # Volume and Moving Averages might need to be calculated from the historical data
+    # Here's an example for volume:
+    stock_data['Volume'] = hist['Volume'].mean()
+
+    # For moving averages, you'll need to implement it yourself. Here's a simple example for a 5 day moving average:
+    stock_data['5 Day Moving Average'] = hist['Close'].rolling(
+        window=5).mean().iloc[-1]
+
     # Create a summary of the stock data
     summary = f"The stock had its highest closing price of ${high_close} and its lowest of ${low_close}. "
     summary += f"The average closing price was ${avg_close:.2f}. "
     summary += f"As of {latest_date.strftime('%B %d, %Y')}, the closing price was ${latest_close}."
+    summary += f"Here are some other key data points about the stock: {stock_data}"
 
     # Construct the ChatGPT prompt
     prompt = f"{summary} What could these figures suggest about the stock's performance and potential future trends?"
 
     # Use the OpenAI API to generate a response
     response = openai.Completion.create(
-        engine="text-davinci-003", prompt=prompt, max_tokens=300)
+        engine="gpt-3.5-turbo", prompt=prompt, max_tokens=300)
 
     return response.choices[0].text.strip()
 

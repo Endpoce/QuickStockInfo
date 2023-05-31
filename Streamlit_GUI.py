@@ -99,7 +99,7 @@ def main():
             col1.write(info['summary'])
 
             # get wiki info
-            search_term = info['name'].replace(" ", "_")
+            search_term = info['name']
             search_term = search_term.replace(",", "")
             search_term = search_term.replace(".", "")
             wiki_url = get_wiki_info(search_term)
@@ -118,7 +118,6 @@ def main():
             time.sleep(5)
             col2.markdown(analyze_stock(filename))
             # col2.write("Placeholder text for stock analysis")
-            time.sleep(5)
 
         with col3.container():
             # display tweets
@@ -150,10 +149,13 @@ def main():
                 st.write("No tweets found")
         with col2.container():
             # get articles
+
             articles = get_MW_Articles(ticker_symbol, 5)
 
             # display articles
             st.write("Articles:")
+
+            time.sleep(5)
 
             # display articles
             for article in articles:
