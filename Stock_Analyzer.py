@@ -38,7 +38,7 @@ def analyze_stock(filename, ticker):
     # Get the latest date in the dataset
     latest_date = df['Date'].iloc[-1]
     # assuming the date is in this format
-    latest_date = datetime.strptime(latest_date, '%Y-%m-%d')
+    latest_date = datetime.strftime(latest_date, '%Y-%m-%d')
 
     # Get the latest closing price
     latest_close = df['Close'].iloc[-1]
