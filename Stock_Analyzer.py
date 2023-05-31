@@ -35,10 +35,10 @@ def analyze_stock(filename, ticker):
     # Ensure the data is sorted by date
     df = df.sort_values('Date')
 
-    # Get the latest date in the dataset
-    latest_date = df['Date'].iloc[-1]
-    # assuming the date is in this format
-    latest_date = datetime.strftime(latest_date, '%Y-%m-%d')
+    # # Get the latest date in the dataset
+    # latest_date = df['Date'].iloc[-1]
+    # # assuming the date is in this format
+    # latest_date = datetime.strptime(latest_date, '%Y-%m-%d')
 
     # Get the latest closing price
     latest_close = df['Close'].iloc[-1]
@@ -80,7 +80,7 @@ def analyze_stock(filename, ticker):
     # Create a summary of the stock data
     summary = f"The stock had its highest closing price of ${high_close} and its lowest of ${low_close}. "
     summary += f"The average closing price was ${avg_close:.2f}. "
-    summary += f"As of {latest_date.strftime('%B %d, %Y')}, the closing price was ${latest_close}."
+    summary += f"As of {datetime.now}, the closing price was ${latest_close}."
     summary += f"Here are some other key data points about the stock: {stock_data}"
 
     # Construct the ChatGPT prompt
