@@ -85,7 +85,8 @@ def main():
         info = ticker.info
 
         with col1.container():
-            col1.write(info['name'])
+            col1.write("Company Info:")
+            col1.write(info['longName'])
             col1.write(info['sector'])
             col1.write(info['industry'])
             col1.write(info['summary'])
