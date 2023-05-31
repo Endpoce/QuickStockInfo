@@ -84,13 +84,11 @@ def main():
         # get company info
         info = ticker.info
         st.write("Company Info:")
-        st.write(info)
-
         with col1.container():
             col1.write(info['longName'])
             col1.write(info['sector'])
             col1.write(info['industry'])
-            col1.write(info['summary'])
+            col1.write(info['longBusinessSummary'])
 
             # get wiki info
             search_term = info['name']
