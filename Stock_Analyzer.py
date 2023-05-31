@@ -94,7 +94,7 @@ def analyze_stock(filename, ticker):
         max_tokens=500
     )
 
-    return response['choices'][0]['message']
+    return response['choices'][0]['message']['content']
 
 
 # Use the function

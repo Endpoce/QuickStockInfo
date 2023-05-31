@@ -83,8 +83,8 @@ def main():
 
         # get company info
         info = ticker.info
-        st.write("Company Info:")
         with col1.container():
+            col1.write("Company Info:")
             col1.write(info['longName'])
             col1.write(info['sector'])
             col1.write(info['industry'])
@@ -108,7 +108,7 @@ def main():
 
             # analyze stock data
             time.sleep(5)
-            col2.markdown(analyze_stock(filename, ticker))
+            col2.write(analyze_stock(filename, ticker))
             # col2.write("Placeholder text for stock analysis")
 
         with col3.container():
