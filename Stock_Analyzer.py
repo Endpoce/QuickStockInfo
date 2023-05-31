@@ -87,7 +87,7 @@ def analyze_stock(filename, ticker):
     prompt = f"{summary} What could these figures suggest about the stock's performance and potential future trends?"
 
     # Use the OpenAI API to generate a response
-    response = openai.ChatCompletion.create(
+    response = openai.Completion.create(
         engine="gpt-3.5-turbo", prompt=prompt, max_tokens=500)
 
     return response.choices[0].text.strip()
