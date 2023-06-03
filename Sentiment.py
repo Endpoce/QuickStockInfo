@@ -1,5 +1,4 @@
 import streamlit as st
-import yfinance as yf
 import tweepy
 import matplotlib.pyplot as plt
 import dotenv
@@ -100,32 +99,32 @@ def get_last_tweet(account):
 # fifth func, retrieve tweets
 
 
-# def get_tweets(query, count):
+def get_tweets(query, count):
 
-#     # create tweet list
-#     tweets = []
+    # create tweet list
+    tweets = []
 
-#     # get tweets containing phrase
-#     fetched_tweets = api.search_tweets(
-#         q=query, count=count, tweet_mode='extended', result_type='popular')
-#     for tweet in fetched_tweets:
-#         parsed_tweet = {}
-#         # parsed_tweet = clean_tweet(tweet.full_text)
-#         parsed_tweet['text'] = tweet.full_text
-#         # parsed_tweet['sentiment'] = get_tweet_sentiment(
-#         #     tweet.full_text)
-#         parsed_tweet['retweet_count'] = tweet.retweet_count
-#         parsed_tweet['user'] = tweet.user
-#         parsed_tweet['screen_name'] = tweet.user.screen_name
-#         parsed_tweet['profile_pic'] = tweet.user.profile_image_url
-#         parsed_tweet['num_likes'] = tweet.favorite_count
+    # get tweets containing phrase
+    fetched_tweets = api.search_tweets(
+        q=query, count=count, tweet_mode='extended', result_type='popular')
+    for tweet in fetched_tweets:
+        parsed_tweet = {}
+        # parsed_tweet = clean_tweet(tweet.full_text)
+        parsed_tweet['text'] = tweet.full_text
+        # parsed_tweet['sentiment'] = get_tweet_sentiment(
+        #     tweet.full_text)
+        parsed_tweet['retweet_count'] = tweet.retweet_count
+        parsed_tweet['user'] = tweet.user
+        parsed_tweet['screen_name'] = tweet.user.screen_name
+        parsed_tweet['profile_pic'] = tweet.user.profile_image_url
+        parsed_tweet['num_likes'] = tweet.favorite_count
 
-#         print(parsed_tweet['text'])
+        print(parsed_tweet['text'])
 
-#         if parsed_tweet not in tweets:
-#             tweets.__add__(parsed_tweet)
+        if parsed_tweet not in tweets:
+            tweets.__add__(parsed_tweet)
 
-#     return tweets
+    return tweets
 
 
 def create_tweet_styles():
