@@ -85,7 +85,7 @@ def get_MW_Articles(symbol, amount):
                 article_title = article_element.text.strip()
                 article_url = base_url + article_element.find('a')['href']
 
-                articles.append({'title': article_title, 'url': article_url})
+                articles.append({'title': article_title, 'url': search_url})
 
             return articles
 
