@@ -32,32 +32,6 @@ st.set_page_config(page_title="Tweet Analysis", page_icon="chart_with_upwards_tr
                    layout='wide', initial_sidebar_state="expanded")
 
 
-def get_tweets(query, count):
-
-    # create tweet list
-    tweets = []
-
-    # get tweets containing phrase
-    fetched_tweets = api.search_tweets(
-        q=query, count=count, tweet_mode='extended', result_type='popular')
-    for tweet in fetched_tweets:
-        parsed_tweet = {}
-        # parsed_tweet = clean_tweet(tweet.full_text)
-        parsed_tweet['text'] = tweet.full_text
-        parsed_tweet['retweet_count'] = tweet.retweet_count
-        parsed_tweet['user'] = tweet.user
-        parsed_tweet['screen_name'] = tweet.user.screen_name
-        parsed_tweet['profile_pic'] = tweet.user.profile_image_url
-        parsed_tweet['num_likes'] = tweet.favorite_count
-
-        # print(parsed_tweet['text'])
-
-        if parsed_tweet not in tweets:
-            tweets.append(parsed_tweet)
-
-    return tweets
-
-
 def main():
 
     # Title
@@ -94,7 +68,7 @@ def main():
             search_term = info['longName']
             search_term = search_term.replace(",", "")
             search_term = search_term.replace(".", "")
-            wiki_url = get_wiki_info(search_term)
+            wiki_url, search_results = get_wiki_info(search_term)
             col1.write("Wikipedia URL:")
             col1.write(wiki_url)
 
