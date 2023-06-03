@@ -15,42 +15,13 @@ auth = tweepy.OAuth2BearerHandler(os.environ.get("Bearer_token"))
 api = tweepy.API(auth)
 
 
-def get_tweets(query, count):
-
-    # create tweet list
-    tweets = []
-
-    # get tweets containing phrase
-    fetched_tweets = api.search_tweets(
-        q=query, count=count, tweet_mode='extended', result_type='popular')
-    for tweet in fetched_tweets:
-        parsed_tweet = {}
-        # parsed_tweet = clean_tweet(tweet.full_text)
-        parsed_tweet['text'] = tweet.full_text
-        parsed_tweet['retweet_count'] = tweet.retweet_count
-        parsed_tweet['user'] = tweet.user
-        parsed_tweet['screen_name'] = tweet.user.screen_name
-        parsed_tweet['profile_pic'] = tweet.user.profile_image_url
-        parsed_tweet['num_likes'] = tweet.favorite_count
-
-        # print(parsed_tweet['text'])
-
-        if parsed_tweet not in tweets:
-            tweets.append(parsed_tweet)
-
-    return tweets
-
-
 # first func, Clean tweets of hyperlinks
-
-
 def clean_tweet(tweet):
 
     return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
 
+
 # Second func, Analyze tweets for sentiment
-
-
 def get_tweet_sentiment(tweet):
 
     # Use textblob to analyze sentiment
@@ -62,17 +33,15 @@ def get_tweet_sentiment(tweet):
     else:
         return 'negative'
 
+
 # third func, get retweet count
-
-
 def get_retweet_count(tweet):
 
     count = api.get_status(tweet)
     return count
 
+
 # fourth func, get last tweet of user
-
-
 def get_last_tweet(account):
 
     tweets = []
@@ -96,9 +65,8 @@ def get_last_tweet(account):
         print("Retweets: "+str(parsed_tweet['retweet_count']))
         print("Likes: " + str(tweet.favorite_count))
 
+
 # fifth func, retrieve tweets
-
-
 def get_tweets(query, count):
 
     # create tweet list
@@ -122,11 +90,12 @@ def get_tweets(query, count):
         print(parsed_tweet['text'])
 
         if parsed_tweet not in tweets:
-            tweets.__add__(parsed_tweet)
+            tweets.append(parsed_tweet)
 
     return tweets
 
 
+# create tweet styles
 def create_tweet_styles():
     # CSS selectors created by manually grabbing class from inpsect element in browser / all containers will have the same auto-generated class in the html
     tweet_styles = '''
@@ -144,9 +113,8 @@ def create_tweet_styles():
     '''
     st.markdown(tweet_styles, unsafe_allow_html=True)
 
+
 # Use the class from TwitterSentiment file to get sentiment of tweets
-
-
 def main_twitter(query):
 
     # for each tweet in tweets, if tweet is positive, add to ptweets, if negative, add to ntweets
@@ -277,9 +245,8 @@ def main_twitter(query):
     except TypeError as e:
         st.write(e)
 
+
 # If twitter phrase starts with '@' then search users
-
-
 def for_users(query):
 
     # Oauth
@@ -305,9 +272,8 @@ def for_users(query):
     except:
         st.subheader("That profile could not be found.")
 
+
 # get text sentiment given any text string
-
-
 def get_text_sentiment(text):
 
     # Use textblob to analyze sentiment
@@ -321,9 +287,8 @@ def get_text_sentiment(text):
     else:
         return 'negative'
 
+
 # Make a graph given, pos, neg, and neu sentiments
-
-
 def pie_Graph(texts):
     ptexts = []
     ntexts = []
@@ -385,9 +350,8 @@ def pie_Graph(texts):
 
         st.pyplot(fig1)
 
+
 # sidebar stock analysis
-
-
 def sidebar_Stocks():
 
     st.sidebar.write("---")
