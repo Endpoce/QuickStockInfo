@@ -66,9 +66,7 @@ def main():
 
             # get wiki info
             search_term = info['longName']
-            search_term = search_term.replace(",", "")
-            search_term = search_term.replace(".", "")
-            wiki_url, search_results = get_wiki_info(search_term)
+            wiki_url = get_wiki_info(search_term)
             col1.write("Wikipedia URL:")
             col1.write(wiki_url)
 
