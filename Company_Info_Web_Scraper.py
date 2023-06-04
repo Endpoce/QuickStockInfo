@@ -1,10 +1,7 @@
 # %%
-import json
 import openai
 import requests
-import yfinance as yf
 import wikipedia
-import textwrap
 from GetArticles import *
 import os
 from dotenv import load_dotenv
@@ -22,27 +19,15 @@ search_query = ['WKHS']
 # %%
 
 
-def get_wiki_info(search_query):
+def get_wiki_info(search_term):
     try:
-        # wikipedia search request
-        search_results = wikipedia.page(search_query)
-        if search_results:
-            # get the first result
-            page_url = wikipedia.page(search_results[0]).url
-            return page_url
-        else:
-            print("No search results found for the query")
-            return '', []
-
+        page = wikipedia.page(search_term)
+        return page.url
     except wikipedia.exceptions.DisambiguationError as e:
-        print(f"Disambiguation error: {e}")
-        return '', []
-    except wikipedia.exceptions.PageError as e:
-        print(f"Page does not exist: {e}")
-        return '', []
-    except Exception as e:
-        print(f"Unexpected error: {e}")
-        return '', []
+        print(f"Disambiguation error: {e.options}")
+    except wikipedia.exceptions.PageError:
+        print("Page not found")
+    return None
 
 # %%
 
