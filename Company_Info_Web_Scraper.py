@@ -25,7 +25,7 @@ search_query = ['WKHS']
 def get_wiki_info(search_query):
     try:
         # wikipedia search request
-        search_results = wikipedia.search(search_query)
+        search_results = wikipedia.page(search_query)
         if search_results:
             # get the first result
             page_url = wikipedia.page(search_results[0]).url
