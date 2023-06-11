@@ -19,15 +19,28 @@ search_query = ['WKHS']
 # %%
 
 
-def get_wiki_info(search_term):
-    try:
-        page = wikipedia.page(search_term)
-        return page.url
-    except wikipedia.exceptions.DisambiguationError as e:
-        print(f"Disambiguation error: {e.options}")
-    except wikipedia.exceptions.PageError:
-        print("Page not found")
-    return None
+def get_first_result_content(query):
+    results = wikipedia.search(query)
+    if results:
+        first_result = results[0]  # get the first result
+        try:
+            # get the page of the first result
+            page = wikipedia.page(first_result)
+            return page.content  # return the content of the page
+        except wikipedia.DisambiguationError as e:
+            print(
+                f"Disambiguation page found, consider choosing a specific title from: {e.options}")
+        except wikipedia.PageError:
+            print("Page not found on Wikipedia")
+    else:
+        return None  # return None if no results found
+
+
+first_result_content = get_first_result_content('Python programming')
+if first_result_content is not None:
+    print('First result content:\n', first_result_content)
+else:
+    print('No results found')
 
 # %%
 
