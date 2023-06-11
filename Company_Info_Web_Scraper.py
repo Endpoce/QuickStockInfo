@@ -19,14 +19,15 @@ search_query = ['WKHS']
 # %%
 
 
-def get_first_result_content(query):
+def get_wiki_info(query):
     results = wikipedia.search(query)
     if results:
         first_result = results[0]  # get the first result
         try:
             # get the page of the first result
             page = wikipedia.page(first_result)
-            return page.content  # return the content of the page
+            url = page.url  # get the url of the page
+            return page.content, url  # return the content of the page
         except wikipedia.DisambiguationError as e:
             print(
                 f"Disambiguation page found, consider choosing a specific title from: {e.options}")
