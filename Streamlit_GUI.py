@@ -65,7 +65,7 @@ def main():
             col1.write(info['longBusinessSummary'])
 
             # get wiki info
-            wiki_url = get_wiki_info(info['longName'])
+            wiki_content, wiki_url = get_wiki_info(info['longName'])
             col1.write("Wikipedia URL:")
             col1.write(wiki_url)
 
