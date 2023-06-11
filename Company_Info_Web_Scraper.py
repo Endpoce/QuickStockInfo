@@ -37,15 +37,6 @@ def get_wiki_info(query):
         return None  # return None if no results found
 
 
-first_result_content = get_first_result_content('Python programming')
-if first_result_content is not None:
-    print('First result content:\n', first_result_content)
-else:
-    print('No results found')
-
-# %%
-
-
 def get_company_info(ticker):
     try:
 
