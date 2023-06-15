@@ -27,7 +27,7 @@ def get_wiki_info(query):
             # get the page of the first result
             page = wikipedia.page(first_result)
             url = page.url  # get the url of the page
-            return page.content, url  # return the content of the page
+            return url  # return the content of the page
         except wikipedia.DisambiguationError as e:
             print(
                 f"Disambiguation page found, consider choosing a specific title from: {e.options}")
