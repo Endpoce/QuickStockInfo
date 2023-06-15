@@ -85,7 +85,7 @@ def main():
         with col3.container():
             # display tweets
             st.write("Tweets:")
-            tweets = get_tweets(str("$" + ticker_symbol), 5)
+            tweets = get_tweets(ticker_symbol, 5)
 
             # display tweets
             # display tweet text
