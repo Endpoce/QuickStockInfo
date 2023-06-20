@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 import time
 from Sentiment import *
 import tweepy
+import plotly.graph_objects as go
 
 load_dotenv()
 
@@ -95,7 +96,7 @@ def main():
 
         with col2.container():
             # plot price stock data
-            col2.pyplot(plot_stock_with_interactive_chart(filename))
+            col2.plotly_chart(plot_stock_with_interactive_chart(filename))
 
             # analyze stock data
             time.sleep(5)
