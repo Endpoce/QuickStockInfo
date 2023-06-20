@@ -122,8 +122,11 @@ def main():
             # display finance info
             if 'regularMarketPrice' or 'currentPrice' in info:
                 col3.subheader("Info:")
-
-                col3.write("Current Price: " + str(info['currentPrice']))
+                if 'regularMarketPrice' in info:
+                    col3.write("Current Price: " +
+                               str(info['regularMarketPrice']))
+                elif 'currentPrice' in info:
+                    col3.write("Current Price: " + str(info['currentPrice']))
                 col3.write("Estimated 52 week return: " +
                            str(get_estimated_return(info, ticker)))
                 col3.write("Market Cap: " + str(info['marketCap']))
