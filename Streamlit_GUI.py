@@ -35,7 +35,10 @@ st.set_page_config(page_title="Tweet Analysis", page_icon="chart_with_upwards_tr
 
 
 def get_estimated_return(info, ticker):
-    current_price = ticker.info['currentPrice']
+    if 'currentPrice' in info:
+        current_price = ticker.info['currentPrice']
+    elif 'regularMarketPrice' in info:
+        current_price = ticker.info['regularMarketPrice']
     dividend_avg = ticker.info['trailingAnnualDividendYield']
 
     one_year_ago_date = (
