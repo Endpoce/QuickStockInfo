@@ -220,8 +220,8 @@ def main():
 
             # analyze stock data
             time.sleep(5)
-            # col2.write(analyze_stock(filename, ticker))
-            col2.write("Placeholder text for stock analysis")
+            col2.write(analyze_stock(filename, ticker))
+            # col2.write("Placeholder text for stock analysis")
 
             # get articles
 
