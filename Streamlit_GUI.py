@@ -136,8 +136,8 @@ def main():
             col3.write("Short Ratio: " + str(info['shortRatio']))
             col3.write("Short Percent Outstanding: " +
                        str(info['shortPercentOfFloat']))
-            col3.write("Short Percent of Shares Outstanding: " +
-                       str(info['shortPercentOfSharesOutstanding']))
+            # col3.write("Short Percent of Shares Outstanding: " +
+            #            str(info['shortPercentOfSharesOutstanding']))
             col3.write("Shares Short (Prior Month Date): " +
                        str(info['sharesShortPriorMonth']))
             col3.write("Shares Short (Prior Month): " +
