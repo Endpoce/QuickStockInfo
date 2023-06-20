@@ -1,3 +1,4 @@
+from datetime import timedelta
 import streamlit as st
 import yfinance as yf
 import pandas as pd
@@ -30,6 +31,25 @@ end_date = datetime.today().strftime('%Y-%m-%d')
 # Page config (Title at top and icon at top )
 st.set_page_config(page_title="Tweet Analysis", page_icon="chart_with_upwards_trend",
                    layout='wide', initial_sidebar_state="expanded")
+
+
+def get_estimated_return(info, ticker, hist):
+    current_price = ticker.info['regularMarketPrice']
+    dividend_avg = ticker.info['trailingAnnualDividendYield']
+
+    one_year_ago_date = (
+        datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
+    history = ticker.history(start=one_year_ago_date)
+
+    # Get the first available price, which should be the price from approximately one year ago
+    # Assumes that the stock market was open on the 'one_year_ago_date',
+    # you may want to handle cases where it was not, such as weekends and holidays.
+    price_one_year_ago = history.iloc[0]['Close']
+
+    estimated_return = round(
+        ((current_price - price_one_year_ago + dividend_avg)/price_one_year_ago), 2)
+
+    return estimated_return
 
 
 def main():
@@ -83,33 +103,88 @@ def main():
             # col2.write("Placeholder text for stock analysis")
 
         with col3.container():
+            # display finance info
+            col3.subheader("Finance Info:")
+            col3.write("Current Price: " + str(info['currentPrice']))
+            col3.write("Estimated 52 week return: " +
+                       str(get_estimated_return(info)))
+            col3.write("Market Cap: " + str(info['marketCap']))
+            col3.write("Enterprise Value: " + str(info['enterpriseValue']))
+            col3.write("Trailing P/E: " + str(info['trailingPE']))
+            col3.write("Forward P/E: " + str(info['forwardPE']))
+            col3.write("PEG Ratio: " + str(info['pegRatio']))
+            col3.write("Price to Sales Ratio: " +
+                       str(info['priceToSalesTrailing12Months']))
+            col3.write("Price to Book Ratio: " + str(info['priceToBook']))
+            col3.write("Enterprise Value to Revenue: " +
+                       str(info['enterpriseToRevenue']))
+            col3.write("Enterprise Value to EBITDA: " +
+                       str(info['enterpriseToEbitda']))
+            col3.write("Profit Margins: " + str(info['profitMargins']))
+            col3.write("Forward EPS: " + str(info['forwardEps']))
+            col3.write("Beta: " + str(info['beta']))
+            col3.write("52 Week High: " + str(info['fiftyTwoWeekHigh']))
+            col3.write("52 Week Low: " + str(info['fiftyTwoWeekLow']))
+            col3.write("50 Day Moving Average: " +
+                       str(info['fiftyDayAverage']))
+            col3.write("200 Day Moving Average: " +
+                       str(info['twoHundredDayAverage']))
+            col3.write("Shares Outstanding: " + str(info['sharesOutstanding']))
+            col3.write("Shares Short: " + str(info['sharesShort']))
+            col3.write("Shares Short Prior Month: " +
+                       str(info['sharesShortPriorMonth']))
+            col3.write("Short Ratio: " + str(info['shortRatio']))
+            col3.write("Short Percent Outstanding: " +
+                       str(info['shortPercentOfFloat']))
+            col3.write("Short Percent of Shares Outstanding: " +
+                       str(info['shortPercentOfSharesOutstanding']))
+            col3.write("Shares Short (Prior Month Date): " +
+                       str(info['sharesShortPriorMonth']))
+            col3.write("Shares Short (Prior Month): " +
+                       str(info['sharesShortPriorMonth']))
+            col3.write("Forward Annual Dividend Rate: " +
+                       str(info['forwardAnnualDividendRate']))
+            col3.write("Forward Annual Dividend Yield: " +
+                       str(info['forwardAnnualDividendYield']))
+            col3.write("Trailing Annual Dividend Rate: " +
+                       str(info['trailingAnnualDividendRate']))
+            col3.write("Trailing Annual Dividend Yield: " +
+                       str(info['trailingAnnualDividendYield']))
+            col3.write("5 Year Average Dividend Yield: " +
+                       str(info['fiveYearAvgDividendYield']))
+            col3.write("Payout Ratio: " + str(info['payoutRatio']))
+            col3.write("Dividend Date: " + str(info['dividendDate']))
+            col3.write("Ex Dividend Date: " + str(info['exDividendDate']))
+            col3.write("Last Split Factor: " + str(info['lastSplitFactor']))
+            col3.write("Last Split Date: " + str(info['lastSplitDate']))
+
             # display tweets
-            st.write("Tweets:")
-            tweets = get_tweets(ticker_symbol, 5)
+            # st.write("Tweets:")
+            # tweets = get_tweets(ticker_symbol, 5)
 
             # display tweets
             # display tweet text
-            for tweet in tweets:
+            # for tweet in tweets:
 
-                with st.container():
+            #     with st.container():
 
-                    create_tweet_styles()
+            #         create_tweet_styles()
 
-                    # Markdown
-                    st.image(tweet["profile_pic"])
-                    st.markdown('Username: ' +
-                                tweet["screen_name"], unsafe_allow_html=False)
-                    st.write(f"Number of likes: {tweet['num_likes']}")
-                    # st.markdown(tweet, unsafe_allow_html=False)
+            #         # Markdown
+            #         st.image(tweet["profile_pic"])
+            #         st.markdown('Username: ' +
+            #                     tweet["screen_name"], unsafe_allow_html=False)
+            #         st.write(f"Number of likes: {tweet['num_likes']}")
+            #         # st.markdown(tweet, unsafe_allow_html=False)
 
-                    # Text
-                    st.write("Sentiment: " +
-                             get_tweet_sentiment(tweet["text"]))
-                    st.markdown(tweet["text"])
-                    st.write("---")
-                    time.sleep(5)
-            else:
-                st.write("No tweets found")
+            #         # Text
+            #         st.write("Sentiment: " +
+            #                  get_tweet_sentiment(tweet["text"]))
+            #         st.markdown(tweet["text"])
+            #         st.write("---")
+            #         time.sleep(5)
+            # else:
+            #     st.write("No tweets found")
         with col2.container():
             # get articles
 
