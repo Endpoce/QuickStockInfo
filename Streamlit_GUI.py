@@ -76,11 +76,12 @@ def main():
         ticker, info, hist, file = get_stock_data(
             ticker_symbol, start_date, end_date)
 
+        # get company info
+        info = ticker.info
+
         sector = info['sector']
         industry = info['industry']
 
-        # get company info
-        info = ticker.info
         with col1.container():
             col1.write("Company Info:")
             col1.write(info['longName'])
