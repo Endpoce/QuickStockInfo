@@ -178,8 +178,8 @@ def main():
             if 'trailingAnnualDividendYield' in info:
                 col3.write("Trailing Annual Dividend Yield: " +
                            str(info['trailingAnnualDividendYield']))
-            col3.write("5 Year Average Dividend Yield: " +
-                       str(info['fiveYearAvgDividendYield']))
+            # col3.write("5 Year Average Dividend Yield: " +
+            #            str(info['fiveYearAvgDividendYield']))
             col3.write("Payout Ratio: " + str(info['payoutRatio']))
             # col3.write("Dividend Date: " + str(info['dividendDate']))
             # col3.write("Ex Dividend Date: " +
