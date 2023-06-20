@@ -47,7 +47,7 @@ def get_estimated_return(info, ticker):
     price_one_year_ago = history.iloc[0]['Close']
 
     estimated_return = round(
-        ((current_price - price_one_year_ago + dividend_avg)/price_one_year_ago), 2)
+        ((current_price - price_one_year_ago + dividend_avg)/price_one_year_ago) * 100, 2)
 
     return estimated_return
 
