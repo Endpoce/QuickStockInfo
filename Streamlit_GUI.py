@@ -39,7 +39,13 @@ def get_estimated_return(info, ticker):
         current_price = ticker.info['currentPrice']
     elif 'regularMarketPrice' in info:
         current_price = ticker.info['regularMarketPrice']
-    dividend_avg = ticker.info['trailingAnnualDividendYield']
+
+    if 'trailingAnnualDividendYield' in info:
+        dividend = ticker.info['trailingAnnualDividendYield']
+    elif 'dividendYield' in info:
+        dividend = ticker.info['dividendYield']
+    else:
+        dividend = 0
 
     one_year_ago_date = (
         datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
@@ -51,7 +57,7 @@ def get_estimated_return(info, ticker):
     price_one_year_ago = history.iloc[0]['Close']
 
     estimated_return = round(
-        ((current_price - price_one_year_ago + dividend_avg)/price_one_year_ago) * 100, 2)
+        ((current_price - price_one_year_ago + dividend)/price_one_year_ago) * 100, 2)
 
     return estimated_return
 
