@@ -33,7 +33,7 @@ st.set_page_config(page_title="Tweet Analysis", page_icon="chart_with_upwards_tr
                    layout='wide', initial_sidebar_state="expanded")
 
 
-def get_estimated_return(info, ticker, hist):
+def get_estimated_return(info, ticker):
     current_price = ticker.info['regularMarketPrice']
     dividend_avg = ticker.info['trailingAnnualDividendYield']
 
@@ -104,10 +104,10 @@ def main():
 
         with col3.container():
             # display finance info
-            col3.subheader("Finance Info:")
+            col3.subheader("Info:")
             col3.write("Current Price: " + str(info['currentPrice']))
             col3.write("Estimated 52 week return: " +
-                       str(get_estimated_return(info)))
+                       str(get_estimated_return(info, ticker)))
             col3.write("Market Cap: " + str(info['marketCap']))
             col3.write("Enterprise Value: " + str(info['enterpriseValue']))
             col3.write("Trailing P/E: " + str(info['trailingPE']))
