@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import os
 from dotenv import load_dotenv
 import yfinance as yf
+import plotly.graph_objects as go
+
 
 load_dotenv()
 
