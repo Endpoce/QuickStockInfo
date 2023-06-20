@@ -126,69 +126,68 @@ def main():
 
         with col3.container():
             # display finance info
-            if 'regularMarketPrice' or 'currentPrice' in info:
-                col3.subheader("Info:")
-                if 'regularMarketPrice' in info:
-                    col3.write("Current Price: " +
-                               str(info['regularMarketPrice']))
-                elif 'currentPrice' in info:
-                    col3.write("Current Price: " + str(info['currentPrice']))
-                col3.write("Estimated 52 week return: " +
-                           str(get_estimated_return(info, ticker)))
-                col3.write("Market Cap: " + str(info['marketCap']))
-                col3.write("Enterprise Value: " + str(info['enterpriseValue']))
-                col3.write("Trailing P/E: " + str(info['trailingPE']))
-                col3.write("Forward P/E: " + str(info['forwardPE']))
-                col3.write("PEG Ratio: " + str(info['pegRatio']))
-                col3.write("Price to Sales Ratio: " +
-                           str(info['priceToSalesTrailing12Months']))
-                col3.write("Price to Book Ratio: " + str(info['priceToBook']))
-                col3.write("Enterprise Value to Revenue: " +
-                           str(info['enterpriseToRevenue']))
-                col3.write("Enterprise Value to EBITDA: " +
-                           str(info['enterpriseToEbitda']))
-                col3.write("Profit Margins: " + str(info['profitMargins']))
-                col3.write("Forward EPS: " + str(info['forwardEps']))
-                col3.write("Beta: " + str(info['beta']))
-                col3.write("52 Week High: " + str(info['fiftyTwoWeekHigh']))
-                col3.write("52 Week Low: " + str(info['fiftyTwoWeekLow']))
-                col3.write("50 Day Moving Average: " +
-                           str(info['fiftyDayAverage']))
-                col3.write("200 Day Moving Average: " +
-                           str(info['twoHundredDayAverage']))
-                col3.write("Shares Outstanding: " +
-                           str(info['sharesOutstanding']))
-                col3.write("Shares Short: " + str(info['sharesShort']))
-                col3.write("Shares Short Prior Month: " +
-                           str(info['sharesShortPriorMonth']))
-                col3.write("Short Ratio: " + str(info['shortRatio']))
-                col3.write("Short Percent Outstanding: " +
-                           str(info['shortPercentOfFloat']))
-                # col3.write("Short Percent of Shares Outstanding: " +
-                #            str(info['shortPercentOfSharesOutstanding']))
-                col3.write("Shares Short (Prior Month Date): " +
-                           str(info['sharesShortPriorMonth']))
-                col3.write("Shares Short (Prior Month): " +
-                           str(info['sharesShortPriorMonth']))
-                # col3.write("Forward Annual Dividend Rate: " +
-                #            str(info['forwardAnnualDividendRate']))
-                # col3.write("Forward Annual Dividend Yield: " +
-                #            str(info['forwardAnnualDividendYield']))
-                col3.write("Trailing Annual Dividend Rate: " +
-                           str(info['trailingAnnualDividendRate']))
-                if 'trailingAnnualDividendYield' in info:
-                    col3.write("Trailing Annual Dividend Yield: " +
-                               str(info['trailingAnnualDividendYield']))
-                col3.write("5 Year Average Dividend Yield: " +
-                           str(info['fiveYearAvgDividendYield']))
-                col3.write("Payout Ratio: " + str(info['payoutRatio']))
-                # col3.write("Dividend Date: " + str(info['dividendDate']))
-                # col3.write("Ex Dividend Date: " +
-                #            str(datetime.date(info['exDividendDate'])))
-                col3.write("Last Split Factor: " +
-                           str(info['lastSplitFactor']))
-                # col3.write("Last Split Date: " +
-                #    str(datetime.date(info['lastSplitDate'])))
+            col3.subheader("Info:")
+            if 'regularMarketPrice' in ticker.info:
+                col3.write("Current Price: " +
+                           str(info['regularMarketPrice']))
+            elif 'currentPrice' in ticker.info:
+                col3.write("Current Price: " + str(info['currentPrice']))
+            col3.write("Estimated 52 week return: " +
+                       str(get_estimated_return(info, ticker)))
+            col3.write("Market Cap: " + str(info['marketCap']))
+            col3.write("Enterprise Value: " + str(info['enterpriseValue']))
+            col3.write("Trailing P/E: " + str(info['trailingPE']))
+            col3.write("Forward P/E: " + str(info['forwardPE']))
+            col3.write("PEG Ratio: " + str(info['pegRatio']))
+            col3.write("Price to Sales Ratio: " +
+                       str(info['priceToSalesTrailing12Months']))
+            col3.write("Price to Book Ratio: " + str(info['priceToBook']))
+            col3.write("Enterprise Value to Revenue: " +
+                       str(info['enterpriseToRevenue']))
+            col3.write("Enterprise Value to EBITDA: " +
+                       str(info['enterpriseToEbitda']))
+            col3.write("Profit Margins: " + str(info['profitMargins']))
+            col3.write("Forward EPS: " + str(info['forwardEps']))
+            col3.write("Beta: " + str(info['beta']))
+            col3.write("52 Week High: " + str(info['fiftyTwoWeekHigh']))
+            col3.write("52 Week Low: " + str(info['fiftyTwoWeekLow']))
+            col3.write("50 Day Moving Average: " +
+                       str(info['fiftyDayAverage']))
+            col3.write("200 Day Moving Average: " +
+                       str(info['twoHundredDayAverage']))
+            col3.write("Shares Outstanding: " +
+                       str(info['sharesOutstanding']))
+            col3.write("Shares Short: " + str(info['sharesShort']))
+            col3.write("Shares Short Prior Month: " +
+                       str(info['sharesShortPriorMonth']))
+            col3.write("Short Ratio: " + str(info['shortRatio']))
+            col3.write("Short Percent Outstanding: " +
+                       str(info['shortPercentOfFloat']))
+            # col3.write("Short Percent of Shares Outstanding: " +
+            #            str(info['shortPercentOfSharesOutstanding']))
+            col3.write("Shares Short (Prior Month Date): " +
+                       str(info['sharesShortPriorMonth']))
+            col3.write("Shares Short (Prior Month): " +
+                       str(info['sharesShortPriorMonth']))
+            # col3.write("Forward Annual Dividend Rate: " +
+            #            str(info['forwardAnnualDividendRate']))
+            # col3.write("Forward Annual Dividend Yield: " +
+            #            str(info['forwardAnnualDividendYield']))
+            col3.write("Trailing Annual Dividend Rate: " +
+                       str(info['trailingAnnualDividendRate']))
+            if 'trailingAnnualDividendYield' in info:
+                col3.write("Trailing Annual Dividend Yield: " +
+                           str(info['trailingAnnualDividendYield']))
+            col3.write("5 Year Average Dividend Yield: " +
+                       str(info['fiveYearAvgDividendYield']))
+            col3.write("Payout Ratio: " + str(info['payoutRatio']))
+            # col3.write("Dividend Date: " + str(info['dividendDate']))
+            # col3.write("Ex Dividend Date: " +
+            #            str(datetime.date(info['exDividendDate'])))
+            col3.write("Last Split Factor: " +
+                       str(info['lastSplitFactor']))
+            # col3.write("Last Split Date: " +
+            #    str(datetime.date(info['lastSplitDate'])))
 
             # display tweets
             # st.write("Tweets:")
