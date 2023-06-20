@@ -154,9 +154,11 @@ def main():
                        str(info['fiveYearAvgDividendYield']))
             col3.write("Payout Ratio: " + str(info['payoutRatio']))
             # col3.write("Dividend Date: " + str(info['dividendDate']))
-            col3.write("Ex Dividend Date: " + str(info['exDividendDate']))
+            col3.write("Ex Dividend Date: " +
+                       str(datetime.date(info['exDividendDate'])))
             col3.write("Last Split Factor: " + str(info['lastSplitFactor']))
-            col3.write("Last Split Date: " + str(info['lastSplitDate']))
+            col3.write("Last Split Date: " +
+                       str(datetime.date(info['lastSplitDate'])))
 
             # display tweets
             # st.write("Tweets:")
