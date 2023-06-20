@@ -128,11 +128,11 @@ def plot_stock_with_moving_averages_from_csv(filename, short_window=15, long_win
     # Add arrows for crossover points
     for i in df[df['ShortCrossesAboveLong']].index:
         plt.annotate('', xy=(i, df['ShortMA'][i]), xytext=(i, df['ShortMA'][i] - 5),
-                     arrowprops={'arrowstyle': '->', 'color': 'green'})  # green for ShortMA crosses above LongMA
+                     arrowprops={'arrowstyle': '->', 'color': 'purple'})  # green for ShortMA crosses above LongMA
 
     for i in df[df['LongCrossesAboveShort']].index:
         plt.annotate('', xy=(i, df['LongMA'][i]), xytext=(i, df['LongMA'][i] + 5),
-                     arrowprops={'arrowstyle': '->', 'color': 'red'})  # red for LongMA crosses above ShortMA
+                     arrowprops={'arrowstyle': '->', 'color': 'purple'})  # red for LongMA crosses above ShortMA
 
     plt.title(
         f'Close Price with {short_window}-Day & {long_window}-Day Moving Averages')
