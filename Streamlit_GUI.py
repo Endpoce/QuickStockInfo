@@ -157,8 +157,8 @@ def main():
             # col3.write("Ex Dividend Date: " +
             #            str(datetime.date(info['exDividendDate'])))
             col3.write("Last Split Factor: " + str(info['lastSplitFactor']))
-            col3.write("Last Split Date: " +
-                       str(datetime.date(info['lastSplitDate'])))
+            # col3.write("Last Split Date: " +
+            #    str(datetime.date(info['lastSplitDate'])))
 
             # display tweets
             # st.write("Tweets:")
