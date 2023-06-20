@@ -81,9 +81,9 @@ def main():
         with col1.container():
             col1.write("Company Info:")
             col1.write(info['longName'])
-            if info['sector'] != "":
+            if info['sector'] != None:
                 col1.write("Sector: "+info['sector'])
-            if info['industry'] != "":
+            if info['industry'] != None:
                 col1.write("Industry: " + info['industry'])
             col1.write(info['longBusinessSummary'])
 
