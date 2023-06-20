@@ -120,7 +120,7 @@ def main():
 
         with col3.container():
             # display finance info
-            if 'currentPrice' in info:
+            if 'regularMarketPrice' or 'currentPrice' in info:
                 col3.subheader("Info:")
 
                 col3.write("Current Price: " + str(info['currentPrice']))
