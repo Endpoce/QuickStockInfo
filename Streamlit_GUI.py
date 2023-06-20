@@ -142,8 +142,8 @@ def main():
                        str(info['sharesShortPriorMonth']))
             col3.write("Shares Short (Prior Month): " +
                        str(info['sharesShortPriorMonth']))
-            col3.write("Forward Annual Dividend Rate: " +
-                       str(info['forwardAnnualDividendRate']))
+            # col3.write("Forward Annual Dividend Rate: " +
+            #            str(info['forwardAnnualDividendRate']))
             col3.write("Forward Annual Dividend Yield: " +
                        str(info['forwardAnnualDividendYield']))
             col3.write("Trailing Annual Dividend Rate: " +
