@@ -116,11 +116,6 @@ def main():
             col2.plotly_chart(plot_stock_with_interactive_chart(
                 filename), use_container_width=True)
 
-            # analyze stock data
-            time.sleep(5)
-            col2.write(analyze_stock(filename, ticker))
-            # col2.write("Placeholder text for stock analysis")
-
         with col3.container():
             # display finance info
             if 'regularMarketPrice' or 'currentPrice' in info:
@@ -214,6 +209,12 @@ def main():
             # else:
             #     st.write("No tweets found")
         with col2.container():
+
+            # analyze stock data
+            time.sleep(5)
+            # col2.write(analyze_stock(filename, ticker))
+            col2.write("Placeholder text for stock analysis")
+
             # get articles
 
             articles = get_MW_Articles(ticker_symbol, 5)
