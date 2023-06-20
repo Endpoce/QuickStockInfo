@@ -1,4 +1,5 @@
 # %%
+import plotly.graph_objects as go
 import pandas as pd
 import openai
 from datetime import datetime
@@ -142,6 +143,50 @@ def plot_stock_with_moving_averages_from_csv(filename, short_window=15, long_win
 
     # Show plot
     # plt.show()
+
+    return fig
+
+
+def plot_stock_with_interactive_chart(filename, short_window=15, long_window=100):
+    # Read data from CSV file
+    df = pd.read_csv(filename, parse_dates=['Date'], index_col='Date')
+
+    # Calculate short and long moving averages
+    df['ShortMA'] = df['Close'].rolling(window=short_window).mean()
+    df['LongMA'] = df['Close'].rolling(window=long_window).mean()
+
+    # Create a column for the difference between the short and long MAs
+    df['Diff'] = df['ShortMA'] - df['LongMA']
+
+    # Identify crossover points
+    df['ShortCrossesAboveLong'] = (
+        (df['Diff'] > 0) & (df['Diff'].shift(1) < 0))
+    df['LongCrossesAboveShort'] = (
+        (df['Diff'] < 0) & (df['Diff'].shift(1) > 0))
+
+    # Create plot
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=df.index, y=df['Close'], mode='lines', name='Close Price'))
+    fig.add_trace(go.Scatter(
+        x=df.index, y=df['ShortMA'], mode='lines', name=f'{short_window} Day MA'))
+    fig.add_trace(go.Scatter(
+        x=df.index, y=df['LongMA'], mode='lines', name=f'{long_window} Day MA'))
+
+    # Add vertical lines for crossover points
+    for i in df[df['ShortCrossesAboveLong']].index:
+        fig.add_shape(type="line", xref="x", yref="y", x0=i, y0=0, x1=i, y1=1,
+                      line=dict(color="purple", width=1))
+
+    for i in df[df['LongCrossesAboveShort']].index:
+        fig.add_shape(type="line", xref="x", yref="y", x0=i, y0=0, x1=i, y1=1,
+                      line=dict(color="purple", width=1))
+
+    fig.update_layout(title=f'Close Price with {short_window}-Day & {long_window}-Day Moving Averages',
+                      xaxis_title='Date', yaxis_title='Close Price ($)', autosize=False, width=1200, height=800)
+
+    fig.show()
 
     return fig
 

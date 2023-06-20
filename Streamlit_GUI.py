@@ -95,7 +95,7 @@ def main():
 
         with col2.container():
             # plot price stock data
-            col2.pyplot(plot_stock_with_moving_averages_from_csv(filename))
+            col2.pyplot(plot_stock_with_interactive_chart(filename))
 
             # analyze stock data
             time.sleep(5)
