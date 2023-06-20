@@ -96,7 +96,8 @@ def main():
 
         with col2.container():
             # plot price stock data
-            col2.plotly_chart(plot_stock_with_interactive_chart(filename))
+            col2.plotly_chart(plot_stock_with_interactive_chart(
+                filename), use_container_width=True)
 
             # analyze stock data
             time.sleep(5)
