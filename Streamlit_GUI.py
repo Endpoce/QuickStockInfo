@@ -80,8 +80,8 @@ def main():
         with col1.container():
             col1.write("Company Info:")
             col1.write(info['longName'])
-            col1.write(info['sector'])
-            col1.write(info['industry'])
+            col1.write("Sector: "+info['sector'])
+            col1.write("Industry: " + info['industry'])
             col1.write(info['longBusinessSummary'])
 
             # get wiki info
@@ -153,7 +153,7 @@ def main():
             col3.write("5 Year Average Dividend Yield: " +
                        str(info['fiveYearAvgDividendYield']))
             col3.write("Payout Ratio: " + str(info['payoutRatio']))
-            col3.write("Dividend Date: " + str(info['dividendDate']))
+            # col3.write("Dividend Date: " + str(info['dividendDate']))
             col3.write("Ex Dividend Date: " + str(info['exDividendDate']))
             col3.write("Last Split Factor: " + str(info['lastSplitFactor']))
             col3.write("Last Split Date: " + str(info['lastSplitDate']))
