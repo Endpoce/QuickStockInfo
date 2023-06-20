@@ -79,8 +79,16 @@ def main():
         # get company info
         info = ticker.info
 
-        sector = info['sector']
-        industry = info['industry']
+        # get sector and industry
+        if 'sector' in info:
+            sector = True
+        else:
+            sector = False
+
+        if 'industry' in info:
+            industry = True
+        else:
+            industry = False
 
         with col1.container():
             col1.write("Company Info:")
