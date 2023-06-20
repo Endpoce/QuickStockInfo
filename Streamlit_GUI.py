@@ -39,6 +39,8 @@ def get_estimated_return(info, ticker):
         current_price = ticker.info['currentPrice']
     elif 'regularMarketPrice' in info:
         current_price = ticker.info['regularMarketPrice']
+    else:
+        current_price = None
 
     if 'trailingAnnualDividendYield' in info:
         dividend = ticker.info['trailingAnnualDividendYield']
