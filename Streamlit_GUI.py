@@ -99,6 +99,7 @@ def main():
         industry = info['industry'] != "N/A"
         legalType = info['legalType'] != "N/A"
         category = info['category'] != "N/A"
+        ytd_return = info['ytdReturn'] != "N/A"
 
         with col1.container():
 
@@ -148,8 +149,10 @@ def main():
                        str(get_estimated_return(info, ticker)) + "%")
 
             # display ytd return
-            col3.write("Estimated YTD Return: " +
-                       str(round(info['ytdReturn']*100), 2) + "%")
+
+            if ytd_return:
+                col3.write("Estimated YTD Return: " +
+                           str(round(info['ytdReturn']*100), 2) + "%")
 
             # list of indicators I don't want to display
             not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
