@@ -35,10 +35,10 @@ st.set_page_config(page_title="Tweet Analysis", page_icon="chart_with_upwards_tr
 
 
 def get_estimated_return(info, ticker):
-    if 'currentPrice' in ticker.info:
-        current_price = ticker.info['currentPrice']
-    elif 'regularMarketPrice' in ticker.info:
-        current_price = ticker.info['regularMarketPrice']
+    if 'currentPrice' in info:
+        current_price = info['currentPrice']
+    elif 'regularMarketPrice' in info:
+        current_price = info['regularMarketPrice']
     else:
         current_price = None
 
@@ -220,8 +220,8 @@ def main():
 
             # analyze stock data
             time.sleep(5)
-            col2.write(analyze_stock(filename, ticker))
-            # col2.write("Placeholder text for stock analysis")
+            # col2.write(analyze_stock(filename, ticker))
+            col2.write("Placeholder text for stock analysis")
 
             # get articles
 
