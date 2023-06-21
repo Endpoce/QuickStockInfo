@@ -140,15 +140,15 @@ def main():
             col3.subheader("Info:")
 
             # display current price
+            col3.write("Current Price: " + str(hist['Close'].iloc[-1]))
 
-            col3.write("Current Price: " + str(info['regularMarketPrice']))
-
-            # display estimated return
+            # display estimated 52 return
             col3.write("Estimated 52 Week Return: " +
                        str(get_estimated_return(info, ticker)) + "%")
 
             # display ytd return
-            col3.write("YTD Return: " + str(info['ytdReturn']*100) + "%")
+            col3.write("Estimated YTD Return: " +
+                       str(info['ytdReturn']*100) + "%")
 
             # list of indicators I don't want to display
             not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
