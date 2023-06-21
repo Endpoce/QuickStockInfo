@@ -85,24 +85,38 @@ def main():
         # get company info
         info = ticker.info
 
-        # get sector and industry
-        if 'sector' in info:
-            sector = True
-        else:
-            sector = False
+        # info to display
+        to_display = ['longName', 'sector', 'industry',
+                      'longBusinessSummary', 'symbol', 'legalType', 'category']
 
-        if 'industry' in info:
-            industry = True
-        else:
-            industry = False
+        # get sector and industry
+        for key in to_display:
+            if key not in info:
+                info[key] = "N/A"
+
+        sector = info['sector'] != "N/A"
+        industry = info['industry'] != "N/A"
+        legalType = info['legalType'] != "N/A"
+        category = info['category'] != "N/A"
 
         with col1.container():
+
             col1.write("Company Info:")
+
             col1.write(info['longName'])
+
             if sector:
                 col1.write("Sector: "+info['sector'])
+
             if industry:
                 col1.write("Industry: " + info['industry'])
+
+            if legalType:
+                col1.write("Legal Type: " + info['legalType'])
+
+            if category:
+                col1.write("Category: " + info['category'])
+
             col1.write(info['longBusinessSummary'])
 
             # get wiki info
@@ -125,11 +139,15 @@ def main():
             col3.subheader("Info:")
 
             # display estimated return
-            col3.write("Estimated Return: " +
+            col3.write("Estimated 52 Week Return: " +
                        str(get_estimated_return(info, ticker)) + "%")
 
-            indicators = [indicator for indicator in info if indicator != 'longName' and indicator !=
-                          'sector' and indicator != 'industry' and indicator != 'longBusinessSummary']
+            # list of indicators I don't want to display
+            not_displayed = ['longName', 'sector', 'category',
+                             'industry', 'longBusinessSummary', 'symbol', 'legalType']
+
+            indicators = [
+                indicator for indicator in info if indicator not in not_displayed]
             sorted_indicators = sorted(indicators)
 
             for indicator in sorted_indicators:
