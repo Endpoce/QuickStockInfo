@@ -35,12 +35,6 @@ st.set_page_config(page_title="Tweet Analysis", page_icon="chart_with_upwards_tr
 
 
 def get_estimated_return(info, ticker):
-    if 'currentPrice' in info:
-        current_price = info['currentPrice']
-    elif 'regularMarketPrice' in info:
-        current_price = info['regularMarketPrice']
-    else:
-        current_price = None
 
     if 'trailingAnnualDividendYield' in info:
         dividend = ticker.info['trailingAnnualDividendYield']
@@ -57,6 +51,7 @@ def get_estimated_return(info, ticker):
     # Assumes that the stock market was open on the 'one_year_ago_date',
     # you may want to handle cases where it was not, such as weekends and holidays.
     price_one_year_ago = history.iloc[0]['Close']
+    current_price = history.iloc[-1]['Close']
 
     estimated_return = round(
         ((current_price - price_one_year_ago + dividend)/price_one_year_ago) * 100, 2)
