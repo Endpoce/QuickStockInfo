@@ -125,7 +125,8 @@ def main():
             col3.subheader("Info:")
 
             for indicator in info:
-                col3.write(indicator + ": " + str(info[indicator]))
+                if indicator != 'longName' or 'sector' or 'industry' or 'longBusinessSummary':
+                    col3.write(indicator + ": " + str(info[indicator]))
 
             # current_price = hist.iloc[-1]['Close']
             # col3.write("Current Price: " + str(round(current_price, 2)))
