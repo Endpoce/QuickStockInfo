@@ -156,26 +156,25 @@ def main():
         with col2.container():
 
             # analyze stock data
-            time.sleep(5)
             # col2.write(analyze_stock(filename, ticker))
             col2.write("Placeholder text for stock analysis")
+            time.sleep(5)
 
             # get articles
-
             articles = get_MW_Articles(ticker_symbol, 5)
 
             # display articles
-            st.write("Articles:")
+            col2.write("Articles:")
 
             time.sleep(5)
 
             # display articles
             for article in articles:
-                st.write(article['title'])
-                st.write(article['url'])
-                st.markdown(summarize_article(article))
+                col2.write(article['title'])
+                col2.write(article['url'])
+                col2.markdown(summarize_article(article))
                 time.sleep(5)
-            st.write("Placeholder text for article analysis")
+            col2.write("Placeholder text for article analysis")
 
 
 if __name__ == "__main__":
