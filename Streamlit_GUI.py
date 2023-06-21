@@ -87,7 +87,8 @@ def main():
 
         # info to display
         to_display = ['longName', 'sector', 'industry',
-                      'longBusinessSummary', 'symbol', 'legalType', 'category']
+                      'longBusinessSummary', 'symbol', 'legalType', 'category'
+                      ]
 
         # get sector and industry
         for key in to_display:
@@ -144,7 +145,14 @@ def main():
 
             # list of indicators I don't want to display
             not_displayed = ['longName', 'sector', 'category',
-                             'industry', 'longBusinessSummary', 'symbol', 'legalType']
+                             'industry', 'longBusinessSummary', 'symbol', 'legalType',
+                             'underlyingSymbol', 'underlyingExchangeSymbol', 'headquartersCity',
+                             'headquartersCountry', 'quoteType', 'city', 'state',
+                             'country', 'website', 'address1', 'address2', 'zip', 'phone',
+                             'numberOfEmployees', 'fullTimeEmployees', 'averageDailyVolume10Day',
+                             'averageVolume10days', 'boardRiskGovernanceExperience', 'boardRisk',
+                             'currency', 'firstTradeDateEpochUtc', 'gmtOffSetMilliseconds',
+                             'governanceEpochDate', 'impliedSharesOutstanding', 'zip', ]
 
             indicators = [
                 indicator for indicator in info if indicator not in not_displayed]
