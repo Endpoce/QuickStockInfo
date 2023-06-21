@@ -140,7 +140,8 @@ def main():
             col3.subheader("Info:")
 
             # display current price
-            col3.write("Current Price: " + str(hist['Close'].iloc[-1]))
+            col3.write("Current Price: " +
+                       str(round(hist['Close'].iloc[-1], 2)))
 
             # display estimated 52 return
             col3.write("Estimated 52 Week Return: " +
@@ -148,7 +149,7 @@ def main():
 
             # display ytd return
             col3.write("Estimated YTD Return: " +
-                       str(info['ytdReturn']*100) + "%")
+                       str(round(info['ytdReturn']*100), 2) + "%")
 
             # list of indicators I don't want to display
             not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
@@ -167,7 +168,10 @@ def main():
                              'navPrice', 'priceHint', 'shortName', 'exchangeTimezoneName', 'trailingPegRatio',
                              'twoHundredDayAverage', 'twoHundredDayAverageChange', 'twoHundredDayAverageChangePercent',
                              'yield', 'ytdReturn', 'trailingAnnualDividendRate', 'trailingAnnualDividendYield',
-                             'SandP52WeekChange'
+                             'SandP52WeekChange', 'regularMarketDayHigh', 'regularMarketDayLow', 'regularMarketOpen',
+                             'regularMarketPreviousClose', 'regularMarketVolume', 'regularMarketChange',
+                             'timeZoneShortName', 'exchangeTimezoneShortName', 'gmtOffSetMilliseconds', 'maxAge',
+                             'fundFamily', 'fundInceptionDate', 'open', 'previousClose', 'regularMarketChangePercent',
                              ]
 
             indicators = [

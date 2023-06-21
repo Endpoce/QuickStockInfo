@@ -61,24 +61,47 @@ def analyze_stock(filename, ticker):
     # Get historical market data
     hist = ticker.history(period="5d")
 
-    # Fundamental Indicators
+    # Technical Indicators
     stock_data['P/E Ratio'] = info.get('trailingPE')
     stock_data['P/B Ratio'] = info.get('priceToBook')
     stock_data['Dividend Yield'] = info.get('dividendYield')
     stock_data['EPS'] = info.get('trailingEps')
     stock_data['D/E Ratio'] = info.get('debtToEquity')
+    stock_data['Beta'] = info.get('beta')
+    stock_data['Market Cap'] = info.get('marketCap')
+    stock_data['Shares Outstanding'] = info.get('sharesOutstanding')
+    stock_data['Return on Equity'] = info.get('returnOnEquity')
+    stock_data['Return on Assets'] = info.get('returnOnAssets')
+    stock_data['Return on Capital'] = info.get('returnOnCapital')
+    stock_data['Profit Margin'] = info.get('profitMargins')
+    stock_data['Operating Margin'] = info.get('operatingMargins')
+    stock_data['Gross Profit'] = info.get('grossProfits')
+    stock_data['Operating Cash Flow'] = info.get('operatingCashflow')
+    stock_data['Leveraged Free Cash Flow'] = info.get('freeCashflow')
+    stock_data['Revenue'] = info.get('revenue')
+    stock_data['Revenue Per Share'] = info.get('revenuePerShare')
+    stock_data['Revenue Growth'] = info.get('revenueGrowth')
+    stock_data['Gross Profit Growth'] = info.get('grossMargins')
+    stock_data['EBITDA'] = info.get('ebitda')
+    stock_data['EBITDA Margin'] = info.get('ebitdaMargins')
+    stock_data['EBITDA Growth'] = info.get('ebitdaGrowth')
+    stock_data['EPS Growth'] = info.get('earningsGrowth')
+    stock_data['EPS Diluted Growth'] = info.get('earningsQuarterlyGrowth')
+    stock_data['EPS Diluted'] = info.get('trailingEps')
 
-    # Technical Indicators
+    # Fundamental Indicators
     stock_data['52 Week High'] = info.get('fiftyTwoWeekHigh')
     stock_data['52 Week Low'] = info.get('fiftyTwoWeekLow')
 
-    # Volume and Moving Averages might need to be calculated from the historical data
-    # Here's an example for volume:
-    stock_data['Volume'] = hist['Volume'].mean()
+    # Historical Market Data
+    stock_data['Average Open'] = hist['Open'].mean()
+    stock_data['Average High'] = hist['High'].mean()
+    stock_data['Average Low'] = hist['Low'].mean()
+    stock_data['Average Close'] = hist['Close'].mean()
+    stock_data['Average Volume'] = hist['Volume'].mean()
 
-    # For moving averages, you'll need to implement it yourself. Here's a simple example for a 5 day moving average:
-    stock_data['5 Day Moving Average'] = hist['Close'].rolling(
-        window=5).mean().iloc[-1]
+    stock_data['10 Day Moving Average'] = hist['Close'].rolling(
+        window=10).mean().iloc[-1]
 
     # Create a summary of the stock data
     summary = f"The stock had its highest closing price of ${high_close} and its lowest of ${low_close}. "
