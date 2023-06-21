@@ -139,12 +139,19 @@ def main():
             # display finance info
             col3.subheader("Info:")
 
+            # display current price
+
+            col3.write("Current Price: " + str(info['regularMarketPrice']))
+
             # display estimated return
             col3.write("Estimated 52 Week Return: " +
                        str(get_estimated_return(info, ticker)) + "%")
 
+            # display ytd return
+            col3.write("YTD Return: " + str(info['ytdReturn']*100) + "%")
+
             # list of indicators I don't want to display
-            not_displayed = ['longName', 'sector', 'category',
+            not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
                              'industry', 'longBusinessSummary', 'symbol', 'legalType',
                              'underlyingSymbol', 'underlyingExchangeSymbol', 'headquartersCity',
                              'headquartersCountry', 'quoteType', 'city', 'state',
@@ -152,7 +159,16 @@ def main():
                              'numberOfEmployees', 'fullTimeEmployees', 'averageDailyVolume10Day',
                              'averageVolume10days', 'boardRiskGovernanceExperience', 'boardRisk',
                              'currency', 'firstTradeDateEpochUtc', 'gmtOffSetMilliseconds',
-                             'governanceEpochDate', 'impliedSharesOutstanding', 'zip', ]
+                             'governanceEpochDate', 'impliedSharesOutstanding', 'zip', 'uuid',
+                             'maxAge', 'logo_url', 'compensationAsOfEpochDate', 'compensationRisk',
+                             'compensationRank', 'compensationScore', 'compensationDescription',
+                             'compensationCalendarDate', 'compensationPeerGroup', 'compensationPeerGroupDescription',
+                             'messageBoardId', 'maxAge', 'logo_url', 'compensationAsOfEpochDate',
+                             'navPrice', 'priceHint', 'shortName', 'exchangeTimezoneName', 'trailingPegRatio',
+                             'twoHundredDayAverage', 'twoHundredDayAverageChange', 'twoHundredDayAverageChangePercent',
+                             'yield', 'ytdReturn', 'trailingAnnualDividendRate', 'trailingAnnualDividendYield',
+                             'SandP52WeekChange'
+                             ]
 
             indicators = [
                 indicator for indicator in info if indicator not in not_displayed]
