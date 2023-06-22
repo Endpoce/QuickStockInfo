@@ -160,7 +160,7 @@ def main():
 
             # display ytd return
             col3.write("Estimated YTD Return: " +
-                       str(round(ytdReturn, 2) + "%"))
+                       round(ytdReturn, 2) + "%")
 
             # list of indicators I don't want to display
             not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
