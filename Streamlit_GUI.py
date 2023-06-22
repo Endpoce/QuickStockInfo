@@ -85,6 +85,10 @@ def main():
         # get company info
         info = ticker.info
 
+        # get ytd return
+        if 'ytdReturn' in info:
+            ytd_return = info['ytdReturn']
+
         # info to display
         to_display = ['longName', 'sector', 'industry',
                       'longBusinessSummary', 'symbol', 'legalType', 'category'
@@ -95,11 +99,10 @@ def main():
             if key not in info:
                 info[key] = "N/A"
 
-        sector = info['sector'] != "N/A"
-        industry = info['industry'] != "N/A"
-        legalType = info['legalType'] != "N/A"
-        category = info['category'] != "N/A"
-        ytd_return = info['ytdReturn'] != "N/A"
+        sector = info['sector']
+        industry = info['industry']
+        legalType = info['legalType']
+        category = info['category']
 
         with col1.container():
 
@@ -119,7 +122,9 @@ def main():
             if category:
                 col1.write("Category: " + info['category'])
 
-            col1.write(info['longBusinessSummary'])
+            if info['longBusinessSummary']:
+                col1.write("Summary:")
+                col1.write(info['longBusinessSummary'])
 
             # get wiki info
             wiki_url = get_wiki_info(info['longName'])
