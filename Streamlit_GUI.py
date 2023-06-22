@@ -85,9 +85,15 @@ def main():
         # get company info
         info = ticker.info
 
-        # get ytd return
-        if 'ytdReturn' in info:
-            ytd_return = info['ytdReturn']
+        # calculate ytd return
+        # get start of year date
+        start_of_year = datetime.today().strftime('%Y-01-01')
+        # get ytd data
+        ytd_data = hist(start=start_of_year)
+        # calculate ytd return
+        ytdReturn = ((ytd_data['Close'].iloc[-1] -
+                      ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100
+
 
         # info to display
         to_display = ['longName', 'sector', 'industry',
@@ -156,7 +162,7 @@ def main():
             # display ytd return
 
             col3.write("Estimated YTD Return: " +
-                       str(round(info['ytdReturn']*100), 2) + "%")
+                       str(round(ytdReturn, 2) + "%")
 
             # list of indicators I don't want to display
             not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
