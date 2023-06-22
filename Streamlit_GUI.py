@@ -94,6 +94,8 @@ def main():
         ytdReturn = ((ytd_data['Close'].iloc[-1] -
                       ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100
 
+        ytdReturn = round(ytdReturn, 2)
+
         # info to display
         to_display = ['longName', 'sector', 'industry',
                       'longBusinessSummary', 'symbol', 'legalType', 'category'
@@ -160,7 +162,7 @@ def main():
 
             # display ytd return
             col3.write("Estimated YTD Return: " +
-                       round(ytdReturn, 2) + "%")
+                       str(ytdReturn) + "%")
 
             # list of indicators I don't want to display
             not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
