@@ -187,8 +187,8 @@ def main():
         with col2.container():
 
             # analyze stock data
-            # col2.write(analyze_stock(filename, ticker))
-            col2.write("Placeholder text for stock analysis")
+            col2.write(analyze_stock(filename, ticker))
+            # col2.write("Placeholder text for stock analysis")
             time.sleep(5)
 
             # get articles
