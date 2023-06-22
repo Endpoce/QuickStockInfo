@@ -89,7 +89,7 @@ def main():
         # get start of year date
         start_of_year = datetime.today().strftime('%Y-01-01')
         # get ytd data
-        ytd_data = hist(start=start_of_year)
+        ytd_data = ticker.history(start=start_of_year)
         # calculate ytd return
         ytdReturn = ((ytd_data['Close'].iloc[-1] -
                       ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100
