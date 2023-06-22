@@ -100,8 +100,11 @@ def analyze_stock(filename, ticker):
     stock_data['Average Close'] = hist['Close'].mean()
     stock_data['Average Volume'] = hist['Volume'].mean()
 
+    # Moving Averages
     stock_data['10 Day Moving Average'] = hist['Close'].rolling(
         window=10).mean().iloc[-1]
+    stock_data['100 Day Moving Average'] = hist['Close'].rolling(
+        window=100).mean().iloc[-1]
 
     # Create a summary of the stock data
     summary = f"The stock had its highest closing price of ${high_close} and its lowest of ${low_close}. "
