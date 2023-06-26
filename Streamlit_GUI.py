@@ -131,7 +131,7 @@ def main():
 
             if info['longBusinessSummary']:
                 col1.write("Summary:")
-                col1.write(info['longBusinessSummary'])
+                col1.markdown(info['longBusinessSummary'])
 
             # get wiki info
             wiki_url = get_wiki_info(info['longName'])
