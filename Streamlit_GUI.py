@@ -17,6 +17,10 @@ load_dotenv()
 
 yf.pdr_override()
 
+# Page config (Title at top and icon at top )
+st.set_page_config(page_title="Quick Stock Info", page_icon="chart_with_upwards_trend",
+                   layout='wide', initial_sidebar_state="expanded")
+
 # set openai api key
 openai.api_key = os.environ.get('API_KEY')
 
@@ -28,10 +32,8 @@ api = tweepy.API(auth)
 start_date = pd.to_datetime("2020-01-01")
 end_date = datetime.today().strftime('%Y-%m-%d')
 
-
-# Page config (Title at top and icon at top )
-st.set_page_config(page_title="Tweet Analysis", page_icon="chart_with_upwards_trend",
-                   layout='wide', initial_sidebar_state="expanded")
+tab1, tab2, tab3 = st.tabs(
+    ["Quick Stock Info", "Compare Stocks", "Stock Report"])
 
 
 def get_estimated_return(info, ticker):
@@ -61,108 +63,140 @@ def get_estimated_return(info, ticker):
 
 def main():
 
-    # Title
-    st.title("Quick Stock Info")
+    with tab1:
+        # Title
+        st.title("Quick Stock Info")
 
-    col1, col2, col3 = st.columns((1, 2, 1))
+        col1, col2 = st.columns((1, 2))
 
-    # Sidebar
-    st.sidebar.header("User Input")
-    ticker_symbol = st.sidebar.text_input("Enter Ticker Symbol:").upper()
-    start_date = st.sidebar.date_input(
-        "Start date", value=pd.to_datetime("2020-01-01"))
-    end_date = st.sidebar.date_input(
-        "End date", value=pd.to_datetime(datetime.today().strftime('%Y-%m-%d')))
-    fetch_button = st.sidebar.button("Get Stock Data")
+        # Sidebar
+        st.sidebar.header("User Input")
+        ticker_symbol = st.sidebar.text_input("Enter Ticker Symbol:").upper()
+        start_date = st.sidebar.date_input(
+            "Start date", value=pd.to_datetime("2020-01-01"))
+        end_date = st.sidebar.date_input(
+            "End date", value=pd.to_datetime(datetime.today().strftime('%Y-%m-%d')))
+        fetch_button = st.sidebar.button("Get Stock Data")
 
-    # Main Page
-    if fetch_button:
+        # Main Page
+        if fetch_button:
 
-        # download and save stock data
-        ticker, info, hist, file = get_stock_data(
-            ticker_symbol, start_date, end_date)
+            # download and save stock data
+            ticker, info, hist, file = get_stock_data(
+                ticker_symbol, start_date, end_date)
 
-        # get company info
-        info = ticker.info
+            # get company info
+            info = ticker.info
 
-        # calculate ytd return
-        # get start of year date
-        start_of_year = datetime.today().strftime('%Y-01-01')
-        # get ytd data
-        ytd_data = ticker.history(start=start_of_year)
-        # calculate ytd return
-        ytdReturn = ((ytd_data['Close'].iloc[-1] -
-                      ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100
+            # calculate ytd return
+            # get start of year date
+            start_of_year = datetime.today().strftime('%Y-01-01')
+            # get ytd data
+            ytd_data = ticker.history(start=start_of_year)
+            # calculate ytd return
+            ytdReturn = ((ytd_data['Close'].iloc[-1] -
+                          ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100
 
-        ytdReturn = round(ytdReturn, 2)
+            ytdReturn = round(ytdReturn, 2)
 
-        # info to display
-        to_display = ['longName', 'sector', 'industry',
-                      'longBusinessSummary', 'symbol', 'legalType', 'category'
-                      ]
+            # info to display
+            to_display = ['longName', 'sector', 'industry',
+                          'longBusinessSummary', 'symbol', 'legalType', 'category'
+                          ]
 
-        # get sector and industry
-        for key in to_display:
-            if key not in info:
-                info[key] = "N/A"
+            # get sector and industry
+            for key in to_display:
+                if key not in info:
+                    info[key] = "N/A"
 
-        sector = info['sector']
-        industry = info['industry']
-        legalType = info['legalType']
-        category = info['category']
+            sector = info['sector']
+            industry = info['industry']
+            legalType = info['legalType']
+            category = info['category']
 
-        with col1.container():
+            with col1.container():
 
-            col1.write("Company Info:")
+                col1.write("Company Info:")
 
-            col1.write(info['longName'])
+                col1.write(info['longName'])
 
-            if sector:
-                col1.write("Sector: "+info['sector'])
+                if sector:
+                    col1.write("Sector: "+info['sector'])
 
-            if industry:
-                col1.write("Industry: " + info['industry'])
+                if industry:
+                    col1.write("Industry: " + info['industry'])
 
-            if legalType:
-                col1.write("Legal Type: " + info['legalType'])
+                if legalType:
+                    col1.write("Legal Type: " + info['legalType'])
 
-            if category:
-                col1.write("Category: " + info['category'])
+                if category:
+                    col1.write("Category: " + info['category'])
 
-            if info['longBusinessSummary']:
-                col1.write("Summary:")
-                col1.markdown(info['longBusinessSummary'])
+                if info['longBusinessSummary']:
+                    col1.write("Summary:")
+                    col1.markdown(info['longBusinessSummary'])
 
-            # get wiki info
-            wiki_url = get_wiki_info(info['longName'])
-            col1.write("Wikipedia URL:")
-            col1.write(wiki_url)
+                # get wiki info
+                wiki_url = get_wiki_info(info['longName'])
+                col1.write("Wikipedia URL:")
+                col1.write(wiki_url)
 
-        # read stock price data from csv
-        filename = ticker_symbol + '_Price_Data.csv'
-        df = pd.read_csv(filename)
+            # read stock price data from csv
+            filename = ticker_symbol + '_Price_Data.csv'
+            df = pd.read_csv(filename)
 
-        with col2.container():
-            # plot price stock data
-            col2.plotly_chart(plot_stock_with_interactive_chart(
-                filename), use_container_width=True)
+            with col2.container():
+                # plot price stock data
+                col2.plotly_chart(plot_stock_with_interactive_chart(
+                    filename), use_container_width=True)
 
-        with col3.container():
+            with col2.container():
 
+                # analyze stock data
+                col2.write(analyze_stock(filename, ticker))
+                # col2.write("Placeholder text for stock analysis")
+                time.sleep(5)
+
+                # get articles
+                articles = get_MW_Articles(ticker_symbol, 5)
+
+                # display articles
+                col2.write("Articles:")
+
+                time.sleep(5)
+
+                # display articles
+                for article in articles:
+                    col2.write(article['title'])
+                    col2.write(article['url'])
+                    col2.markdown(summarize_article(article))
+                    time.sleep(5)
+                col2.write("Placeholder text for article analysis")
+
+    with tab2:
+        st.title("Compare Stocks")
+        st.write("Placeholder text for portfolio analysis")
+
+    with tab3:
+        st.title("Stock Report")
+
+        col1, col2 = st.columns((1, 2))
+
+        with col1:
             # display finance info
-            col3.subheader("Info:")
+            st.subheader("Info:")
 
             # display current price
-            col3.write("Current Price: " +
-                       str(round(hist['Close'].iloc[-1], 2)))
+            st.write("Current Price: " +
+                     str(round(hist['Close'].iloc[-1], 2)))
 
             # display estimated 52 return
-            col3.write("Estimated 52 Week Return: " +
-                       str(get_estimated_return(info, ticker)) + "%")
+            st.write("Estimated 52 Week Return: " +
+                     str(get_estimated_return(info, ticker)) + "%")
 
             # display ytd return
-            col3.write("Estimated YTD Return: " +
-                       str(ytdReturn) + "%")
+            st.write("Estimated YTD Return: " +
+                     str(ytdReturn) + "%")
 
             # list of indicators I don't want to display
             not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
@@ -192,30 +226,13 @@ def main():
             sorted_indicators = sorted(indicators)
 
             for indicator in sorted_indicators:
-                col3.write(indicator + ": " + str(info[indicator]))
+                st.write(indicator + ": " + str(info[indicator]))
 
-        with col2.container():
-
-            # analyze stock data
-            col2.write(analyze_stock(filename, ticker))
-            # col2.write("Placeholder text for stock analysis")
-            time.sleep(5)
-
-            # get articles
-            articles = get_MW_Articles(ticker_symbol, 5)
-
-            # display articles
-            col2.write("Articles:")
-
-            time.sleep(5)
-
-            # display articles
-            for article in articles:
-                col2.write(article['title'])
-                col2.write(article['url'])
-                col2.markdown(summarize_article(article))
-                time.sleep(5)
-            col2.write("Placeholder text for article analysis")
+        with col2:
+            investors = ticker.institutional_holders
+            st.subheader("Institutional Holders:")
+            for investor in investors:
+                st.write(investor['name'])
 
 
 if __name__ == "__main__":
