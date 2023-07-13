@@ -207,7 +207,7 @@ def main():
 
         with col1:
             # display finance info
-            st.subheader("Info:")
+            st.subheader("Summary:")
 
             # display current price
             st.metric(label="Current Price: ",
@@ -252,11 +252,10 @@ def main():
                 st.write(indicator + ": " + str(info[indicator]))
 
         with col2:
-            investors = ticker.institutional_holders
-            st.subheader("Institutional Holders:")
-            for investor in investors:
-                st.write(investor['name'])
-                st.write(investor['position']['fmt'])
+
+            # plot price stock data
+            col2.plotly_chart(plot_stock_with_interactive_chart(
+                filename), use_container_width=True)
 
             # analyze stock data
             # col2.write(analyze_stock(filename, ticker))
