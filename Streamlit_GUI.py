@@ -10,8 +10,11 @@ import os
 from dotenv import load_dotenv
 import time
 from Sentiment import *
-import tweepy
 import plotly.graph_objects as go
+import nltk
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
+nltk.download('vader_lexicon')
 
 load_dotenv()
 
@@ -25,15 +28,12 @@ st.set_page_config(page_title="Quick Stock Info", page_icon="chart_with_upwards_
 openai.api_key = os.environ.get('API_KEY')
 
 
-auth = tweepy.OAuth2BearerHandler(os.environ.get("Bearer_token"))
-api = tweepy.API(auth)
-
 # set dates
 start_date = pd.to_datetime("2020-01-01")
 end_date = datetime.today().strftime('%Y-%m-%d')
 
 tab1, tab2, tab3 = st.tabs(
-    ["Quick Stock Info", "Compare Stocks", "Stock Report"])
+    ["Quick Stock Info", "Investor Info", "GPT-4 Analysis"])
 
 
 def get_estimated_return(info, ticker):
@@ -61,7 +61,51 @@ def get_estimated_return(info, ticker):
     return estimated_return
 
 
+def get_investors(ticker):
+
+    institutional_investor_dict = {}
+
+    # Get institutional investor information
+    institutional_holders = ticker.institutional_holders
+    for _, row in institutional_holders.iterrows():
+        investor_name = row['Holder']
+        investor_position = row['Shares']
+        institutional_investor_dict[investor_name] = investor_position
+
+    major_holder_dict = {}
+
+    # Get major holder information
+    major_holders = ticker.major_holders
+    for _, row in major_holders.iterrows():
+        investor_name = row['Holder']
+        investor_position = row['Shares']
+        major_holder_dict[investor_name] = investor_position
+
+    return institutional_investor_dict, major_holder_dict
+
+
 def main():
+
+    st.sidebar.header("User Input")
+    ticker_symbol = st.sidebar.text_input("Enter Ticker Symbol:").upper()
+    start_date = st.sidebar.date_input(
+        "Start date", value=pd.to_datetime("2020-01-01"))
+    end_date = st.sidebar.date_input(
+        "End date", value=pd.to_datetime(datetime.today().strftime('%Y-%m-%d')))
+    fetch_button = st.sidebar.button("Get Stock Data")
+
+    # download and save stock data
+    ticker, info, hist, file = get_stock_data(
+        ticker_symbol, start_date, end_date)
+
+    # get company info
+    info = ticker.info
+
+    # get start of year date
+    start_of_year = datetime.today().strftime('%Y-01-01')
+
+    # get ytd data
+    ytd_data = ticker.history(start=start_of_year)
 
     with tab1:
         # Title
@@ -69,30 +113,9 @@ def main():
 
         col1, col2 = st.columns((1, 2))
 
-        # Sidebar
-        st.sidebar.header("User Input")
-        ticker_symbol = st.sidebar.text_input("Enter Ticker Symbol:").upper()
-        start_date = st.sidebar.date_input(
-            "Start date", value=pd.to_datetime("2020-01-01"))
-        end_date = st.sidebar.date_input(
-            "End date", value=pd.to_datetime(datetime.today().strftime('%Y-%m-%d')))
-        fetch_button = st.sidebar.button("Get Stock Data")
-
         # Main Page
         if fetch_button:
 
-            # download and save stock data
-            ticker, info, hist, file = get_stock_data(
-                ticker_symbol, start_date, end_date)
-
-            # get company info
-            info = ticker.info
-
-            # calculate ytd return
-            # get start of year date
-            start_of_year = datetime.today().strftime('%Y-01-01')
-            # get ytd data
-            ytd_data = ticker.history(start=start_of_year)
             # calculate ytd return
             ytdReturn = ((ytd_data['Close'].iloc[-1] -
                           ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100
@@ -150,34 +173,34 @@ def main():
                 col2.plotly_chart(plot_stock_with_interactive_chart(
                     filename), use_container_width=True)
 
-            with col2.container():
-
-                # analyze stock data
-                col2.write(analyze_stock(filename, ticker))
-                # col2.write("Placeholder text for stock analysis")
-                time.sleep(5)
-
-                # get articles
-                articles = get_MW_Articles(ticker_symbol, 5)
-
-                # display articles
-                col2.write("Articles:")
-
-                time.sleep(5)
-
-                # display articles
-                for article in articles:
-                    col2.write(article['title'])
-                    col2.write(article['url'])
-                    col2.markdown(summarize_article(article))
-                    time.sleep(5)
-                col2.write("Placeholder text for article analysis")
-
     with tab2:
-        st.title("Compare Stocks")
-        st.write("Placeholder text for portfolio analysis")
+        st.title("Investor Info")
+
+        col1, col2 = st.columns((1, 2))
+
+        with col1.container():
+            st.subheader("instituational Investors:")
+
+            # get institutional investors
+            institutional_investor = ticker.institutional_holders
+
+            # display institutional investors
+            for holder in institutional_investor:
+                st.write(holder["Holder"] + ": " + holder["Shares"])
+
+        with col2.container():
+            st.subheader("Major Holders:")
+
+            # get investor info from yfinance
+            investor_info = ticker.major_holders
+
+            # display investor info
+            for holder in investor_info["Holder"]:
+                st.write(holder + ": " + investor_info["Shares"][holder])
 
     with tab3:
+        st.title("GPT-4 Analysis")
+
         st.title("Stock Report")
 
         col1, col2 = st.columns((1, 2))
@@ -187,16 +210,16 @@ def main():
             st.subheader("Info:")
 
             # display current price
-            st.write("Current Price: " +
-                     str(round(hist['Close'].iloc[-1], 2)))
+            st.metric(label="Current Price: ",
+                      value=round(hist['Close'].iloc[-1], 2))
 
             # display estimated 52 return
             st.write("Estimated 52 Week Return: " +
                      str(get_estimated_return(info, ticker)) + "%")
 
             # display ytd return
-            st.write("Estimated YTD Return: " +
-                     str(ytdReturn) + "%")
+            st.metric(label="Estimated YTD Return", value=ytdReturn,
+                      delta=ytdReturn)
 
             # list of indicators I don't want to display
             not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
@@ -233,6 +256,28 @@ def main():
             st.subheader("Institutional Holders:")
             for investor in investors:
                 st.write(investor['name'])
+                st.write(investor['position']['fmt'])
+
+            # analyze stock data
+            # col2.write(analyze_stock(filename, ticker))
+            col2.write("Placeholder text for stock analysis")
+            time.sleep(5)
+
+            # get articles
+            articles = get_MW_Articles(ticker_symbol, 5)
+
+            # display articles
+            col2.write("Articles:")
+
+            time.sleep(5)
+
+            # display articles
+            # for article in articles[:5]:
+            #     col2.write(article['title'])
+            #     col2.write(article['url'])
+            #     col2.markdown(summarize_article(article))
+            #     time.sleep(5)
+            col2.write("Placeholder text for article analysis")
 
 
 if __name__ == "__main__":
