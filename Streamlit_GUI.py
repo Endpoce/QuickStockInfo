@@ -11,10 +11,7 @@ from dotenv import load_dotenv
 import time
 from Sentiment import *
 import plotly.graph_objects as go
-import nltk
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-nltk.download('vader_lexicon')
 
 load_dotenv()
 
