@@ -179,21 +179,21 @@ def main():
             st.subheader("instituational Investors:")
 
             # get institutional investors
-            institutional_investor = ticker.institutional_holders
+            # institutional_investor = ticker.institutional_holders
 
             # display institutional investors
-            for holder in institutional_investor:
-                st.write(holder["Holder"] + ": " + holder["Shares"])
+            # for holder in institutional_investor:
+            #     st.write(holder["Holder"] + ": " + holder["Shares"])
 
         with col2.container():
             st.subheader("Major Holders:")
 
-            # get investor info from yfinance
-            investor_info = ticker.major_holders
+            # # get investor info from yfinance
+            # investor_info = ticker.major_holders
 
-            # display investor info
-            for holder in investor_info["Holder"]:
-                st.write(holder + ": " + investor_info["Shares"][holder])
+            # # display investor info
+            # for holder in investor_info["Holder"]:
+            #     st.write(holder + ": " + investor_info["Shares"][holder])
 
     with tab3:
         st.title("GPT-4 Analysis")
