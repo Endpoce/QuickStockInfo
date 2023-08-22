@@ -179,7 +179,7 @@ def main():
             st.subheader("instituational Investors:")
 
             # get institutional investors
-            institutional_investor = ticker.info['institutionalInvestors']
+            institutional_investor = ticker.constituents.get_institutional_holders()
 
             # display institutional investors
             for investor in institutional_investor:
