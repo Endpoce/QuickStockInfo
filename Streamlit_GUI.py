@@ -255,8 +255,8 @@ def main():
                 filename), use_container_width=True)
 
             # analyze stock data
-            # col2.write(analyze_stock(filename, ticker))
-            col2.write("Placeholder text for stock analysis")
+            col2.write(analyze_stock(filename, ticker))
+            # col2.write("Placeholder text for stock analysis")
             time.sleep(5)
 
             # get articles
@@ -268,12 +268,12 @@ def main():
             time.sleep(5)
 
             # display articles
-            # for article in articles[:5]:
-            #     col2.write(article['title'])
-            #     col2.write(article['url'])
-            #     col2.markdown(summarize_article(article))
-            #     time.sleep(5)
-            col2.write("Placeholder text for article analysis")
+            for article in articles[:5]:
+                col2.write(article['title'])
+                col2.write(article['url'])
+                col2.markdown(summarize_article(article))
+                time.sleep(5)
+            # col2.write("Placeholder text for article analysis")
 
 
 if __name__ == "__main__":
