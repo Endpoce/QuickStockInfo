@@ -178,12 +178,12 @@ def main():
         with col1.container():
             st.subheader("instituational Investors:")
 
-            # get institutional investors
-            institutional_investor = ticker.constituent.get_institutional_holders()
+            # # get institutional investors
+            # institutional_investor = ticker.constituent.get_institutional_holders()
 
-            # display institutional investors
-            for investor in institutional_investor:
-                st.write(investor + ":" + investor["shares"])
+            # # display institutional investors
+            # for investor in institutional_investor:
+            #     st.write(investor + ":" + investor["shares"])
 
         with col2.container():
             st.subheader("Major Holders:")
