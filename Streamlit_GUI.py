@@ -125,7 +125,7 @@ def main():
 
                 try:
 
-                    col1.write("Company Info:")
+                    col1.subheader("Company Info:")
 
                     col1.write(info['longName'])
 
@@ -135,8 +135,8 @@ def main():
                     if info["industry"]:
                         col1.write("Industry: " + info["industry"])
 
-                    if info["legalType"]:
-                        col1.write("Legal Type: " + info["legalType"])
+                    # if info["legalType"]:
+                    #     col1.write("Legal Type: " + info["legalType"])
 
                     if info.category:
                         col1.write("Category: " + info["category"])
