@@ -218,8 +218,6 @@ def main():
         try:
             st.title("GPT-4 Analysis")
 
-            st.title("Stock Report")
-
             col1, col2 = st.columns((1, 2))
 
             with col1:
@@ -269,6 +267,8 @@ def main():
                     st.write(indicator + ": " + str(info[indicator]))
 
             with col2:
+
+                st.subheader("Analysis:")
 
                 # plot price stock data
                 col2.plotly_chart(plot_stock_with_interactive_chart(
