@@ -22,7 +22,7 @@ def get_stock_data(symbol, start_date, end_date):
 
     info = ticker.info
 
-    legalType = str(info.get(legalType))
+    legalType = str(info.get(legalType) if info.get(legalType) else 'N/A')
 
     hist = ticker.history(period="1d", start=start_date, end=end_date)
 
