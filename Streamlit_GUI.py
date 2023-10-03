@@ -128,7 +128,7 @@ def main():
                 #         info[key] = "N/A"
 
             except Exception as e:
-                st.write("Error:" + str(e))
+                st.write("Error: " + str(e))
                 return
 
             try:
@@ -168,7 +168,7 @@ def main():
                     col2.plotly_chart(plot_stock_with_interactive_chart(
                         filename), use_container_width=True)
             except Exception as e:
-                st.write("Error: Cant find company info")
+                st.write("Error: " + str(e))
                 return
 
     with tab2:
