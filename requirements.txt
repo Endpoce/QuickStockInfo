@@ -2,7 +2,7 @@ streamlit
 tk
 docx
 datetime
-yfinance
+yfinance>=0.2.31b2
 pandas
 openai
 bs4

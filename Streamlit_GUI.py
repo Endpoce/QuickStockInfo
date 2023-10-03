@@ -33,7 +33,7 @@ tab1, tab2, tab3 = st.tabs(
     ["Quick Stock Info", "Investor Info", "GPT-4 Analysis"])
 
 
-def get_estimated_return(info, ticker):
+def get_estimated_1y_return(info, ticker):
 
     if 'trailingAnnualDividendYield' in info:
         dividend = ticker.info['trailingAnnualDividendYield']
