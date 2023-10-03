@@ -91,19 +91,6 @@ def main():
         "End date", value=pd.to_datetime(datetime.today().strftime('%Y-%m-%d')))
     fetch_button = st.sidebar.button("Get Stock Data")
 
-    # download and save stock data
-    ticker, info, hist, file = get_stock_data(
-        ticker_symbol, start_date, end_date)
-
-    # get company info
-    info = ticker.info
-
-    # get start of year date
-    start_of_year = datetime.today().strftime('%Y-01-01')
-
-    # get ytd data
-    ytd_data = ticker.history(start=start_of_year)
-
     with tab1:
         # Title
         st.title("Quick Stock Info")
@@ -113,6 +100,19 @@ def main():
         # Main Page
         if fetch_button:
             try:
+                # download and save stock data
+                ticker, info, hist, file = get_stock_data(
+                    ticker_symbol, start_date, end_date)
+
+                # get company info
+                info = ticker.info
+
+                # get start of year date
+                start_of_year = datetime.today().strftime('%Y-01-01')
+
+                # get ytd data
+                ytd_data = ticker.history(start=start_of_year)
+
                 # calculate ytd return
                 ytdReturn = round(
                     (((ytd_data['Close'].iloc[-1] - ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100), 2)
