@@ -134,7 +134,7 @@ def main():
 
             except Exception as e:
                 st.write(e)
-                st.write("Error: Invalid Ticker Symbol")
+                st.write("Error:)
                 return
 
             try:
