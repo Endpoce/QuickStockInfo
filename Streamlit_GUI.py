@@ -156,7 +156,7 @@ def main():
                     df = pd.read_csv(filename)
 
                 except Exception as e:
-                    st.write("Error: " + str(e))
+                    st.write("Error in col 1: " + str(e))
                     return
 
                 try:
@@ -166,7 +166,7 @@ def main():
                             filename), use_container_width=True)
 
                 except Exception as e:
-                    st.write("Error: " + str(e))
+                    st.write("Error in col 2: " + str(e))
                     return
 
     with tab2:
