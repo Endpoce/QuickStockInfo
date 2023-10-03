@@ -98,7 +98,7 @@ def main():
         col1, col2 = st.columns((1, 2))
 
         # Main Page
-        if fetch_button:
+        if fetch_button.clicked:
             try:
                 # download and save stock data
                 ticker, info, hist, file = get_stock_data(
