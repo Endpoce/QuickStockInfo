@@ -146,7 +146,7 @@ def main():
 
                     # get wiki info
                     if get_wiki_info(info['longName']):
-                        wiki_url = get_wiki_info(info['longName'])
+                        wiki_url = get_wiki_info(info['longName'] + " (Stock)")
                         col1.write("Wikipedia URL:")
                         col1.write(wiki_url)
 
