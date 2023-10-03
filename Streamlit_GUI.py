@@ -138,8 +138,8 @@ def main():
                     # if info["legalType"]:
                     #     col1.write("Legal Type: " + info["legalType"])
 
-                    if info.category:
-                        col1.write("Category: " + info["category"])
+                    # if info.category:
+                    #     col1.write("Category: " + info["category"])
 
                     if info['longBusinessSummary']:
                         col1.write("Summary:")
