@@ -118,11 +118,12 @@ def main():
                     (((ytd_data['Close'].iloc[-1] - ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100), 2)
 
             except Exception as e:
-                st.write("Error: " + str(e))
+                st.write("Error getting info: " + str(e))
                 return
 
-            try:
-                with col1.container():
+            with col1.container():
+
+                try:
 
                     col1.write("Company Info:")
 
@@ -150,18 +151,23 @@ def main():
                         col1.write("Wikipedia URL:")
                         col1.write(wiki_url)
 
-                # read stock price data from csv
-                filename = ticker_symbol + '_Price_Data.csv'
-                df = pd.read_csv(filename)
+                    # read stock price data from csv
+                    filename = ticker_symbol + '_Price_Data.csv'
+                    df = pd.read_csv(filename)
 
-                with col2.container():
-                    # plot price stock data
-                    col2.plotly_chart(plot_stock_with_interactive_chart(
-                        filename), use_container_width=True)
+                except Exception as e:
+                    st.write("Error: " + str(e))
+                    return
 
-            except Exception as e:
-                st.write("Error: " + str(e))
-                return
+                try:
+                    with col2.container():
+                        # plot price stock data
+                        col2.plotly_chart(plot_stock_with_interactive_chart(
+                            filename), use_container_width=True)
+
+                except Exception as e:
+                    st.write("Error: " + str(e))
+                    return
 
     with tab2:
         try:
