@@ -101,7 +101,7 @@ def main():
         if fetch_button:
             try:
                 # download and save stock data
-                ticker, info, hist, file, legalType = get_stock_data(
+                ticker, info, hist, file = get_stock_data(
                     ticker_symbol, start_date, end_date)
 
                 # get company info
@@ -134,8 +134,8 @@ def main():
                     if info["industry"]:
                         col1.write("Industry: " + info["industry"])
 
-                    if legalType:
-                        col1.write("Legal Type: " + legalType)
+                    if info["legalType"]:
+                        col1.write("Legal Type: " + info["legalType"])
 
                     if info.category:
                         col1.write("Category: " + info["category"])
