@@ -117,16 +117,6 @@ def main():
                 ytdReturn = round(
                     (((ytd_data['Close'].iloc[-1] - ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100), 2)
 
-                # info to display
-                # to_display = ['longName', 'sector', 'industry',
-                #               'longBusinessSummary', 'symbol', 'legalType', 'category'
-                #               ]
-
-                # get sector and industry
-                # for key in to_display:
-                #     if key not in info:
-                #         info[key] = "N/A"
-
             except Exception as e:
                 st.write("Error: " + str(e))
                 return
@@ -144,8 +134,8 @@ def main():
                     if info["industry"] != "N/A":
                         col1.write("Industry: " + info["industry"])
 
-                    if info["legalType"] != "N/A":
-                        col1.write("Legal Type: " + info["legalType"])
+                    if info["legaltype"] != "N/A":
+                        col1.write("Legal Type: " + info["legaltype"])
 
                     if info["category"] != "N/A":
                         col1.write("Category: " + info["category"])
