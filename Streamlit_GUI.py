@@ -133,8 +133,7 @@ def main():
                 category = info['category']
 
             except Exception as e:
-                st.write(e)
-                st.write("Error:)
+                st.write("Error:" + str(e))
                 return
 
             try:
