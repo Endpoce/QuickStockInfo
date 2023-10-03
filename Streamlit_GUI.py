@@ -155,9 +155,10 @@ def main():
                         col1.markdown(info['longBusinessSummary'])
 
                     # get wiki info
-                    wiki_url = get_wiki_info(info['longName'])
-                    col1.write("Wikipedia URL:")
-                    col1.write(wiki_url)
+                    if get_wiki_info(info['longName']):
+                        wiki_url = get_wiki_info(info['longName'])
+                        col1.write("Wikipedia URL:")
+                        col1.write(wiki_url)
 
                 # read stock price data from csv
                 filename = ticker_symbol + '_Price_Data.csv'
@@ -167,6 +168,7 @@ def main():
                     # plot price stock data
                     col2.plotly_chart(plot_stock_with_interactive_chart(
                         filename), use_container_width=True)
+
             except Exception as e:
                 st.write("Error: " + str(e))
                 return
