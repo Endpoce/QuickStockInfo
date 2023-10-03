@@ -138,19 +138,19 @@ def main():
 
                     col1.write(info['longName'])
 
-                    if info["sector"]:
+                    if info["sector"] != "N/A":
                         col1.write("Sector: "+info["sector"])
 
-                    if info["industry"]:
+                    if info["industry"] != "N/A":
                         col1.write("Industry: " + info["industry"])
 
-                    if info["legalType"]:
+                    if info["legalType"] != "N/A":
                         col1.write("Legal Type: " + info["legalType"])
 
-                    if info["category"]:
+                    if info["category"] != "N/A":
                         col1.write("Category: " + info["category"])
 
-                    if info['longBusinessSummary']:
+                    if info['longBusinessSummary'] != "N/A":
                         col1.write("Summary:")
                         col1.markdown(info['longBusinessSummary'])
 
