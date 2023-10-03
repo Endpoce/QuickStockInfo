@@ -170,7 +170,7 @@ def main():
             col1, col2 = st.columns((1, 2))
 
             with col1.container():
-                st.subheader("instituational Investors:")
+                st.subheader("Institutional Investors:")
 
                 # # get institutional investors
                 # institutional_investor = ticker.constituent.get_institutional_holders()
