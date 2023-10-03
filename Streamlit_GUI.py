@@ -112,168 +112,191 @@ def main():
 
         # Main Page
         if fetch_button:
+            try:
+                # calculate ytd return
+                ytdReturn = round(
+                    (((ytd_data['Close'].iloc[-1] - ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100), 2)
 
-            # calculate ytd return
-            ytdReturn = ((ytd_data['Close'].iloc[-1] -
-                          ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100
+                # info to display
+                # to_display = ['longName', 'sector', 'industry',
+                #               'longBusinessSummary', 'symbol', 'legalType', 'category'
+                #               ]
 
-            ytdReturn = round(ytdReturn, 2)
+                # get sector and industry
+                # for key in to_display:
+                #     if key not in info:
+                #         info[key] = "N/A"
 
-            # info to display
-            to_display = ['longName', 'sector', 'industry',
-                          'longBusinessSummary', 'symbol', 'legalType', 'category'
-                          ]
+                sector = info['sector']
+                industry = info['industry']
+                legalType = info['legalType']
+                category = info['category']
 
-            # get sector and industry
-            for key in to_display:
-                if key not in info:
-                    info[key] = "N/A"
+            except Exception as e:
+                st.write("Error: Invalid Ticker Symbol")
+                return
 
-            sector = info['sector']
-            industry = info['industry']
-            legalType = info['legalType']
-            category = info['category']
+            try:
+                with col1.container():
+
+                    col1.write("Company Info:")
+
+                    col1.write(info['longName'])
+
+                    if sector:
+                        col1.write("Sector: "+sector)
+                    elif sector == "N/A":
+                        pass
+
+                    if industry:
+                        col1.write("Industry: " + industry)
+                    elif industry == "N/A":
+                        pass
+
+                    if legalType:
+                        col1.write("Legal Type: " + legalType)
+                    elif legalType == "N/A":
+                        pass
+
+                    if category:
+                        col1.write("Category: " + category)
+                    elif category == "N/A":
+                        pass
+
+                    if info['longBusinessSummary']:
+                        col1.write("Summary:")
+                        col1.markdown(info['longBusinessSummary'])
+                    elif info['longBusinessSummary'] == "N/A":
+                        pass
+
+                    # get wiki info
+                    wiki_url = get_wiki_info(info['longName'])
+                    col1.write("Wikipedia URL:")
+                    col1.write(wiki_url)
+
+                # read stock price data from csv
+                filename = ticker_symbol + '_Price_Data.csv'
+                df = pd.read_csv(filename)
+
+                with col2.container():
+                    # plot price stock data
+                    col2.plotly_chart(plot_stock_with_interactive_chart(
+                        filename), use_container_width=True)
+            except Exception as e:
+                st.write("Error: Cant find company info")
+                return
+
+    with tab2:
+        try:
+            st.title("Investor Info")
+
+            col1, col2 = st.columns((1, 2))
 
             with col1.container():
+                st.subheader("instituational Investors:")
 
-                col1.write("Company Info:")
+                # # get institutional investors
+                # institutional_investor = ticker.constituent.get_institutional_holders()
 
-                col1.write(info['longName'])
-
-                if sector:
-                    col1.write("Sector: "+info['sector'])
-
-                if industry:
-                    col1.write("Industry: " + info['industry'])
-
-                if legalType:
-                    col1.write("Legal Type: " + info['legalType'])
-
-                if category:
-                    col1.write("Category: " + info['category'])
-
-                if info['longBusinessSummary']:
-                    col1.write("Summary:")
-                    col1.markdown(info['longBusinessSummary'])
-
-                # get wiki info
-                wiki_url = get_wiki_info(info['longName'])
-                col1.write("Wikipedia URL:")
-                col1.write(wiki_url)
-
-            # read stock price data from csv
-            filename = ticker_symbol + '_Price_Data.csv'
-            df = pd.read_csv(filename)
+                # # display institutional investors
+                # for investor in institutional_investor:
+                #     st.write(investor + ":" + investor["shares"])
 
             with col2.container():
+                st.subheader("Major Holders:")
+
+                # # get investor info from yfinance
+                # investor_info = ticker.major_holders
+
+                # # display investor info
+                # for holder in investor_info["Holder"]:
+                #     st.write(holder + ": " + investor_info["Shares"][holder])
+        except Exception as e:
+            st.write("Error: Cant find investor info")
+            return
+    with tab3:
+        try:
+            st.title("GPT-4 Analysis")
+
+            st.title("Stock Report")
+
+            col1, col2 = st.columns((1, 2))
+
+            with col1:
+                # display finance info
+                st.subheader("Summary:")
+
+                # display current price
+                st.metric(label="Current Price: ",
+                          value=round(hist['Close'].iloc[-1], 2))
+
+                # display estimated 52 return
+                st.write("Estimated 52 Week Return: " +
+                         str(get_estimated_1y_return(info, ticker)) + "%")
+
+                # display ytd return
+                st.metric(label="Estimated YTD Return", value=ytdReturn,
+                          delta=ytdReturn)
+
+                # list of indicators I don't want to display
+                not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
+                                 'industry', 'longBusinessSummary', 'symbol', 'legalType',
+                                 'underlyingSymbol', 'underlyingExchangeSymbol', 'headquartersCity',
+                                 'headquartersCountry', 'quoteType', 'city', 'state',
+                                 'country', 'website', 'address1', 'address2', 'zip', 'phone',
+                                 'numberOfEmployees', 'fullTimeEmployees', 'averageDailyVolume10Day',
+                                 'averageVolume10days', 'boardRiskGovernanceExperience', 'boardRisk',
+                                 'currency', 'firstTradeDateEpochUtc', 'gmtOffSetMilliseconds',
+                                 'governanceEpochDate', 'impliedSharesOutstanding', 'zip', 'uuid',
+                                 'maxAge', 'logo_url', 'compensationAsOfEpochDate', 'compensationRisk',
+                                 'compensationRank', 'compensationScore', 'compensationDescription',
+                                 'compensationCalendarDate', 'compensationPeerGroup', 'compensationPeerGroupDescription',
+                                 'messageBoardId', 'maxAge', 'logo_url', 'compensationAsOfEpochDate',
+                                 'navPrice', 'priceHint', 'shortName', 'exchangeTimezoneName', 'trailingPegRatio',
+                                 'twoHundredDayAverage', 'twoHundredDayAverageChange', 'twoHundredDayAverageChangePercent',
+                                 'yield', 'ytdReturn', 'trailingAnnualDividendRate', 'trailingAnnualDividendYield',
+                                 'SandP52WeekChange', 'regularMarketDayHigh', 'regularMarketDayLow', 'regularMarketOpen',
+                                 'regularMarketPreviousClose', 'regularMarketVolume', 'regularMarketChange',
+                                 'timeZoneShortName', 'exchangeTimezoneShortName', 'gmtOffSetMilliseconds', 'maxAge',
+                                 'fundFamily', 'fundInceptionDate', 'open', 'previousClose', 'regularMarketChangePercent',
+                                 ]
+
+                indicators = [
+                    indicator for indicator in info if indicator not in not_displayed]
+                sorted_indicators = sorted(indicators)
+
+                for indicator in sorted_indicators:
+                    st.write(indicator + ": " + str(info[indicator]))
+
+            with col2:
+
                 # plot price stock data
                 col2.plotly_chart(plot_stock_with_interactive_chart(
                     filename), use_container_width=True)
 
-    with tab2:
-        st.title("Investor Info")
-
-        col1, col2 = st.columns((1, 2))
-
-        with col1.container():
-            st.subheader("instituational Investors:")
-
-            # # get institutional investors
-            # institutional_investor = ticker.constituent.get_institutional_holders()
-
-            # # display institutional investors
-            # for investor in institutional_investor:
-            #     st.write(investor + ":" + investor["shares"])
-
-        with col2.container():
-            st.subheader("Major Holders:")
-
-            # # get investor info from yfinance
-            # investor_info = ticker.major_holders
-
-            # # display investor info
-            # for holder in investor_info["Holder"]:
-            #     st.write(holder + ": " + investor_info["Shares"][holder])
-
-    with tab3:
-        st.title("GPT-4 Analysis")
-
-        st.title("Stock Report")
-
-        col1, col2 = st.columns((1, 2))
-
-        with col1:
-            # display finance info
-            st.subheader("Summary:")
-
-            # display current price
-            st.metric(label="Current Price: ",
-                      value=round(hist['Close'].iloc[-1], 2))
-
-            # display estimated 52 return
-            st.write("Estimated 52 Week Return: " +
-                     str(get_estimated_return(info, ticker)) + "%")
-
-            # display ytd return
-            st.metric(label="Estimated YTD Return", value=ytdReturn,
-                      delta=ytdReturn)
-
-            # list of indicators I don't want to display
-            not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
-                             'industry', 'longBusinessSummary', 'symbol', 'legalType',
-                             'underlyingSymbol', 'underlyingExchangeSymbol', 'headquartersCity',
-                             'headquartersCountry', 'quoteType', 'city', 'state',
-                             'country', 'website', 'address1', 'address2', 'zip', 'phone',
-                             'numberOfEmployees', 'fullTimeEmployees', 'averageDailyVolume10Day',
-                             'averageVolume10days', 'boardRiskGovernanceExperience', 'boardRisk',
-                             'currency', 'firstTradeDateEpochUtc', 'gmtOffSetMilliseconds',
-                             'governanceEpochDate', 'impliedSharesOutstanding', 'zip', 'uuid',
-                             'maxAge', 'logo_url', 'compensationAsOfEpochDate', 'compensationRisk',
-                             'compensationRank', 'compensationScore', 'compensationDescription',
-                             'compensationCalendarDate', 'compensationPeerGroup', 'compensationPeerGroupDescription',
-                             'messageBoardId', 'maxAge', 'logo_url', 'compensationAsOfEpochDate',
-                             'navPrice', 'priceHint', 'shortName', 'exchangeTimezoneName', 'trailingPegRatio',
-                             'twoHundredDayAverage', 'twoHundredDayAverageChange', 'twoHundredDayAverageChangePercent',
-                             'yield', 'ytdReturn', 'trailingAnnualDividendRate', 'trailingAnnualDividendYield',
-                             'SandP52WeekChange', 'regularMarketDayHigh', 'regularMarketDayLow', 'regularMarketOpen',
-                             'regularMarketPreviousClose', 'regularMarketVolume', 'regularMarketChange',
-                             'timeZoneShortName', 'exchangeTimezoneShortName', 'gmtOffSetMilliseconds', 'maxAge',
-                             'fundFamily', 'fundInceptionDate', 'open', 'previousClose', 'regularMarketChangePercent',
-                             ]
-
-            indicators = [
-                indicator for indicator in info if indicator not in not_displayed]
-            sorted_indicators = sorted(indicators)
-
-            for indicator in sorted_indicators:
-                st.write(indicator + ": " + str(info[indicator]))
-
-        with col2:
-
-            # plot price stock data
-            col2.plotly_chart(plot_stock_with_interactive_chart(
-                filename), use_container_width=True)
-
-            # analyze stock data
-            col2.write(analyze_stock(filename, ticker))
-            # col2.write("Placeholder text for stock analysis")
-            time.sleep(5)
-
-            # get articles
-            articles = get_MW_Articles(ticker_symbol, 5)
-
-            # display articles
-            col2.write("Articles:")
-
-            time.sleep(5)
-
-            # display articles
-            for article in articles[:5]:
-                col2.write(article['title'])
-                col2.write(article['url'])
-                col2.markdown(summarize_article(article))
+                # analyze stock data
+                col2.write(analyze_stock(filename, ticker))
+                # col2.write("Placeholder text for stock analysis")
                 time.sleep(5)
-            # col2.write("Placeholder text for article analysis")
+
+                # get articles
+                articles = get_MW_Articles(ticker_symbol, 5)
+
+                # display articles
+                col2.write("Articles:")
+
+                time.sleep(5)
+
+                # display articles
+                for article in articles[:5]:
+                    col2.write(article['title'])
+                    col2.write(article['url'])
+                    col2.markdown(summarize_article(article))
+                    time.sleep(5)
+                # col2.write("Placeholder text for article analysis")
+        except Exception as e:
+            st.write("Error: Cant find GPT-4 analysis")
+            return
 
 
 if __name__ == "__main__":
