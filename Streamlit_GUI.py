@@ -127,11 +127,6 @@ def main():
                 #     if key not in info:
                 #         info[key] = "N/A"
 
-                sector = info['sector']
-                industry = info['industry']
-                legalType = info['legalType']
-                category = info['category']
-
             except Exception as e:
                 st.write("Error:" + str(e))
                 return
@@ -143,31 +138,21 @@ def main():
 
                     col1.write(info['longName'])
 
-                    if sector:
-                        col1.write("Sector: "+sector)
-                    elif sector == "N/A":
-                        pass
+                    if info["sector"]:
+                        col1.write("Sector: "+info["sector"])
 
-                    if industry:
-                        col1.write("Industry: " + industry)
-                    elif industry == "N/A":
-                        pass
+                    if info["industry"]:
+                        col1.write("Industry: " + info["industry"])
 
-                    if legalType:
-                        col1.write("Legal Type: " + legalType)
-                    elif legalType == "N/A":
-                        pass
+                    if info["legalType"]:
+                        col1.write("Legal Type: " + info["legalType"])
 
-                    if category:
-                        col1.write("Category: " + category)
-                    elif category == "N/A":
-                        pass
+                    if info["category"]:
+                        col1.write("Category: " + info["category"])
 
                     if info['longBusinessSummary']:
                         col1.write("Summary:")
                         col1.markdown(info['longBusinessSummary'])
-                    elif info['longBusinessSummary'] == "N/A":
-                        pass
 
                     # get wiki info
                     wiki_url = get_wiki_info(info['longName'])
