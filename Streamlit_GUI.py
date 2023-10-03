@@ -133,6 +133,7 @@ def main():
                 category = info['category']
 
             except Exception as e:
+                st.write(e)
                 st.write("Error: Invalid Ticker Symbol")
                 return
 
