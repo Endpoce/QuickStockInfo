@@ -9,28 +9,24 @@ import plotly.express as px
 import plotly.figure_factory as ff
 import datetime
 import yfinance as yf
-
-
-# -- Define the tickers and start/end dates
-start_date = '2019-01-01'
-
-# -- end date is today
-end_date = datetime.date.today().strftime('%Y-%m-%d')
-
-# -- define the tickers
-tickers = ['AAPL', 'MSFT', 'AMZN', 'GOOG', 'META']
-
-# -- calculate the daily returns
-daily_returns = pd.DataFrame()
-
-# -- Loop through and download the data for each ticker
-for ticker in tqdm(tickers):
-    df = yf.download(ticker, start=start_date, end=end_date)
-    df['daily_return'] = df['Adj Close'].pct_change()
-    daily_returns[ticker] = df['daily_return']
+import streamlit as st
 
 
 def get_daily_returns(tickers, start_date, end_date):
+
+    # -- calculate the daily returns
+    daily_returns = pd.DataFrame()
+
+    # -- Loop through and download the data for each ticker
+    for ticker in tqdm(tickers):
+        df = yf.download(ticker, start=start_date, end=end_date)
+        df['daily_return'] = df['Adj Close'].pct_change()
+        daily_returns[ticker] = df['daily_return']
+
+    return daily_returns
+
+
+def get_mean_returns_and_covariance(daily_returns):
 
     # -- Get annualised mean returns
     mus = (1+daily_returns.mean())**252 - 1
@@ -50,7 +46,7 @@ def set_randomness(n_assets, n_portfolios):
     return n_assets, n_portfolios
 
 
-def get_random_portfolios(n_assets, n_portfolios):
+def get_random_portfolios(n_assets, n_portfolios, daily_returns, mus, cov):
     # -- Initialize empty list to store mean-variance pairs for plotting
     mean_variance_pairs = []
 
@@ -93,6 +89,15 @@ def get_random_portfolios(n_assets, n_portfolios):
 
 
 def plot_random_portfolios(mean_variance_pairs):
+    """
+    Plots the risk vs. return of randomly generated portfolios.
+
+    Parameters:
+    mean_variance_pairs (numpy.ndarray): Array of mean-variance pairs representing the portfolios.
+
+    Returns:
+    None
+    """
     risk_free_rate = 0  # -- Include risk free rate here
     # -- Plot the risk vs. return of randomly generated portfolios
     fig = go.Figure()
@@ -114,6 +119,8 @@ def plot_random_portfolios(mean_variance_pairs):
     fig.update_xaxes(range=[0.18, 0.32])
     fig.update_yaxes(range=[0.02, 0.27])
     fig.update_layout(coloraxis_colorbar=dict(title="Sharpe Ratio"))
+
+    return fig
 
 
 def get_efficient_frontier(n_assets, n_portfolios, mus, cov):
@@ -161,6 +168,8 @@ def get_efficient_frontier(n_assets, n_portfolios, mus, cov):
     # -- Plot the risk vs. return of randomly generated portfolios
     # -- Convert the list from before into an array for easy plotting
     mean_variance_pairs = np.array(mean_variance_pairs)
+
+    return mean_variance_pairs, weights_list, tickers_list
 
 
 def plot_efficient_frontier(mean_variance_pairs, weights_list, tickers_list):

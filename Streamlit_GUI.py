@@ -83,6 +83,8 @@ def get_investors(ticker):
 
 def main():
 
+    # Title
+    st.title("Quick Stock Info")
     st.sidebar.header("User Input")
     ticker_symbol = st.sidebar.text_input("Enter Ticker Symbol:").upper()
     start_date = st.sidebar.date_input(
@@ -93,7 +95,7 @@ def main():
 
     with tab1:
         # Title
-        st.title("Quick Stock Info")
+        st.title("Company Info")
 
         col1, col2 = st.columns((1, 2))
 
@@ -127,7 +129,7 @@ def main():
 
                     col1.subheader("Company Info:")
 
-                    col1.write(info['longName'])
+                    col1.subheader(info['longName'], color="blue")
 
                     if info["sector"]:
                         col1.write("Sector: "+info["sector"])
@@ -145,11 +147,15 @@ def main():
                         col1.write("Summary:")
                         col1.markdown(info['longBusinessSummary'])
 
-                    # get wiki info
-                    if get_wiki_info(info['longName']):
-                        wiki_url = get_wiki_info(info['longName'] + " (Stock)")
-                        col1.write("Wikipedia URL:")
-                        col1.write(wiki_url)
+                    try:
+                        # get wiki info
+                        if get_wiki_info(info['longName']):
+                            wiki_url = get_wiki_info(
+                                info['longName'] + " company")
+                            col1.write("Wikipedia URL:")
+                            col1.write(wiki_url)
+                    except Exception as e:
+                        st.write("Error getting wiki info: " + str(e))
 
                     # read stock price data from csv
                     filename = ticker_symbol + '_Price_Data.csv'
@@ -197,6 +203,7 @@ def main():
         except Exception as e:
             st.write("Error: Cant find investor info")
             return
+
     with tab3:
         try:
             st.title("GPT-4 Analysis")
@@ -240,6 +247,17 @@ def main():
                                  'regularMarketPreviousClose', 'regularMarketVolume', 'regularMarketChange',
                                  'timeZoneShortName', 'exchangeTimezoneShortName', 'gmtOffSetMilliseconds', 'maxAge',
                                  'fundFamily', 'fundInceptionDate', 'open', 'previousClose', 'regularMarketChangePercent',
+                                 'auditRisk', 'boardRisk', 'compensationRisk', 'shareHolderRightsRisk', 'overallRisk',
+                                 'companyOfficers', 'maxAge', 'logo_url', 'compensationAsOfEpochDate', 'compensationRisk',
+                                 'dateShortInterest', 'daysToCover', 'daylow', 'dayhigh', 'exDividendDate',
+                                 'earningsquarterlyGrowth', 'enterpriseToEbitda', 'enterpriseToRevenue', 'enterpriseValue',
+                                 'financialCurrency', 'floatShares', 'freeCashflow', 'fundFamily', 'fundInceptionDate',
+                                 'industrydisplayName', 'lastfiscalYearEnd', 'numberOfAnalystOpinions', 'netIncomeToCommon',
+                                 'nextFiscalYearEnd', 'payoutratio', 'pricetosalestrailing12months', 'sectordisplayname',
+                                 'sectorkey', 'shareholderRightsRisk', 'sharesshort', 'sharesshortpriormonth',
+                                 'shortPercentFloat', ' shortPercentOutstanding', 'sharesoutstanding', 'sharespercentsharesout',
+                                 'targetHighPrice', 'targetLowPrice', 'targetMeanPrice', 'targetMedianPrice', 'totalAssets',
+                                 'timeZoneShortName', 'exchangeTimezoneShortName', 'gmtOffSetMilliseconds', 'maxAge'
                                  ]
 
                 indicators = [
