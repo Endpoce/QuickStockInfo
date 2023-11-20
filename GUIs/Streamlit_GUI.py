@@ -10,22 +10,20 @@ import yfinance as yf
 import pandas as pd
 import openai
 from dotenv import load_dotenv
-import plotly.graph_objects as go
-from Files.Company_Info_Web_Scraper import *
-from Files.GetArticles import get_MW_Articles
-from Files.Stock_Analyzer import *
-from Files.Efficient_Frontier import *
-from Files.Sentiment import *
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(parent_dir)
+from Files.Efficient_Frontier import get_daily_returns, get_mean_returns_and_covariance, set_randomness, get_random_portfolios, get_efficient_frontier, plot_efficient_frontier
 
 # imports
-
+import os
+from datetime import timedelta, datetime
+import streamlit as st
+import yfinance as yf
+import pandas as pd
+import openai
+from dotenv import load_dotenv
 
 load_dotenv()
 
 yf.pdr_override()
-
 
 # Page config (Title at top and icon at top )
 st.set_page_config(page_title="Quick Stock Info", page_icon="chart_with_upwards_trend",
