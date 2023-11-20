@@ -13,5 +13,8 @@ regex
 plotly
 Gen_Files
 GUIs
-Company_info
-
+Company_info_Web_Scraper
+Efficient_Frontier
+GetArticles
+Semtiment
+Stock_Analyzer
