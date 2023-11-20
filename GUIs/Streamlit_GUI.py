@@ -1,8 +1,8 @@
 # Authors: Aidan Murphy
 # Date Created: 5/15/23
 
-from Gen_Files.Company_Info_Web_Scraper import get_company_info, get_wiki_info
 from Gen_Files.Efficient_Frontier import get_daily_returns, get_mean_returns_and_covariance, set_randomness, get_random_portfolios, get_efficient_frontier, plot_efficient_frontier
+from Gen_Files.Company_Info_Web_Scraper import get_company_info, get_wiki_info
 from dotenv import load_dotenv
 import openai
 import pandas as pd
