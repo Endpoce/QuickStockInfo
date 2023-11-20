@@ -1,20 +1,26 @@
 # Authors: Aidan Murphy
 # Date Created: 5/15/23
 
-# Imports
-from datetime import timedelta, datetime
-import streamlit as st
-import yfinance as yf
-import pandas as pd
-import openai
-from Files.Company_Info_Web_Scraper import *
-from Files.GetArticles import get_MW_Articles
-from Files.Stock_Analyzer import *
-import os
-from dotenv import load_dotenv
+# imports
 from Files.Sentiment import *
-import plotly.graph_objects as go
 from Files.Efficient_Frontier import *
+from Files.Stock_Analyzer import *
+from Files.GetArticles import get_MW_Articles
+from Files.Company_Info_Web_Scraper import *
+import plotly.graph_objects as go
+from dotenv import load_dotenv
+import openai
+import pandas as pd
+import yfinance as yf
+import streamlit as st
+from datetime import timedelta, datetime
+import os
+import sys
+
+# import Files module
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(parent_dir)
+
 
 load_dotenv()
 
@@ -24,6 +30,7 @@ yf.pdr_override()
 # Page config (Title at top and icon at top )
 st.set_page_config(page_title="Quick Stock Info", page_icon="chart_with_upwards_trend",
                    layout='wide', initial_sidebar_state="expanded")
+st.theme('dark')
 
 # set openai api key
 openai.api_key = os.environ.get('API_KEY')

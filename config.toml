@@ -1,0 +1,6 @@
+[theme]
+base = 'light'
+primary_color = 'blue'
+secondary_color = 'purple'
+tertiary_color = 'green'
+quaternary_color = 'orange'
