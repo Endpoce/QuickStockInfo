@@ -1,14 +1,14 @@
 # Authors: Aidan Murphy
 # Date Created: 5/15/23
 
-from Gen_Files.Efficient_Frontier import get_daily_returns, get_mean_returns_and_covariance, set_randomness, get_random_portfolios, get_efficient_frontier, plot_efficient_frontier
-from Gen_Files.Company_Info_Web_Scraper import get_company_info, get_wiki_info
-from dotenv import load_dotenv
-import openai
-import pandas as pd
-import yfinance as yf
-import streamlit as st
 from datetime import timedelta, datetime
+import streamlit as st
+import yfinance as yf
+import pandas as pd
+import openai
+from dotenv import load_dotenv
+from Gen_Files.Company_Info_Web_Scraper import get_company_info, get_wiki_info
+from Gen_Files.Efficient_Frontier import get_daily_returns, get_mean_returns_and_covariance, set_randomness, get_random_portfolios, get_efficient_frontier, plot_efficient_frontier
 import sys
 import os
 
