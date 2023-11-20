@@ -1,22 +1,18 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import filedialog
 from datetime import datetime
 import yfinance as yf
 import pandas as pd
 import openai
-from Company_Info_Web_Scraper import get_company_info, get_wiki_info, summarize_article
-from GetArticles import get_MW_Articles
-from Stock_Analyzer import *
-import config
-import matplotlib.pyplot as plt
+from Gen_Files.Company_Info_Web_Scraper import get_company_info, get_wiki_info, summarize_article
+from Gen_Files.GetArticles import get_MW_Articles
+from Gen_Files.Stock_Analyzer import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.figure import Figure
 
 yf.pdr_override()
 
 # set openai api key
-openai.api_key = config.API_KEY
+openai.api_key = os.environ.get('API_KEY')
 
 
 def get_stock_data(symbol, start_date, end_date):

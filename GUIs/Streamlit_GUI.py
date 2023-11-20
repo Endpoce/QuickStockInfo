@@ -9,12 +9,11 @@ import openai
 from dotenv import load_dotenv
 from Gen_Files.Company_Info_Web_Scraper import get_company_info, get_wiki_info
 from Gen_Files.Efficient_Frontier import get_daily_returns, get_mean_returns_and_covariance, set_randomness, get_random_portfolios, get_efficient_frontier, plot_efficient_frontier
+from Gen_Files.Stock_Analyzer import *
+from Gen_Files.Sentiment import *
+from Gen_Files.GetArticles import get_MW_Articles
 import sys
 import os
-
-# add Gen_Files to path
-sys.path.append(os.path.abspath(os.path.join(
-    os.path.dirname(__file__), os.path.pardir, 'Gen_Files')))
 
 
 load_dotenv()
