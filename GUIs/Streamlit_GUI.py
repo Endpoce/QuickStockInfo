@@ -1,14 +1,17 @@
 # Authors: Aidan Murphy
 # Date Created: 5/15/23
 
-from datetime import timedelta, datetime
-import streamlit as st
-import yfinance as yf
-import pandas as pd
-import openai
-from dotenv import load_dotenv
-from Gen_Files import *
 import os
+from Gen_Files import *
+from dotenv import load_dotenv
+import openai
+import pandas as pd
+import yfinance as yf
+import streamlit as st
+from datetime import timedelta, datetime
+import sys
+
+sys.path.append('Gen_Files')
 
 
 load_dotenv()
