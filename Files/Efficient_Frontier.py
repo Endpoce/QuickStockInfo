@@ -89,15 +89,6 @@ def get_random_portfolios(n_assets, n_portfolios, daily_returns, mus, cov):
 
 
 def plot_random_portfolios(mean_variance_pairs):
-    """
-    Plots the risk vs. return of randomly generated portfolios.
-
-    Parameters:
-    mean_variance_pairs (numpy.ndarray): Array of mean-variance pairs representing the portfolios.
-
-    Returns:
-    None
-    """
     risk_free_rate = 0  # -- Include risk free rate here
     # -- Plot the risk vs. return of randomly generated portfolios
     fig = go.Figure()
@@ -123,16 +114,17 @@ def plot_random_portfolios(mean_variance_pairs):
     return fig
 
 
-def get_efficient_frontier(n_assets, n_portfolios, mus, cov):
+def get_efficient_frontier(n_assets, n_portfolios, daily_returns, mus, cov, ):
     # -- Create random portfolio weights and indexes
     # - How many assests in the portfolio
-    n_assets = 5
+    n_assets = n_assets
+    n_portfolios = n_portfolios
 
     mean_variance_pairs = []
     weights_list = []
     tickers_list = []
 
-    for i in tqdm(range(10000)):
+    for i in tqdm(range(n_portfolios)):
         next_i = False
         while True:
             # - Choose assets randomly without replacement
@@ -195,3 +187,5 @@ def plot_efficient_frontier(mean_variance_pairs, weights_list, tickers_list):
     fig.update_xaxes(range=[0.18, 0.35])
     fig.update_yaxes(range=[0.05, 0.29])
     fig.update_layout(coloraxis_colorbar=dict(title="Sharpe Ratio"))
+
+    return fig

@@ -1,0 +1,8 @@
+config.py
+/MONEYBOTS/Price_Data
+/MONEYBOTS/Raw_Data
+/MONEYBOTS/Notebooks
+/MONEYBOTS/dist
+/MONEYBOTS/build
+/MONEYBOTS/Basic_info_Getter
+.env
