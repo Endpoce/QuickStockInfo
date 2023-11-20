@@ -6,14 +6,6 @@ from GetArticles import *
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
-
-# Set up your OpenAI API credentials
-openai.api_key = os.environ.get('API_KEY')
-
-# set search query (must be ticker symbol or list of symbols)
-search_query = ['WKHS']
-
 
 def get_wiki_info(query):
     results = wikipedia.search(query)

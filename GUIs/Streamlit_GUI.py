@@ -1,9 +1,8 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 import streamlit as st
 import yfinance as yf
 import pandas as pd
 import openai
-from datetime import datetime
 from Files.Company_Info_Web_Scraper import *
 from Files.GetArticles import get_MW_Articles
 from Files.Stock_Analyzer import *
