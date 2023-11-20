@@ -1,3 +1,10 @@
+# Authors: Aidan Murphy
+# Date Created: 5/15/23
+
+# Imports
+# import Files as Files
+import Files
+
 from datetime import timedelta, datetime
 import streamlit as st
 import yfinance as yf
