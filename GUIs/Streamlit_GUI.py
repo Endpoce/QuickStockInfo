@@ -12,7 +12,6 @@ from Gen_Files.Efficient_Frontier import get_daily_returns, get_mean_returns_and
 from Gen_Files.Stock_Analyzer import *
 from Gen_Files.Sentiment import *
 from Gen_Files.GetArticles import get_MW_Articles
-import sys
 import os
 
 
