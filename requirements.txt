@@ -1,6 +1,6 @@
 streamlit
 datetime
-yfinance>=0.2.31b2
+yfinance
 pandas
 openai
 requests
