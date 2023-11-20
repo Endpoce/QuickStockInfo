@@ -9,7 +9,7 @@ import openai
 from dotenv import load_dotenv
 import os
 
-from Gen_Files import Company_Info_Web_Scraper
+from Gen_Files.Company_Info_Web_Scraper import *
 from Gen_Files.GetArticles import *
 from Gen_Files.Stock_Analyzer import *
 from Gen_Files.Efficient_Frontier import *
