@@ -3,7 +3,7 @@
 
 import sys
 
-sys.path.append('Gen_Files')
+sys.path.append('QuickStockInfo/Gen_Files')
 
 from datetime import timedelta, datetime
 import streamlit as st
@@ -11,7 +11,11 @@ import yfinance as yf
 import pandas as pd
 import openai
 from dotenv import load_dotenv
-from Gen_Files import *
+from Company_Info_Web_Scraper import *
+from Efficient_Frontier import *
+from Stock_Analyzer import *
+from Sentiment import *
+from GetArticles import *
 import os
 
 
