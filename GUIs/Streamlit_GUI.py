@@ -1,22 +1,19 @@
 # Authors: Aidan Murphy
 # Date Created: 5/15/23
 
-import sys
-
-sys.path.append('QuickStockInfo/Gen_Files')
-
 from datetime import timedelta, datetime
 import streamlit as st
 import yfinance as yf
 import pandas as pd
 import openai
 from dotenv import load_dotenv
-from Company_Info_Web_Scraper import *
-from Efficient_Frontier import *
-from Stock_Analyzer import *
-from Sentiment import *
-from GetArticles import *
 import os
+
+from Gen_Files import Company_Info_Web_Scraper
+from Gen_Files.GetArticles import *
+from Gen_Files.Stock_Analyzer import *
+from Gen_Files.Efficient_Frontier import *
+from Gen_Files.Sentiment import *
 
 
 load_dotenv()
