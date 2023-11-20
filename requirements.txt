@@ -12,4 +12,6 @@ praw
 regex
 plotly
 Gen_Files
+GUIs
+Company_info
 
