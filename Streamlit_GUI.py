@@ -63,8 +63,6 @@ fetch_button = st.sidebar.button("Get Stock Data")
 start_of_year = datetime.today().strftime('%Y-01-01')
 
 
-
-
 # tab 1
 with tab1:
 
@@ -224,19 +222,22 @@ with tab3:
     st, st = st.columns((2, 1))
 
     with st.container():
-        # set randomness
-        n_assets, n_portfolios = set_randomness(5, 1000)
-                
-        # get daily returns
-        daily_returns = get_daily_returns(primary_ticker, start_date, end_date)
+        try:
+            # set randomness
+            n_assets, n_portfolios = set_randomness(5, 1000)
+                    
+            # get daily returns
+            daily_returns = get_daily_returns(primary_ticker, start_date, end_date)
 
-        # get random portfolios
-        mean_variance_pairs = get_random_portfolios(
-            n_assets, n_portfolios, daily_returns, mus, cov)
+            # get random portfolios
+            mean_variance_pairs = get_random_portfolios(
+                n_assets, n_portfolios, daily_returns, mus, cov)
 
-        # plot efficient frontier
-        st.plotly_chart(plot_efficient_frontier(
-            efficient_frontier), use_container_width=True)
+            # plot efficient frontier
+            st.plotly_chart(plot_efficient_frontier(
+                efficient_frontier), use_container_width=True)
+        except Exception as e:
+            st.write("Error ::" + str(e))
 
 with tab4:
     try:
