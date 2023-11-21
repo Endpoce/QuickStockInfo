@@ -45,11 +45,10 @@ tab1, tab2, tab3, tab4 = st.tabs(
 st.sidebar.header("User Input")
 
 # get user input for multiple tickers
-ticker_symbols = st.sidebar.text_input(
-    "Ticker Symbols (separated by commas)").upper()
+primary_ticker = ("Ticker Symbol").upper()
 
-# ticker_symbols -> list of tickers
-ticker_symbols = ticker_symbols.split(",")
+comparative_tickers = st.sidebar.text_input(
+    "Comparative Ticker Symbols (separated by commas)").upper()
 
 # get start and end date
 start_date = st.sidebar.date_input(
@@ -79,24 +78,26 @@ with tab1:
         try:
 
             # download and save stock data
-            for ticker in ticker_symbols:
-                data = yf.download(ticker, start=start_date, end=end_date)
-                filename = "QuickStockInfo\\Price_Data\\" + ticker + '_Price_Data.csv'
-                data.to_csv(filename)
+            data = yf.download(primary_ticker, start=start_date, end=end_date)
+            filename = "QuickStockInfo\\Price_Data\\" + primary_ticker + '_Price_Data.csv'
+            data.to_csv(filename)
 
-                # get company info and save to csv
-                info = get_company_info(ticker)
-                filename = "QuickStockInfo\\Company_Info\\" + ticker + '_Company_Info.csv'
-                pd.DataFrame.from_dict(info, orient='index').to_csv(
-                    filename, header=False)
+            # get company info and save to csv
+            info = get_company_info(primary_ticker)
+            filename = "QuickStockInfo\\Company_Info\\" + primary_ticker + '_Company_Info.csv'
+            pd.DataFrame.from_dict(info, orient='index').to_csv(
+                filename, header=False)
 
             # get ytd data
-            ytd_data = ticker.history(start=start_of_year)
+            ytd_data = data.loc[start_of_year:end_date]
 
-            
+            # get ytd returns and save to csv
+            ytd_returns = ytd_data['Close'].pct_change()
+            filename = "QuickStockInfo\\Company_Info\\" + primary_ticker + '_Returns.csv'
+
             # get daily returns
             daily_returns = get_daily_returns(
-                ticker_symbols, start_date, end_date)
+                primary_ticker, start_date, end_date)
 
             # get mean returns and covariance
             mus, cov = get_mean_returns_and_covariance(daily_returns)
@@ -155,34 +156,22 @@ with tab1:
                     st.markdown(wiki_info['summary'])
 
             except Exception as e:
-                st.write("Error in col 1:: " + str(e))
+                st.write("Error :: " + str(e))
 
         with st.container():
 
-            try:
-                if len(ticker_symbols) == 1:
-                    # read stock price data from csv
-                    filename = ticker_symbols + '_Price_Data.csv'
-                    df = pd.read_csv(filename)
+            # read stock price data from csv
+            filename = primary_ticker + '_Price_Data.csv'
+            df = pd.read_csv(filename)
 
-                else:
-                    # read stock price data from csvs
-                    dfs = []
-                    for ticker in ticker_symbols:
-                        filename = "QuickStockInfo\\Price_Data\\" + ticker + '_Price_Data.csv'
-                        dfs.append(pd.read_csv(filename))
-                    df = pd.concat(dfs)
+            # get stock price data
+            hist = df[['Date', 'Close']]
+            hist = hist.set_index('Date')
 
-                    # get stock price data
-                    hist = df[['Date', 'Close']]
-                    hist = hist.set_index('Date')
+            # plot price stock data
+            st.plotly_chart(plot_stock_with_interactive_chart(
+            filename), use_container_width=True)
 
-                # plot price stock data
-                st.plotly_chart(plot_stock_with_interactive_chart(
-                    filename), use_container_width=True)
-
-            except Exception as e:
-                st.write("Error in col 1: " + str(e))
 
             try:
                 # plot price stock data
@@ -262,10 +251,10 @@ with tab4:
 
             # display estimated 52 return
             st.write("Estimated 52 Week Return: " +
-                     str(get_estimated_1y_return(info, ticker)) + "%")
+                     str(get_estimated_1y_return(info, primary_ticker)) + "%")
 
             # display ytd return
-            ytdReturn = get_ytd_return(ticker_symbols, start_of_year)
+            ytdReturn = get_ytd_return(primary_ticker, start_of_year)
             st.metric(label="Estimated YTD Return", value=ytdReturn,
                       delta=ytdReturn)
 
@@ -324,7 +313,7 @@ with tab4:
             time.sleep(5)
 
             # get articles
-            articles = get_MW_Articles(ticker_symbols, 5)
+            articles = get_MW_Articles(primary_ticker, 5)
 
             # display articles
             st.write("Articles:")
