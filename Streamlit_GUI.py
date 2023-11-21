@@ -14,9 +14,10 @@ from Gen_Files.Stock_Analyzer import *
 from Gen_Files.Efficient_Frontier import *
 import streamlit as st
 
-
+# set env vars
 load_dotenv()
 
+# set pandas override
 yf.pdr_override()
 
 # Page config (Title at top and icon at top )
@@ -55,7 +56,7 @@ ticker_symbols = ticker_symbols.split(",")
 
 # get start and end date
 start_date = st.sidebar.date_input(
-    "Start date", value=pd.to_datetime("2020-01-01"))
+    "Start date", value=pd.to_datetime("2014-01-01"))
 end_date = st.sidebar.date_input(
     "End date", value=pd.to_datetime(datetime.today().strftime('%Y-%m-%d')))
 
@@ -67,8 +68,14 @@ fetch_button = st.sidebar.button("Get Stock Data")
 start_of_year = datetime.today().strftime('%Y-01-01')
 
 # calculate ytd return
-ytdReturn = round(
-    (((ytd_data['Close'].iloc[-1] - ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100), 2)
+def get_ytd_return(ticker_symbols, start_of_year):
+    for ticker in ticker_symbols:
+        ytd_data = ticker.history(start=start_of_year)
+        ytdReturn = round(
+            (((ytd_data['Close'].iloc[-1] - ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100), 2)
+
+    return ytdReturn
+
 
 # get daily returns
 daily_returns = get_daily_returns(
@@ -120,7 +127,6 @@ with tab1:
                 wiki_info = get_wiki_info(info['longName'] + " company")
             except Exception as e:
                 st.write("Error getting wiki info:: " + str(e))
-                return
 
         except Exception as e:
             st.write("Error getting company info:: " + str(e))
@@ -270,6 +276,7 @@ with tab4:
                      str(get_estimated_1y_return(info, ticker)) + "%")
 
             # display ytd return
+            ytdReturn = get_ytd_return(ticker_symbols, start_of_year)
             st.metric(label="Estimated YTD Return", value=ytdReturn,
                       delta=ytdReturn)
 
