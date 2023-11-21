@@ -81,7 +81,7 @@ with tab1:
             data.to_csv(filename)
 
             # get company info and save to csv
-            info = get_stock_data(primary_ticker)
+            info = get_stock_data(primary_ticker, start_date, end_date)
             filename = "QuickStockInfo\\Company_Info\\" + primary_ticker + '_Company_Info.csv'
             pd.DataFrame.from_dict(info, orient='index').to_csv(
                 filename, header=False)
