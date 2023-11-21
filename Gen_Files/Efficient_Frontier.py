@@ -1,9 +1,34 @@
-# %%
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
 import plotly.graph_objects as go
 import yfinance as yf
+from datetime import datetime, timedelta
+
+
+def get_estimated_1y_return(info, ticker):
+
+    if 'trailingAnnualDividendYield' in info:
+        dividend = ticker.info['trailingAnnualDividendYield']
+    elif 'dividendYield' in info:
+        dividend = ticker.info['dividendYield']
+    else:
+        dividend = 0
+
+    one_year_ago_date = (
+        datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
+    history = ticker.history(start=one_year_ago_date)
+
+    # Get the first available price, which should be the price from approximately one year ago
+    # Assumes that the stock market was open on the 'one_year_ago_date',
+    # you may want to handle cases where it was not, such as weekends and holidays.
+    price_one_year_ago = history.iloc[0]['Close']
+    current_price = history.iloc[-1]['Close']
+
+    estimated_return = round(
+        ((current_price - price_one_year_ago + dividend)/price_one_year_ago) * 100, 2)
+
+    return estimated_return
 
 
 def get_daily_returns(tickers, start_date, end_date):

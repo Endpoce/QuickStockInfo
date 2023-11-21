@@ -22,8 +22,7 @@ yf.pdr_override()
 
 # Page config (Title at top and icon at top )
 st.set_page_config(page_title="Quick Stock Info", page_icon="chart_with_upwards_trend",
-                   layout='wide', initial_sidebar_state="expanded")
-st.theme('dark')
+                   layout='wide', initial_sidebar_state="expanded", theme="dark")
 
 # set openai api key
 openai.api_key = os.environ.get('API_KEY')
@@ -35,54 +34,6 @@ end_date = datetime.today().strftime('%Y-%m-%d')
 
 tab1, tab2, tab3, tab4 = st.tabs(
     ["Quick Stock Info", "Investor Info", "Efficient Frontier", "GPT-4 Analysis"])
-
-
-def get_estimated_1y_return(info, ticker):
-
-    if 'trailingAnnualDividendYield' in info:
-        dividend = ticker.info['trailingAnnualDividendYield']
-    elif 'dividendYield' in info:
-        dividend = ticker.info['dividendYield']
-    else:
-        dividend = 0
-
-    one_year_ago_date = (
-        datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
-    history = ticker.history(start=one_year_ago_date)
-
-    # Get the first available price, which should be the price from approximately one year ago
-    # Assumes that the stock market was open on the 'one_year_ago_date',
-    # you may want to handle cases where it was not, such as weekends and holidays.
-    price_one_year_ago = history.iloc[0]['Close']
-    current_price = history.iloc[-1]['Close']
-
-    estimated_return = round(
-        ((current_price - price_one_year_ago + dividend)/price_one_year_ago) * 100, 2)
-
-    return estimated_return
-
-
-def get_investors(ticker):
-
-    institutional_investor_dict = {}
-
-    # Get institutional investor information
-    institutional_holders = ticker.institutional_holders
-    for _, row in institutional_holders.iterrows():
-        investor_name = row['Holder']
-        investor_position = row['Shares']
-        institutional_investor_dict[investor_name] = investor_position
-
-    major_holder_dict = {}
-
-    # Get major holder information
-    major_holders = ticker.major_holders
-    for _, row in major_holders.iterrows():
-        investor_name = row['Holder']
-        investor_position = row['Shares']
-        major_holder_dict[investor_name] = investor_position
-
-    return institutional_investor_dict, major_holder_dict
 
 
 def main():
@@ -139,7 +90,7 @@ def main():
     with tab1:
 
         # Columns
-        col1, col2 = st.columns((1, 1))
+        st, st = st.columns((1, 1))
 
         # if button is pressed
         if fetch_button:
@@ -175,41 +126,41 @@ def main():
 
             # try to display company info
             try:
-                with col1.container():
-                    col1.subheader("Company Info:")
+                with st.container():
+                    st.subheader("Company Info:")
 
-                    col1.subheader(info['longName'], color="blue")
+                    st.subheader(info['longName'], color="blue")
 
                     if info["sector"]:
-                        col1.write("Sector: "+info["sector"])
+                        st.write("Sector: "+info["sector"])
 
                     if info["industry"]:
-                        col1.write("Industry: " + info["industry"])
+                        st.write("Industry: " + info["industry"])
 
                     if info["legalType"]:
-                        col1.write("Legal Type: " + info["legalType"])
+                        st.write("Legal Type: " + info["legalType"])
 
                     if info.category:
-                        col1.write("Category: " + info["category"])
+                        st.write("Category: " + info["category"])
 
                     if info['longBusinessSummary']:
-                        col1.write("Summary:")
-                        col1.markdown(info['longBusinessSummary'])
+                        st.write("Summary:")
+                        st.markdown(info['longBusinessSummary'])
 
                     # display wiki info
                     if wiki_info:
-                        col1.write("Wikipedia URL:")
-                        col1.write(wiki_info['url'])
+                        st.write("Wikipedia URL:")
+                        st.write(wiki_info['url'])
 
-                        col1.write("Wikipedia Summary:")
-                        col1.markdown(wiki_info['summary'])
+                        st.write("Wikipedia Summary:")
+                        st.markdown(wiki_info['summary'])
 
             except Exception as e:
                 st.write("Error in col 1:: " + str(e))
                 return
 
             try:
-                with col2.container():
+                with st.container():
 
                     try:
                         # read stock price data from csv
@@ -222,7 +173,7 @@ def main():
 
                     try:
                         # plot price stock data
-                        col2.plotly_chart(plot_stock_with_interactive_chart(
+                        st.plotly_chart(plot_stock_with_interactive_chart(
                             filename), use_container_width=True)
 
                     except Exception as e:
@@ -231,7 +182,7 @@ def main():
 
                     try:
                         # plot efficient frontier
-                        col2.plotly_chart(plot_efficient_frontier(
+                        st.plotly_chart(plot_efficient_frontier(
                             efficient_frontier), use_container_width=True)
 
                     except Exception as e:
@@ -247,9 +198,9 @@ def main():
         try:
             st.title("Investor Info")
 
-            col1, col2 = st.columns((1, 2))
+            st, st = st.columns((1, 2))
 
-            with col1.container():
+            with st.container():
                 st.subheader("Institutional Investors:")
 
                 # # get institutional investors
@@ -259,7 +210,7 @@ def main():
                 # for investor in institutional_investor:
                 #     st.write(investor + ":" + investor["shares"])
 
-            with col2.container():
+            with st.container():
                 st.subheader("Major Holders:")
 
                 # # get investor info from yfinance
@@ -277,9 +228,9 @@ def main():
 
         st.sidebar.subheader("Efficient Frontier")
 
-        col1, col2 = st.columns((2, 1))
+        st, st = st.columns((2, 1))
 
-        with col1.container():
+        with st.container():
             # set randomness
             n_assets, n_portfolios = set_randomness(5, 1000)
 
@@ -288,16 +239,16 @@ def main():
                 n_assets, n_portfolios, daily_returns, mus, cov)
 
             # plot efficient frontier
-            col1.plotly_chart(plot_efficient_frontier(
+            st.plotly_chart(plot_efficient_frontier(
                 efficient_frontier), use_container_width=True)
 
     with tab4:
         try:
             st.title("GPT-4 Analysis")
 
-            col1, col2 = st.columns((1, 2))
+            st, st = st.columns((1, 2))
 
-            with col1:
+            with st:
                 # display finance info
                 st.subheader("Summary:")
 
@@ -354,24 +305,24 @@ def main():
                 for indicator in sorted_indicators:
                     st.write(indicator + ": " + str(info[indicator]))
 
-            with col2:
+            with st:
 
                 st.subheader("Analysis:")
 
                 # plot price stock data
-                col2.plotly_chart(plot_stock_with_interactive_chart(
+                st.plotly_chart(plot_stock_with_interactive_chart(
                     filename), use_container_width=True)
 
                 # analyze stock data
                 # col2.write(analyze_stock(filename, ticker))
-                col2.write("Placeholder text for stock analysis")
+                st.write("Placeholder text for stock analysis")
                 time.sleep(5)
 
                 # get articles
                 articles = get_MW_Articles(ticker_symbols, 5)
 
                 # display articles
-                col2.write("Articles:")
+                st.write("Articles:")
 
                 time.sleep(5)
 
@@ -381,7 +332,7 @@ def main():
                 #     col2.write(article['url'])
                 #     col2.markdown(summarize_article(article))
                 #     time.sleep(5)
-                col2.write("Placeholder text for article analysis")
+                st.write("Placeholder text for article analysis")
         except Exception as e:
             st.write("Error: Cant find GPT-4 analysis")
             return

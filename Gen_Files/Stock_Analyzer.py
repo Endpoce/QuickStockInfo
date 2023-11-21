@@ -12,9 +12,9 @@ import plotly.graph_objects as go
 
 load_dotenv()
 
-# %%
 # Set up your OpenAI API credentials
 openai.api_key = os.environ.get('API_KEY')
+
 
 
 def get_stock_data(symbol, start_date, end_date):
@@ -131,7 +131,6 @@ def analyze_stock(filename, ticker):
 # Use the function
 # print(analyze_stock('C:\\Users\\Aidan\\Desktop\\USB\\Projects\\Python\\MoneyBots\\2PREPARE_Basic_info_Getter\\Stock_Price_Info\\AAPL_3_years.csv'))
 
-# %%
 def plot_stock_with_moving_averages_from_csv(filename, short_window=15, long_window=100):
     # Read data from CSV file
     df = pd.read_csv(filename, parse_dates=['Date'], index_col='Date')
@@ -219,8 +218,3 @@ def plot_stock_with_interactive_chart(filename, short_window=15, long_window=100
     fig.show()
 
     return fig
-
-
-# Use the function
-# plot_stock_with_moving_averages_from_csv(
-#     'C:\\Users\\Aidan\\Desktop\\USB\\Projects\\Python\\MoneyBots\\2PREPARE_Basic_info_Getter\\Stock_Price_Info\\AAPL_3_years.csv')
