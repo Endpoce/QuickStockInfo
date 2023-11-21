@@ -232,9 +232,6 @@ with tab2:
 with tab3:
     st.subheader("Efficient Frontier")
 
-    st.sidebar.title("Efficient Frontier")
-
-
     st, st = st.columns((2, 1))
 
     with st.container():
