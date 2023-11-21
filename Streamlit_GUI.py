@@ -128,7 +128,7 @@ with tab1:
                 st.subheader("Company Info:")
 
                 # display company info
-                info = get_company_info(primary_ticker)
+                ticker, info, hist, file, legalType = get_company_info(primary_ticker)
 
                 st.subheader(info['longName'], color="blue")
                 with col1.container():
