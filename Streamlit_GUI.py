@@ -21,7 +21,7 @@ yf.pdr_override()
 
 # Page config (Title at top and icon at top )
 st.set_page_config(page_title="Quick Stock Info", page_icon="chart_with_upwards_trend",
-                   layout='wide', initial_sidebar_state="expanded", theme="dark")
+                   layout='wide', initial_sidebar_state="expanded")
 
 # set openai api key
 openai.api_key = os.environ.get('API_KEY')
