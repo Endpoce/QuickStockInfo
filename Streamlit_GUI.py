@@ -127,6 +127,9 @@ with tab1:
             try:
                 st.subheader("Company Info:")
 
+                # display company info
+                info = get_company_info(primary_ticker)
+
                 st.subheader(info['longName'], color="blue")
                 with col1.container():
                     if info["sector"]:
