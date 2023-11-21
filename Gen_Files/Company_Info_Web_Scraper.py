@@ -4,6 +4,7 @@ import wikipedia
 from Gen_Files.GetArticles import *
 import os
 from dotenv import load_dotenv
+import yfinance as yf
 
 
 def get_wiki_info(query):
@@ -28,19 +29,23 @@ def get_company_info(ticker):
     try:
 
         # Get company info from the Ticker object
+        
         info = ticker.info
 
         # Extract the desired information
         company_name = info['longName']
         sector = info['sector']
         industry = info['industry']
+        legal_type = info['legalType'],
         summary = info['longBusinessSummary']
+
 
         # Return the company information as a dictionary
         company_dict = {
             'name': company_name,
             'sector': sector,
             'industry': industry,
+            'Legal Type': legal_type,
             'summary': summary
         }
 
