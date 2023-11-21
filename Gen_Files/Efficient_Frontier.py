@@ -5,6 +5,24 @@ import plotly.graph_objects as go
 import yfinance as yf
 from datetime import datetime, timedelta
 
+# calculate ytd return
+def get_ytd_return(ticker_symbols, start_of_year):
+
+    for ticker in ticker_symbols:
+        ytd_data = []
+        ytd_returns = []
+
+        # get ytd data
+        ytd_data = ticker.history(start=start_of_year)
+
+        # calculate ytd return
+        ytdReturn = round(
+            (ytd_data['Close'].iloc[-1] - ytd_data['Close'].iloc[0]) / ytd_data['Close'].iloc[0] * 100, 2)
+
+        ytd_returns.append(ytdReturn)
+
+    return ytd_returns
+
 
 def get_estimated_1y_return(info, ticker):
 

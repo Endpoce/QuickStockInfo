@@ -38,8 +38,6 @@ tab1, tab2, tab3, tab4 = st.tabs(
 # main function for streamlit app
 
 
-# def main():
-
 # set page parameters
 # Title
 st.title("Quick Stock Info")
@@ -67,33 +65,7 @@ fetch_button = st.sidebar.button("Get Stock Data")
 # get start of year date
 start_of_year = datetime.today().strftime('%Y-01-01')
 
-# calculate ytd return
-def get_ytd_return(ticker_symbols, start_of_year):
-    for ticker in ticker_symbols:
-        ytd_data = ticker.history(start=start_of_year)
-        ytdReturn = round(
-            (((ytd_data['Close'].iloc[-1] - ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100), 2)
 
-    return ytdReturn
-
-
-# get daily returns
-daily_returns = get_daily_returns(
-    ticker_symbols, start_date, end_date)
-
-# get mean returns and covariance
-mus, cov = get_mean_returns_and_covariance(daily_returns)
-
-# set randomness
-n_assets, n_portfolios = set_randomness(5, 1000)
-
-# get random portfolios
-mean_variance_pairs = get_random_portfolios(
-    n_assets, n_portfolios, daily_returns, mus, cov)
-
-# get efficient frontier
-efficient_frontier = get_efficient_frontier(
-    mean_variance_pairs, mus, cov)
 
 # tab 1
 with tab1:
@@ -121,6 +93,26 @@ with tab1:
 
             # get ytd data
             ytd_data = ticker.history(start=start_of_year)
+
+            
+            # get daily returns
+            daily_returns = get_daily_returns(
+                ticker_symbols, start_date, end_date)
+
+            # get mean returns and covariance
+            mus, cov = get_mean_returns_and_covariance(daily_returns)
+
+            # set randomness
+            n_assets, n_portfolios = set_randomness(5, 1000)
+
+            # get random portfolios
+            mean_variance_pairs = get_random_portfolios(
+                n_assets, n_portfolios, daily_returns, mus, cov)
+
+            # get efficient frontier
+            efficient_frontier = get_efficient_frontier(
+                mean_variance_pairs, mus, cov)
+
 
             try:
                 # get wiki info
