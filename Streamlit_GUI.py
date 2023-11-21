@@ -33,7 +33,6 @@ start_date = pd.to_datetime("2020-01-01")
 end_date = datetime.today().strftime('%Y-%m-%d')
 
 
-
 # set page parameters
 # Title
 st.title("Quick Stock Info")
@@ -62,6 +61,7 @@ fetch_button = st.sidebar.button("Get Stock Data")
 # set vars and calculate returns
 # get start of year date
 start_of_year = datetime.today().strftime('%Y-01-01')
+
 
 
 
@@ -226,6 +226,9 @@ with tab3:
     with st.container():
         # set randomness
         n_assets, n_portfolios = set_randomness(5, 1000)
+                
+        # get daily returns
+        daily_returns = get_daily_returns(primary_ticker, start_date, end_date)
 
         # get random portfolios
         mean_variance_pairs = get_random_portfolios(
