@@ -34,6 +34,8 @@ end_date = datetime.today().strftime('%Y-%m-%d')
 tab1, tab2, tab3, tab4 = st.tabs(
     ["Quick Stock Info", "Investor Info", "Efficient Frontier", "GPT-4 Analysis"])
 
+# main function for streamlit app
+
 
 def main():
 
