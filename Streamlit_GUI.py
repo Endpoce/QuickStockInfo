@@ -161,13 +161,6 @@ with tab1:
 
         with st.container():
 
-            # read stock price data from csv
-            filename = primary_ticker + '_Price_Data.csv'
-            df = pd.read_csv(filename)
-
-            # get stock price data
-            hist = df[['Date', 'Close']]
-            hist = hist.set_index('Date')
 
             # plot price stock data
             st.plotly_chart(plot_stock_with_interactive_chart(
@@ -251,6 +244,15 @@ with tab4:
         with st:
             # display finance info
             st.subheader("Summary:")
+
+            
+            # read stock price data from csv
+            filename = str(primary_ticker) + '_Price_Data.csv'
+            df = pd.read_csv(filename)
+
+            # get stock price data
+            hist = df[['Date', 'Close']]
+            hist = hist.set_index('Date')
 
             # display current price
             st.metric(label="Current Price: ",
