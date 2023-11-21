@@ -37,322 +37,314 @@ tab1, tab2, tab3, tab4 = st.tabs(
 # main function for streamlit app
 
 
-def main():
+# def main():
 
-    # set page parameters
-    # Title
+# set page parameters
+# Title
+st.title("Quick Stock Info")
 
-    st.title("Quick Stock Info")
+# Sidebar
+st.sidebar.header("User Input")
 
-    # Sidebar
-    st.sidebar.header("User Input")
+# get user input for multiple tickers
+ticker_symbols = st.sidebar.text_input(
+    "Ticker Symbols (separated by commas)").upper()
 
-    # get user input for multiple tickers
-    ticker_symbols = st.sidebar.text_input(
-        "Ticker Symbols (separated by commas)").upper()
+# ticker_symbols -> list of tickers
+ticker_symbols = ticker_symbols.split(",")
 
-    # ticker_symbols -> list of tickers
-    ticker_symbols = ticker_symbols.split(",")
+# get start and end date
+start_date = st.sidebar.date_input(
+    "Start date", value=pd.to_datetime("2020-01-01"))
+end_date = st.sidebar.date_input(
+    "End date", value=pd.to_datetime(datetime.today().strftime('%Y-%m-%d')))
 
-    # get start and end date
-    start_date = st.sidebar.date_input(
-        "Start date", value=pd.to_datetime("2020-01-01"))
-    end_date = st.sidebar.date_input(
-        "End date", value=pd.to_datetime(datetime.today().strftime('%Y-%m-%d')))
+# fetch button
+fetch_button = st.sidebar.button("Get Stock Data")
 
-    # fetch button
-    fetch_button = st.sidebar.button("Get Stock Data")
+# set vars and calculate returns
+# get start of year date
+start_of_year = datetime.today().strftime('%Y-01-01')
 
-    # set vars and calculate returns
-    # get start of year date
-    start_of_year = datetime.today().strftime('%Y-01-01')
+# calculate ytd return
+ytdReturn = round(
+    (((ytd_data['Close'].iloc[-1] - ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100), 2)
 
-    # calculate ytd return
-    ytdReturn = round(
-        (((ytd_data['Close'].iloc[-1] - ytd_data['Close'].iloc[0])/ytd_data['Close'].iloc[0])*100), 2)
+# get daily returns
+daily_returns = get_daily_returns(
+    ticker_symbols, start_date, end_date)
 
-    # get daily returns
-    daily_returns = get_daily_returns(
-        ticker_symbols, start_date, end_date)
+# get mean returns and covariance
+mus, cov = get_mean_returns_and_covariance(daily_returns)
 
-    # get mean returns and covariance
-    mus, cov = get_mean_returns_and_covariance(daily_returns)
+# set randomness
+n_assets, n_portfolios = set_randomness(5, 1000)
 
-    # set randomness
-    n_assets, n_portfolios = set_randomness(5, 1000)
+# get random portfolios
+mean_variance_pairs = get_random_portfolios(
+    n_assets, n_portfolios, daily_returns, mus, cov)
 
-    # get random portfolios
-    mean_variance_pairs = get_random_portfolios(
-        n_assets, n_portfolios, daily_returns, mus, cov)
+# get efficient frontier
+efficient_frontier = get_efficient_frontier(
+    mean_variance_pairs, mus, cov)
 
-    # get efficient frontier
-    efficient_frontier = get_efficient_frontier(
-        mean_variance_pairs, mus, cov)
+# tab 1
+with tab1:
 
-    # tab 1
-    with tab1:
+    # Columns
+    col1, col2 = st.columns((1, 1))
 
-        # Columns
-        col1, col2 = st.columns((1, 1))
+    # if button is pressed
+    if fetch_button:
 
-        # if button is pressed
-        if fetch_button:
+        # try to get basic company info
+        try:
 
-            # try to get basic company info
+            # download and save stock data
+            for ticker in ticker_symbols:
+                data = yf.download(ticker, start=start_date, end=end_date)
+                filename = "QuickStockInfo\\Price_Data\\" + ticker + '_Price_Data.csv'
+                data.to_csv(filename)
+
+                # get company info and save to csv
+                info = get_company_info(ticker)
+                filename = "QuickStockInfo\\Company_Info\\" + ticker + '_Company_Info.csv'
+                pd.DataFrame.from_dict(info, orient='index').to_csv(
+                    filename, header=False)
+
+            # get ytd data
+            ytd_data = ticker.history(start=start_of_year)
+
             try:
-
-                # download and save stock data
-                for ticker in ticker_symbols:
-                    data = yf.download(ticker, start=start_date, end=end_date)
-                    filename = "QuickStockInfo\\Price_Data\\" + ticker + '_Price_Data.csv'
-                    data.to_csv(filename)
-
-                    # get company info and save to csv
-                    info = get_company_info(ticker)
-                    filename = "QuickStockInfo\\Company_Info\\" + ticker + '_Company_Info.csv'
-                    pd.DataFrame.from_dict(info, orient='index').to_csv(
-                        filename, header=False)
-
-                # get ytd data
-                ytd_data = ticker.history(start=start_of_year)
-
-                try:
-                    # get wiki info
-                    wiki_info = get_wiki_info(info['longName'] + " company")
-                except Exception as e:
-                    st.write("Error getting wiki info:: " + str(e))
-                    return
-
+                # get wiki info
+                wiki_info = get_wiki_info(info['longName'] + " company")
             except Exception as e:
-                st.write("Error getting company info:: " + str(e))
+                st.write("Error getting wiki info:: " + str(e))
                 return
 
-            # try to display company info
-            with st.container():
-
-                try:
-                    st.subheader("Company Info:")
-
-                    st.subheader(info['longName'], color="blue")
-                    with col1.container():
-                        if info["sector"]:
-                            st.write("Sector: "+info["sector"])
-
-                        if info["industry"]:
-                            st.write("Industry: " + info["industry"])
-
-                        if info["legalType"]:
-                            st.write("Legal Type: " + info["legalType"])
-
-                        if info.category:
-                            st.write("Category: " + info["category"])
-                    with col2.container():
-                        if info['longBusinessSummary']:
-                            st.write("Summary:")
-                            st.markdown(info['longBusinessSummary'])
-
-                    # display wiki info
-                    if wiki_info:
-                        st.write("Wikipedia URL:")
-                        st.write(wiki_info['url'])
-
-                        st.write("Wikipedia Summary:")
-                        st.markdown(wiki_info['summary'])
-
-                except Exception as e:
-                    st.write("Error in col 1:: " + str(e))
-                    return
-
-            with st.container():
-
-                try:
-                    if len(ticker_symbols) == 1:
-                        # read stock price data from csv
-                        filename = ticker_symbols + '_Price_Data.csv'
-                        df = pd.read_csv(filename)
-
-                    else:
-                        # read stock price data from csvs
-                        dfs = []
-                        for ticker in ticker_symbols:
-                            filename = "QuickStockInfo\\Price_Data\\" + ticker + '_Price_Data.csv'
-                            dfs.append(pd.read_csv(filename))
-                        df = pd.concat(dfs)
-
-                        # get stock price data
-                        hist = df[['Date', 'Close']]
-                        hist = hist.set_index('Date')
-
-                    # plot price stock data
-                    st.plotly_chart(plot_stock_with_interactive_chart(
-                        filename), use_container_width=True)
-
-                except Exception as e:
-                    st.write("Error in col 1: " + str(e))
-                    return
-
-                try:
-                    # plot price stock data
-                    st.plotly_chart(plot_stock_with_interactive_chart(
-                        filename), use_container_width=True)
-
-                except Exception as e:
-                    st.write("Error in plotting price data: " + str(e))
-                    return
-
-                try:
-                    # plot efficient frontier
-                    st.plotly_chart(plot_efficient_frontier(
-                        efficient_frontier), use_container_width=True)
-
-                except Exception as e:
-                    st.write(
-                        "Error in plotting efficient frontier: " + str(e))
-                    return
-
-    with tab2:
-        try:
-            st.title("Investor Info")
-
-            st, st = st.columns((1, 2))
-
-            with st.container():
-                st.subheader("Institutional Investors:")
-
-                # # get institutional investors
-                # institutional_investor = ticker.constituent.get_institutional_holders()
-
-                # # display institutional investors
-                # for investor in institutional_investor:
-                #     st.write(investor + ":" + investor["shares"])
-
-            with st.container():
-                st.subheader("Major Holders:")
-
-                # # get investor info from yfinance
-                # investor_info = ticker.major_holders
-
-                # # display investor info
-                # for holder in investor_info["Holder"]:
-                #     st.write(holder + ": " + investor_info["Shares"][holder])
         except Exception as e:
-            st.write("Error: Cant find investor info")
-            return
+            st.write("Error getting company info:: " + str(e))
 
-    with tab3:
-        st.subheader("Efficient Frontier")
+        # try to display company info
+        with st.container():
 
-        st.sidebar.subheader("Efficient Frontier")
+            try:
+                st.subheader("Company Info:")
 
-        st, st = st.columns((2, 1))
+                st.subheader(info['longName'], color="blue")
+                with col1.container():
+                    if info["sector"]:
+                        st.write("Sector: "+info["sector"])
+
+                    if info["industry"]:
+                        st.write("Industry: " + info["industry"])
+
+                    if info["legalType"]:
+                        st.write("Legal Type: " + info["legalType"])
+
+                    if info.category:
+                        st.write("Category: " + info["category"])
+                with col2.container():
+                    if info['longBusinessSummary']:
+                        st.write("Summary:")
+                        st.markdown(info['longBusinessSummary'])
+
+                # display wiki info
+                if wiki_info:
+                    st.write("Wikipedia URL:")
+                    st.write(wiki_info['url'])
+
+                    st.write("Wikipedia Summary:")
+                    st.markdown(wiki_info['summary'])
+
+            except Exception as e:
+                st.write("Error in col 1:: " + str(e))
 
         with st.container():
-            # set randomness
-            n_assets, n_portfolios = set_randomness(5, 1000)
 
-            # get random portfolios
-            mean_variance_pairs = get_random_portfolios(
-                n_assets, n_portfolios, daily_returns, mus, cov)
+            try:
+                if len(ticker_symbols) == 1:
+                    # read stock price data from csv
+                    filename = ticker_symbols + '_Price_Data.csv'
+                    df = pd.read_csv(filename)
 
-            # plot efficient frontier
-            st.plotly_chart(plot_efficient_frontier(
-                efficient_frontier), use_container_width=True)
+                else:
+                    # read stock price data from csvs
+                    dfs = []
+                    for ticker in ticker_symbols:
+                        filename = "QuickStockInfo\\Price_Data\\" + ticker + '_Price_Data.csv'
+                        dfs.append(pd.read_csv(filename))
+                    df = pd.concat(dfs)
 
-    with tab4:
-        try:
-            st.title("GPT-4 Analysis")
-
-            st, st = st.columns((1, 2))
-
-            with st:
-                # display finance info
-                st.subheader("Summary:")
-
-                # display current price
-                st.metric(label="Current Price: ",
-                          value=round(hist['Close'].iloc[-1], 2))
-
-                # display estimated 52 return
-                st.write("Estimated 52 Week Return: " +
-                         str(get_estimated_1y_return(info, ticker)) + "%")
-
-                # display ytd return
-                st.metric(label="Estimated YTD Return", value=ytdReturn,
-                          delta=ytdReturn)
-
-                # list of indicators I don't want to display
-                not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
-                                 'industry', 'longBusinessSummary', 'symbol', 'legalType',
-                                 'underlyingSymbol', 'underlyingExchangeSymbol', 'headquartersCity',
-                                 'headquartersCountry', 'quoteType', 'city', 'state',
-                                 'country', 'website', 'address1', 'address2', 'zip', 'phone',
-                                 'numberOfEmployees', 'fullTimeEmployees', 'averageDailyVolume10Day',
-                                 'averageVolume10days', 'boardRiskGovernanceExperience', 'boardRisk',
-                                 'currency', 'firstTradeDateEpochUtc', 'gmtOffSetMilliseconds',
-                                 'governanceEpochDate', 'impliedSharesOutstanding', 'zip', 'uuid',
-                                 'maxAge', 'logo_url', 'compensationAsOfEpochDate', 'compensationRisk',
-                                 'compensationRank', 'compensationScore', 'compensationDescription',
-                                 'compensationCalendarDate', 'compensationPeerGroup', 'compensationPeerGroupDescription',
-                                 'messageBoardId', 'maxAge', 'logo_url', 'compensationAsOfEpochDate',
-                                 'navPrice', 'priceHint', 'shortName', 'exchangeTimezoneName', 'trailingPegRatio',
-                                 'twoHundredDayAverage', 'twoHundredDayAverageChange', 'twoHundredDayAverageChangePercent',
-                                 'yield', 'ytdReturn', 'trailingAnnualDividendRate', 'trailingAnnualDividendYield',
-                                 'SandP52WeekChange', 'regularMarketDayHigh', 'regularMarketDayLow', 'regularMarketOpen',
-                                 'regularMarketPreviousClose', 'regularMarketVolume', 'regularMarketChange',
-                                 'timeZoneShortName', 'exchangeTimezoneShortName', 'gmtOffSetMilliseconds', 'maxAge',
-                                 'fundFamily', 'fundInceptionDate', 'open', 'previousClose', 'regularMarketChangePercent',
-                                 'auditRisk', 'boardRisk', 'compensationRisk', 'shareHolderRightsRisk', 'overallRisk',
-                                 'companyOfficers', 'maxAge', 'logo_url', 'compensationAsOfEpochDate', 'compensationRisk',
-                                 'dateShortInterest', 'daysToCover', 'daylow', 'dayhigh', 'exDividendDate',
-                                 'earningsquarterlyGrowth', 'enterpriseToEbitda', 'enterpriseToRevenue', 'enterpriseValue',
-                                 'financialCurrency', 'floatShares', 'freeCashflow', 'fundFamily', 'fundInceptionDate',
-                                 'industrydisplayName', 'lastfiscalYearEnd', 'numberOfAnalystOpinions', 'netIncomeToCommon',
-                                 'nextFiscalYearEnd', 'payoutratio', 'pricetosalestrailing12months', 'sectordisplayname',
-                                 'sectorkey', 'shareholderRightsRisk', 'sharesshort', 'sharesshortpriormonth',
-                                 'shortPercentFloat', ' shortPercentOutstanding', 'sharesoutstanding', 'sharespercentsharesout',
-                                 'targetHighPrice', 'targetLowPrice', 'targetMeanPrice', 'targetMedianPrice', 'totalAssets',
-                                 'timeZoneShortName', 'exchangeTimezoneShortName', 'gmtOffSetMilliseconds', 'maxAge'
-                                 ]
-
-                indicators = [
-                    indicator for indicator in info if indicator not in not_displayed]
-                sorted_indicators = sorted(indicators)
-
-                for indicator in sorted_indicators:
-                    st.write(indicator + ": " + str(info[indicator]))
-
-            with st:
-
-                st.subheader("Analysis:")
+                    # get stock price data
+                    hist = df[['Date', 'Close']]
+                    hist = hist.set_index('Date')
 
                 # plot price stock data
                 st.plotly_chart(plot_stock_with_interactive_chart(
                     filename), use_container_width=True)
 
-                # analyze stock data
-                # col2.write(analyze_stock(filename, ticker))
-                st.write("Placeholder text for stock analysis")
-                time.sleep(5)
+            except Exception as e:
+                st.write("Error in col 1: " + str(e))
 
-                # get articles
-                articles = get_MW_Articles(ticker_symbols, 5)
+            try:
+                # plot price stock data
+                st.plotly_chart(plot_stock_with_interactive_chart(
+                    filename), use_container_width=True)
 
-                # display articles
-                st.write("Articles:")
+            except Exception as e:
+                st.write("Error in plotting price data: " + str(e))
 
-                time.sleep(5)
+            try:
+                # plot efficient frontier
+                st.plotly_chart(plot_efficient_frontier(
+                    efficient_frontier), use_container_width=True)
 
-                # display articles
-                # for article in articles[:5]:
-                #     col2.write(article['title'])
-                #     col2.write(article['url'])
-                #     col2.markdown(summarize_article(article))
-                #     time.sleep(5)
-                st.write("Placeholder text for article analysis")
-        except Exception as e:
-            st.write("Error: Cant find GPT-4 analysis")
-            return
+            except Exception as e:
+                st.write(
+                    "Error in plotting efficient frontier: " + str(e))
+
+with tab2:
+    try:
+        st.title("Investor Info")
+
+        st, st = st.columns((1, 2))
+
+        with st.container():
+            st.subheader("Institutional Investors:")
+
+            # # get institutional investors
+            # institutional_investor = ticker.constituent.get_institutional_holders()
+
+            # # display institutional investors
+            # for investor in institutional_investor:
+            #     st.write(investor + ":" + investor["shares"])
+
+        with st.container():
+            st.subheader("Major Holders:")
+
+            # # get investor info from yfinance
+            # investor_info = ticker.major_holders
+
+            # # display investor info
+            # for holder in investor_info["Holder"]:
+            #     st.write(holder + ": " + investor_info["Shares"][holder])
+    except Exception as e:
+        st.write("Error: Cant find investor info")
+
+with tab3:
+    st.subheader("Efficient Frontier")
+
+    st.sidebar.subheader("Efficient Frontier")
+
+    st, st = st.columns((2, 1))
+
+    with st.container():
+        # set randomness
+        n_assets, n_portfolios = set_randomness(5, 1000)
+
+        # get random portfolios
+        mean_variance_pairs = get_random_portfolios(
+            n_assets, n_portfolios, daily_returns, mus, cov)
+
+        # plot efficient frontier
+        st.plotly_chart(plot_efficient_frontier(
+            efficient_frontier), use_container_width=True)
+
+with tab4:
+    try:
+        st.title("GPT-4 Analysis")
+
+        st, st = st.columns((1, 2))
+
+        with st:
+            # display finance info
+            st.subheader("Summary:")
+
+            # display current price
+            st.metric(label="Current Price: ",
+                      value=round(hist['Close'].iloc[-1], 2))
+
+            # display estimated 52 return
+            st.write("Estimated 52 Week Return: " +
+                     str(get_estimated_1y_return(info, ticker)) + "%")
+
+            # display ytd return
+            st.metric(label="Estimated YTD Return", value=ytdReturn,
+                      delta=ytdReturn)
+
+            # list of indicators I don't want to display
+            not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
+                             'industry', 'longBusinessSummary', 'symbol', 'legalType',
+                             'underlyingSymbol', 'underlyingExchangeSymbol', 'headquartersCity',
+                             'headquartersCountry', 'quoteType', 'city', 'state',
+                             'country', 'website', 'address1', 'address2', 'zip', 'phone',
+                             'numberOfEmployees', 'fullTimeEmployees', 'averageDailyVolume10Day',
+                             'averageVolume10days', 'boardRiskGovernanceExperience', 'boardRisk',
+                             'currency', 'firstTradeDateEpochUtc', 'gmtOffSetMilliseconds',
+                             'governanceEpochDate', 'impliedSharesOutstanding', 'zip', 'uuid',
+                             'maxAge', 'logo_url', 'compensationAsOfEpochDate', 'compensationRisk',
+                             'compensationRank', 'compensationScore', 'compensationDescription',
+                             'compensationCalendarDate', 'compensationPeerGroup', 'compensationPeerGroupDescription',
+                             'messageBoardId', 'maxAge', 'logo_url', 'compensationAsOfEpochDate',
+                             'navPrice', 'priceHint', 'shortName', 'exchangeTimezoneName', 'trailingPegRatio',
+                             'twoHundredDayAverage', 'twoHundredDayAverageChange', 'twoHundredDayAverageChangePercent',
+                             'yield', 'ytdReturn', 'trailingAnnualDividendRate', 'trailingAnnualDividendYield',
+                             'SandP52WeekChange', 'regularMarketDayHigh', 'regularMarketDayLow', 'regularMarketOpen',
+                             'regularMarketPreviousClose', 'regularMarketVolume', 'regularMarketChange',
+                             'timeZoneShortName', 'exchangeTimezoneShortName', 'gmtOffSetMilliseconds', 'maxAge',
+                             'fundFamily', 'fundInceptionDate', 'open', 'previousClose', 'regularMarketChangePercent',
+                             'auditRisk', 'boardRisk', 'compensationRisk', 'shareHolderRightsRisk', 'overallRisk',
+                             'companyOfficers', 'maxAge', 'logo_url', 'compensationAsOfEpochDate', 'compensationRisk',
+                             'dateShortInterest', 'daysToCover', 'daylow', 'dayhigh', 'exDividendDate',
+                             'earningsquarterlyGrowth', 'enterpriseToEbitda', 'enterpriseToRevenue', 'enterpriseValue',
+                             'financialCurrency', 'floatShares', 'freeCashflow', 'fundFamily', 'fundInceptionDate',
+                             'industrydisplayName', 'lastfiscalYearEnd', 'numberOfAnalystOpinions', 'netIncomeToCommon',
+                             'nextFiscalYearEnd', 'payoutratio', 'pricetosalestrailing12months', 'sectordisplayname',
+                             'sectorkey', 'shareholderRightsRisk', 'sharesshort', 'sharesshortpriormonth',
+                             'shortPercentFloat', ' shortPercentOutstanding', 'sharesoutstanding', 'sharespercentsharesout',
+                             'targetHighPrice', 'targetLowPrice', 'targetMeanPrice', 'targetMedianPrice', 'totalAssets',
+                             'timeZoneShortName', 'exchangeTimezoneShortName', 'gmtOffSetMilliseconds', 'maxAge'
+                             ]
+
+            indicators = [
+                indicator for indicator in info if indicator not in not_displayed]
+            sorted_indicators = sorted(indicators)
+
+            for indicator in sorted_indicators:
+                st.write(indicator + ": " + str(info[indicator]))
+
+        with st:
+
+            st.subheader("Analysis:")
+
+            # plot price stock data
+            st.plotly_chart(plot_stock_with_interactive_chart(
+                filename), use_container_width=True)
+
+            # analyze stock data
+            # col2.write(analyze_stock(filename, ticker))
+            st.write("Placeholder text for stock analysis")
+            time.sleep(5)
+
+            # get articles
+            articles = get_MW_Articles(ticker_symbols, 5)
+
+            # display articles
+            st.write("Articles:")
+
+            time.sleep(5)
+
+            # display articles
+            # for article in articles[:5]:
+            #     col2.write(article['title'])
+            #     col2.write(article['url'])
+            #     col2.markdown(summarize_article(article))
+            #     time.sleep(5)
+            st.write("Placeholder text for article analysis")
+    except Exception as e:
+        st.write("Error: Cant find GPT-4 analysis")
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
