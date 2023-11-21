@@ -2,7 +2,6 @@
 # Date Created: 5/15/23
 
 from datetime import timedelta, datetime, time
-import streamlit as st
 import yfinance as yf
 import pandas as pd
 import openai
@@ -13,6 +12,7 @@ from Gen_Files.Company_Info_Web_Scraper import *
 from Gen_Files.GetArticles import *
 from Gen_Files.Stock_Analyzer import *
 from Gen_Files.Efficient_Frontier import *
+import streamlit as st
 
 
 load_dotenv()
@@ -39,7 +39,9 @@ tab1, tab2, tab3, tab4 = st.tabs(
 
 def main():
 
+    # set page parameters
     # Title
+
     st.title("Quick Stock Info")
 
     # Sidebar
