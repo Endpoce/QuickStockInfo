@@ -162,13 +162,11 @@ with tab1:
         with st.container():
 
 
-            # plot price stock data
-            filename = str(primary_ticker) + '_Price_Data.csv'
-            st.plotly_chart(plot_stock_with_interactive_chart(
-            filename), use_container_width=True)
-
 
             try:
+                # plot price stock data
+                filename = str(primary_ticker) + '_Price_Data.csv'
+
                 # plot price stock data
                 st.plotly_chart(plot_stock_with_interactive_chart(
                     filename), use_container_width=True)
