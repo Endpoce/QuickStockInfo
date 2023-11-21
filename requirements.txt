@@ -12,7 +12,6 @@ praw
 regex
 plotly
 Gen_Files
-textblob
 
 
 
