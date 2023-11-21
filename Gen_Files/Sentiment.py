@@ -9,9 +9,8 @@ import re
 # Load Bearer token
 dotenv.load_dotenv()
 
-
+# set up tweepy
 auth = tweepy.OAuth2BearerHandler(os.environ.get("Bearer_token"))
-
 api = tweepy.API(auth)
 
 

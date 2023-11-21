@@ -1,4 +1,3 @@
-# %%
 import openai
 import requests
 import wikipedia
@@ -62,6 +61,3 @@ def summarize_article(url):
     )
 
     return chat_model['choices'][0]['text']
-
-# Test the function
-# print(summarize_article('https://www.marketwatch.comhttps://www.marketwatch.com/story/tech-stock-picks-that-are-small-and-focused-this-fund-invests-in-unsung-innovators-here-are-2-top-choices-2028d2aa?mod=search_headline'))

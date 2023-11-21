@@ -13,7 +13,6 @@ from Gen_Files.Company_Info_Web_Scraper import *
 from Gen_Files.GetArticles import *
 from Gen_Files.Stock_Analyzer import *
 from Gen_Files.Efficient_Frontier import *
-from Gen_Files.Sentiment import *
 
 
 load_dotenv()
