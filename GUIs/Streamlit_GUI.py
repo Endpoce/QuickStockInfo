@@ -90,7 +90,7 @@ def main():
     with tab1:
 
         # Columns
-        st, st = st.columns((1, 1))
+        col1, col2 = st.columns((1, 1))
 
         # if button is pressed
         if fetch_button:
@@ -125,27 +125,28 @@ def main():
                 return
 
             # try to display company info
-            try:
-                with st.container():
+            with st.container():
+
+                try:
                     st.subheader("Company Info:")
 
                     st.subheader(info['longName'], color="blue")
+                    with col1.container():
+                        if info["sector"]:
+                            st.write("Sector: "+info["sector"])
 
-                    if info["sector"]:
-                        st.write("Sector: "+info["sector"])
+                        if info["industry"]:
+                            st.write("Industry: " + info["industry"])
 
-                    if info["industry"]:
-                        st.write("Industry: " + info["industry"])
+                        if info["legalType"]:
+                            st.write("Legal Type: " + info["legalType"])
 
-                    if info["legalType"]:
-                        st.write("Legal Type: " + info["legalType"])
-
-                    if info.category:
-                        st.write("Category: " + info["category"])
-
-                    if info['longBusinessSummary']:
-                        st.write("Summary:")
-                        st.markdown(info['longBusinessSummary'])
+                        if info.category:
+                            st.write("Category: " + info["category"])
+                    with col2.container():
+                        if info['longBusinessSummary']:
+                            st.write("Summary:")
+                            st.markdown(info['longBusinessSummary'])
 
                     # display wiki info
                     if wiki_info:
@@ -155,44 +156,56 @@ def main():
                         st.write("Wikipedia Summary:")
                         st.markdown(wiki_info['summary'])
 
-            except Exception as e:
-                st.write("Error in col 1:: " + str(e))
-                return
+                except Exception as e:
+                    st.write("Error in col 1:: " + str(e))
+                    return
 
-            try:
-                with st.container():
+            with st.container():
 
-                    try:
+                try:
+                    if len(ticker_symbols) == 1:
                         # read stock price data from csv
                         filename = ticker_symbols + '_Price_Data.csv'
                         df = pd.read_csv(filename)
 
-                    except Exception as e:
-                        st.write("Error in col 1: " + str(e))
-                        return
+                    else:
+                        # read stock price data from csvs
+                        dfs = []
+                        for ticker in ticker_symbols:
+                            filename = "QuickStockInfo\\Price_Data\\" + ticker + '_Price_Data.csv'
+                            dfs.append(pd.read_csv(filename))
+                        df = pd.concat(dfs)
 
-                    try:
-                        # plot price stock data
-                        st.plotly_chart(plot_stock_with_interactive_chart(
-                            filename), use_container_width=True)
+                        # get stock price data
+                        hist = df[['Date', 'Close']]
+                        hist = hist.set_index('Date')
 
-                    except Exception as e:
-                        st.write("Error in plotting price data: " + str(e))
-                        return
+                    # plot price stock data
+                    st.plotly_chart(plot_stock_with_interactive_chart(
+                        filename), use_container_width=True)
 
-                    try:
-                        # plot efficient frontier
-                        st.plotly_chart(plot_efficient_frontier(
-                            efficient_frontier), use_container_width=True)
+                except Exception as e:
+                    st.write("Error in col 1: " + str(e))
+                    return
 
-                    except Exception as e:
-                        st.write(
-                            "Error in plotting efficient frontier: " + str(e))
-                        return
+                try:
+                    # plot price stock data
+                    st.plotly_chart(plot_stock_with_interactive_chart(
+                        filename), use_container_width=True)
 
-            except Exception as e:
-                st.write("Error in col 2: " + str(e))
-                return
+                except Exception as e:
+                    st.write("Error in plotting price data: " + str(e))
+                    return
+
+                try:
+                    # plot efficient frontier
+                    st.plotly_chart(plot_efficient_frontier(
+                        efficient_frontier), use_container_width=True)
+
+                except Exception as e:
+                    st.write(
+                        "Error in plotting efficient frontier: " + str(e))
+                    return
 
     with tab2:
         try:
