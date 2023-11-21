@@ -2,7 +2,7 @@
 import openai
 import requests
 import wikipedia
-from GetArticles import *
+from Gen_Files.GetArticles import *
 import os
 from dotenv import load_dotenv
 

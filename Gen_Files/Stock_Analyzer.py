@@ -4,17 +4,12 @@ import pandas as pd
 import openai
 from datetime import datetime
 import matplotlib.pyplot as plt
-import os
 from dotenv import load_dotenv
 import yfinance as yf
 import plotly.graph_objects as go
 
 
 load_dotenv()
-
-# Set up your OpenAI API credentials
-openai.api_key = os.environ.get('API_KEY')
-
 
 
 def get_stock_data(symbol, start_date, end_date):
@@ -127,9 +122,6 @@ def analyze_stock(filename, ticker):
 
     return response['choices'][0]['message']['content']
 
-
-# Use the function
-# print(analyze_stock('C:\\Users\\Aidan\\Desktop\\USB\\Projects\\Python\\MoneyBots\\2PREPARE_Basic_info_Getter\\Stock_Price_Info\\AAPL_3_years.csv'))
 
 def plot_stock_with_moving_averages_from_csv(filename, short_window=15, long_window=100):
     # Read data from CSV file
