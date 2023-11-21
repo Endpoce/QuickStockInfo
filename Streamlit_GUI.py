@@ -1,7 +1,7 @@
 # Authors: Aidan Murphy
 # Date Created: 5/15/23
 
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, time
 import streamlit as st
 import yfinance as yf
 import pandas as pd
@@ -9,11 +9,11 @@ import openai
 from dotenv import load_dotenv
 import os
 
-from Company_Info_Web_Scraper import *
-from GetArticles import *
-from Stock_Analyzer import *
-from Efficient_Frontier import *
-from Sentiment import *
+from Gen_Files.Company_Info_Web_Scraper import *
+from Gen_Files.GetArticles import *
+from Gen_Files.Stock_Analyzer import *
+from Gen_Files.Efficient_Frontier import *
+from Gen_Files.Sentiment import *
 
 
 load_dotenv()

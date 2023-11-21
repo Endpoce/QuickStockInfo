@@ -11,10 +11,6 @@ tweepy
 praw
 regex
 plotly
-Company_Info_Web_Scraper
-Efficent_Frontier
-GetArticles
-Sentiment
-Stock_Analyzer
+
 
 
