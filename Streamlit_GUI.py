@@ -32,15 +32,14 @@ openai.api_key = os.environ.get('API_KEY')
 start_date = pd.to_datetime("2020-01-01")
 end_date = datetime.today().strftime('%Y-%m-%d')
 
-tab1, tab2, tab3, tab4 = st.tabs(
-    ["Quick Stock Info", "Investor Info", "Efficient Frontier", "GPT-4 Analysis"])
-
-# main function for streamlit app
 
 
 # set page parameters
 # Title
 st.title("Quick Stock Info")
+
+tab1, tab2, tab3, tab4 = st.tabs(
+    ["Quick Stock Info", "Investor Info", "Efficient Frontier", "GPT-4 Analysis"])
 
 # Sidebar
 st.sidebar.header("User Input")
@@ -233,7 +232,8 @@ with tab2:
 with tab3:
     st.subheader("Efficient Frontier")
 
-    st.sidebar.subheader("Efficient Frontier")
+    st.sidebar.title("Efficient Frontier")
+
 
     st, st = st.columns((2, 1))
 
