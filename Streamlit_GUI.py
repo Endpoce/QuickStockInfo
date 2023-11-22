@@ -79,7 +79,8 @@ with tab1:
             ticker, info, hist, file, legalType = get_company_info(primary_ticker)
             
             # get ytd data
-            ytd_data = hist.loc[start_of_year:end_date]
+            price_data = hist[['Close']]
+            ytd_data = data.loc[start_of_year:end_date]
 
             # get ytd returns and save to csv
             ytd_returns = ytd_data['Close'].pct_change()
