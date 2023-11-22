@@ -101,7 +101,7 @@ with tab1:
 
         # get efficient frontier
         efficient_frontier = get_efficient_frontier(
-            mean_variance_pairs, mus, cov)
+            n_assets, n_portfolios, mean_variance_pairs, mus, cov)
 
 
         try:
