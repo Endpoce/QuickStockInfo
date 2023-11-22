@@ -137,7 +137,7 @@ with tab1:
                     #     st.write("Legal Type: " + info["legalType"])
 
                     # display category
-                    if info.category:
+                    if info['category']:
                         st.write("Category: " + info["category"])
 
                     # display year founded
