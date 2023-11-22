@@ -65,7 +65,7 @@ def get_mean_returns_and_covariance(daily_returns):
     mus = daily_returns.mean() * 252
 
     # -- Get covariances
-    cov = daily_returns.cov(cov) * 252
+    cov = daily_returns.cov(daily_returns) * 252
 
     return mus, cov
 

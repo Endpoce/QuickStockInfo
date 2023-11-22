@@ -46,8 +46,8 @@ st.sidebar.header("User Input")
 # get user input for multiple tickers
 primary_ticker = st.sidebar.text_input("Ticker Symbol:").upper()
 
-# comparative_tickers = st.sidebar.text_input(
-#     "Comparative Ticker Symbols (separated by commas)").upper()
+comparative_tickers = st.sidebar.text_input(
+    "Comparative Ticker Symbols (separated by commas)").upper()
 
 # get start and end date
 start_date = st.sidebar.date_input(
@@ -191,19 +191,23 @@ with tab3:
 
     with st.container():
         try:
-            # set randomness
-            n_assets, n_portfolios = set_randomness(5, 1000)
-                    
-            # get daily returns
-            daily_returns = get_daily_returns(primary_ticker, start_date, end_date)
+            # Define comparative_tickers or remove the if statement if not needed
 
-            # get random portfolios
-            mean_variance_pairs = get_random_portfolios(
-                n_assets, n_portfolios, daily_returns, mus, cov)
+            # Check if comparative_tickers is not empty
+            if comparative_tickers:
+                # set randomness
+                n_assets, n_portfolios = set_randomness(5, 1000)
+                        
+                # get daily returns
+                daily_returns = get_daily_returns(primary_ticker, start_date, end_date)
 
-            # plot efficient frontier
-            st.plotly_chart(plot_efficient_frontier(
-                efficient_frontier), use_container_width=True)
+                # get random portfolios
+                mean_variance_pairs = get_random_portfolios(
+                    n_assets, n_portfolios, daily_returns, mus, cov)
+
+                # plot efficient frontier
+                st.plotly_chart(plot_efficient_frontier(
+                    efficient_frontier), use_container_width=True)
         except Exception as e:
             st.write("Error ::" + str(e))
 
