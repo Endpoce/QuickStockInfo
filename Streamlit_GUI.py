@@ -108,15 +108,14 @@ with tab1:
 
             # get wiki info
             wiki_info = get_wiki_info(info['longName'] + " company")
-            
+
         except Exception as e:
             st.write("Error getting wiki info:: " + str(e))
 
         # try to display company info
         with st.container():
 
-            st.subheader("Company Info:")
-
+            # display company info
             st.subheader(info['longName'])
             
             try:
