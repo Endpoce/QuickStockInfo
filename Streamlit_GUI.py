@@ -8,7 +8,7 @@ import openai
 from dotenv import load_dotenv
 import os
 
-from Gen_Files.Company_Info_Web_Scraper import *
+from Gen_Files.Wiki_GPT import *
 from Gen_Files.GetArticles import *
 from Gen_Files.Stock_Analyzer import *
 from Gen_Files.Efficient_Frontier import *
@@ -76,15 +76,14 @@ with tab1:
         try:
 
             # display company info
-            ticker, info, hist, file, legalType = get_company_info(primary_ticker)
+            ticker, info, hist, file, legalType = get_stock_data(primary_ticker)
             
             # get ytd data
-            price_data = hist[['Close']]
-            ytd_data = data.loc[start_of_year:end_date]
-
+            ytd_data = ticker.history(period="ytd")
+            
             # get ytd returns and save to csv
-            ytd_returns = ytd_data['Close'].pct_change()
-            filename = "QuickStockInfo\\Company_Info\\" + primary_ticker + '_Returns.csv'
+            ytd_returns = ytd_data.pct_change()
+            ytd_returns.to_csv(str(primary_ticker) + '_YTD_Returns.csv')
 
             # get daily returns
             daily_returns = get_daily_returns(

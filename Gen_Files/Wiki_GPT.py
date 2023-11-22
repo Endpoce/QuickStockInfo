@@ -24,38 +24,6 @@ def get_wiki_info(query):
     else:
         return None  # return None if no results found
 
-
-def get_company_info(ticker):
-    try:
-
-        # Get company info from the Ticker object
-        
-        info = ticker.info
-
-        # Extract the desired information
-        company_name = info['longName']
-        sector = info['sector']
-        industry = info['industry']
-        legal_type = info['legalType'],
-        summary = info['longBusinessSummary']
-
-
-        # Return the company information as a dictionary
-        company_dict = {
-            'name': company_name,
-            'sector': sector,
-            'industry': industry,
-            'Legal Type': legal_type,
-            'summary': summary
-        }
-
-        return company_dict
-
-    except requests.exceptions.RequestException as e:
-        print(f"Request error: {e}")
-        return ''
-
-
 def summarize_article(url):
     # Initialize a new chat model
     chat_model = openai.Completion.create(
