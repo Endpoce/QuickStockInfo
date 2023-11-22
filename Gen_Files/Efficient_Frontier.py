@@ -61,6 +61,7 @@ def get_daily_returns(ticker, start_date, end_date):
 
 def get_mean_returns_and_covariance(daily_returns):
     print(type(daily_returns))
+    
     # -- Get annualized mean returns
     mus = daily_returns.mean() * 252
     print(mus)

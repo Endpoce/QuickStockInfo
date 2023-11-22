@@ -73,7 +73,6 @@ with tab1:
     if fetch_button:
 
         # try to get basic company info
-        # try:
 
         # display company info
         ticker, info, hist, symbol = get_stock_data(primary_ticker, start_date, end_date)
@@ -87,6 +86,10 @@ with tab1:
         # get daily returns
         daily_returns = get_daily_returns(
             symbol, start_date, end_date)
+        
+
+        print('Type daily returns: '+type(daily_returns))
+        print(daily_returns)
 
         # get mean returns and covariance
         mus, cov = get_mean_returns_and_covariance(daily_returns)
@@ -116,6 +119,7 @@ with tab1:
 
             st.subheader(info['longName'], color="blue")
             
+
             with col1.container():
                 if info["sector"]:
                     st.write("Sector: "+info["sector"])
