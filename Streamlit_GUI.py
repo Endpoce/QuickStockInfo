@@ -44,10 +44,10 @@ tab1, tab2, tab3, tab4 = st.tabs(
 st.sidebar.header("User Input")
 
 # get user input for multiple tickers
-primary_ticker = st.sidebar.text_input("Ticker Symbol").upper()
+primary_ticker = st.sidebar.text_input("Ticker Symbol:").upper()
 
-comparative_tickers = st.sidebar.text_input(
-    "Comparative Ticker Symbols (separated by commas)").upper()
+# comparative_tickers = st.sidebar.text_input(
+#     "Comparative Ticker Symbols (separated by commas)").upper()
 
 # get start and end date
 start_date = st.sidebar.date_input(
