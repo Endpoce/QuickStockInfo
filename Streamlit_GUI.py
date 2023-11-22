@@ -119,39 +119,43 @@ with tab1:
 
             st.subheader(info['longName'], color="blue")
             
+            try:
+                with col1.container():
+                    if info["sector"]:
+                        st.write("Sector: "+info["sector"])
 
-            with col1.container():
-                if info["sector"]:
-                    st.write("Sector: "+info["sector"])
+                    if info["industry"]:
+                        st.write("Industry: " + info["industry"])
 
-                if info["industry"]:
-                    st.write("Industry: " + info["industry"])
+                    if info["legalType"]:
+                        st.write("Legal Type: " + info["legalType"])
 
-                if info["legalType"]:
-                    st.write("Legal Type: " + info["legalType"])
+                    if info.category:
+                        st.write("Category: " + info["category"])
 
-                if info.category:
-                    st.write("Category: " + info["category"])
+                with col2.container():
+                    if info['longBusinessSummary']:
+                        st.write("Summary:")
+                        st.markdown(info['longBusinessSummary'])
 
-            with col2.container():
-                if info['longBusinessSummary']:
-                    st.write("Summary:")
-                    st.markdown(info['longBusinessSummary'])
+                # display wiki info
+                if wiki_info:
+                    st.write("Wikipedia URL:")
+                    st.write(wiki_info['url'])
 
-            # display wiki info
-            if wiki_info:
-                st.write("Wikipedia URL:")
-                st.write(wiki_info['url'])
-
-                st.write("Wikipedia Summary:")
-                st.markdown(wiki_info['summary'])
+                    st.write("Wikipedia Summary:")
+                    st.markdown(wiki_info['summary'])
+            except Exception as e:
+                st.write("Error displaying company info:: " + str(e))
 
         with st.container():
 
-            # plot price stock data
-            st.plotly_chart(plot_stock_with_interactive_chart(
-                primary_ticker), use_container_width=True)
-
+            try:
+                # plot price stock data
+                st.plotly_chart(plot_stock_with_interactive_chart(
+                    primary_ticker), use_container_width=True)
+            except Exception as e:
+                st.write("Error plotting stock data:: " + str(e))
             try:
                 # plot efficient frontier
                 st.plotly_chart(plot_efficient_frontier(
@@ -164,7 +168,7 @@ with tab2:
     try:
         st.title("Investor Info")
 
-        st, st = st.columns((1, 2))
+        col1, col2 = st.columns((1, 2))
 
         with st.container():
             st.subheader("Institutional Investors:")
@@ -213,7 +217,7 @@ with tab3:
                 st.plotly_chart(plot_efficient_frontier(
                     efficient_frontier), use_container_width=True)
         except Exception as e:
-            st.write("Error ::" + str(e))
+            st.write("Error plotting efficient frontier ::" + str(e))
 
 with tab4:
     try:
