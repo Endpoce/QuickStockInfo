@@ -27,11 +27,9 @@ st.set_page_config(page_title="Quick Stock Info", page_icon="chart_with_upwards_
 # set openai api key
 openai.api_key = os.environ.get('API_KEY')
 
-
 # set dates
 start_date = pd.to_datetime("2020-01-01")
 end_date = datetime.today().strftime('%Y-%m-%d')
-
 
 # set page parameters
 # Title
@@ -253,7 +251,7 @@ with tab4:
 
             # list of indicators I don't want to display
             not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
-                             'industry', 'longBusinessSummary', 'symbol', 'legalType',
+                             'industry', 'longBusinessSummary', 'symbol', 'shortName',
                              'underlyingSymbol', 'underlyingExchangeSymbol', 'headquartersCity',
                              'headquartersCountry', 'quoteType', 'city', 'state',
                              'country', 'website', 'address1', 'address2', 'zip', 'phone',
