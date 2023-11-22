@@ -17,14 +17,12 @@ def get_stock_data(symbol, start_date, end_date):
 
     info = ticker.info
 
-    legalType = info.get('legalType')
-
     hist = ticker.history(period="1d", start=start_date, end=end_date)
 
     # save stock data to csv
     file = hist.to_csv(symbol + '_Price_Data.csv')
 
-    return ticker, info, hist, file, legalType
+    return ticker, info, hist, file
 
 
 def analyze_stock(filename, ticker):

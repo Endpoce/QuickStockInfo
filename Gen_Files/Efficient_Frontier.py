@@ -51,12 +51,8 @@ def get_estimated_1y_return(info, ticker):
 
 def get_daily_returns(hist, start_date, end_date):
 
-    # -- Get the daily returns
-    daily_returns = hist.loc[start_date:end_date, 'Close'].pct_change()
-
-    # -- Drop the first row of NaNs
-    daily_returns = daily_returns.dropna()
-    
+    # -- Get daily returns
+    daily_returns = hist['Close'].pct_change()[1:]    
 
     return daily_returns
 
