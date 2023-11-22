@@ -91,7 +91,7 @@ def get_random_portfolios(n_assets, n_portfolios, daily_returns, mus, cov):
 
         # - Choose assets randomly without replacement
         assets = np.random.choice(
-            list(daily_returns.columns), n_assets, replace=False)
+            list(daily_returns), n_assets, replace=False)
 
         # - Choose weights randomly
         weights = np.random.rand(n_assets)
