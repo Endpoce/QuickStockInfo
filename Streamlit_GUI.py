@@ -144,16 +144,16 @@ with tab1:
 
         with st.container():
 
-                # plot price stock data
-                filename = str(primary_ticker) + '_Price_Data.csv'
+            # plot price stock data
+            st.plotly_chart(plot_stock_with_interactive_chart(
+                primary_ticker), use_container_width=True)
 
-                # plot price stock data
-                st.plotly_chart(plot_stock_with_interactive_chart(
-                    filename), use_container_width=True)
-
+            try:
                 # plot efficient frontier
                 st.plotly_chart(plot_efficient_frontier(
                     efficient_frontier), use_container_width=True)
+            except Exception as e:
+                st.write("Error ::" + str(e)) 
 
 
 with tab2:
