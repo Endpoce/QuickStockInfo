@@ -87,9 +87,9 @@ with tab1:
         daily_returns = get_daily_returns(
             symbol, start_date, end_date)
         
-
+        print('got here 1')
         print('Type daily returns: ' +str(type(daily_returns)))
-        print(daily_returns) 
+        print(daily_returns)
 
         # get mean returns and covariance
         mus, cov = get_mean_returns_and_covariance(daily_returns)
