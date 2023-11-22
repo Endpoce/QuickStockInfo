@@ -117,7 +117,7 @@ with tab1:
 
             st.subheader("Company Info:")
 
-            st.subheader(info['longName'], color="blue")
+            st.subheader(info['longName'])
             
             try:
                 with col1.container():
