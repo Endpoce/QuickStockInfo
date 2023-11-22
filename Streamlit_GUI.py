@@ -75,19 +75,11 @@ with tab1:
         # try to get basic company info
         try:
 
-            # download and save stock data
-            data = yf.download(primary_ticker, start=start_date, end=end_date)
-            filename = "QuickStockInfo\\Price_Data\\" + primary_ticker + '_Price_Data.csv'
-            data.to_csv(filename)
-
-            # get company info and save to csv
-            info = get_stock_data(primary_ticker, start_date, end_date)
-            filename = "QuickStockInfo\\Company_Info\\" + primary_ticker + '_Company_Info.csv'
-            pd.DataFrame.from_dict(info, orient='index').to_csv(
-                filename, header=False)
-
+            # display company info
+            ticker, info, hist, file, legalType = get_company_info(primary_ticker)
+            
             # get ytd data
-            ytd_data = data.loc[start_of_year:end_date]
+            ytd_data = hist.loc[start_of_year:end_date]
 
             # get ytd returns and save to csv
             ytd_returns = ytd_data['Close'].pct_change()
@@ -126,9 +118,6 @@ with tab1:
 
             try:
                 st.subheader("Company Info:")
-
-                # display company info
-                ticker, info, hist, file, legalType = get_company_info(primary_ticker)
 
                 st.subheader(info['longName'], color="blue")
                 with col1.container():
