@@ -84,22 +84,7 @@ with tab1:
 
         try:
                    
-            # get ytd returns
-            ytd_returns = ytd_data.pct_change()
 
-            # get mean returns and covariance
-            mus, cov = get_mean_returns_and_covariance(daily_returns)
-
-            # set randomness
-            n_assets, n_portfolios = set_randomness(1, 1000)
-
-            # get random portfolios
-            mean_variance_pairs = get_random_portfolios(
-                n_assets, n_portfolios, daily_returns, mus, cov)
-
-            # get efficient frontier
-            efficient_frontier = get_efficient_frontier(
-                n_assets, n_portfolios, mean_variance_pairs, mus, cov)
             
         except Exception as e:
             st.write("Error getting efficient frontier:: " + str(e))
@@ -206,7 +191,24 @@ with tab3:
 
     with st.container():
         try:
+            if comparative_tickers == 0:
+                # get ytd returns
+                ytd_returns = ytd_data.pct_change()
 
+                # get mean returns and covariance
+                mus, cov = get_mean_returns_and_covariance(daily_returns)
+
+                # set randomness
+                n_assets, n_portfolios = set_randomness(1, 1000)
+
+                # get random portfolios
+                mean_variance_pairs = get_random_portfolios(
+                    n_assets, n_portfolios, daily_returns, mus, cov)
+
+                # get efficient frontier
+                efficient_frontier = get_efficient_frontier(
+                    n_assets, n_portfolios, mean_variance_pairs, mus, cov)
+            
             # Define comparative_tickers or remove the if statement if not needed
 
             # Check if comparative_tickers is not empty
@@ -333,6 +335,3 @@ with tab4:
     except Exception as e:
         st.write("Error: Cant find GPT-4 analysis")
 
-
-# if __name__ == "__main__":
-#     main()
