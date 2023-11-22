@@ -49,11 +49,10 @@ def get_estimated_1y_return(info, ticker):
     return estimated_return
 
 
-def get_daily_returns(ticker, start_date, end_date):
+def get_daily_returns(hist, start_date, end_date):
 
     # -- Get the daily returns
-    daily_returns = ticker.history(
-        start=start_date, end=end_date)['Adj Close'].pct_change()
+    daily_returns = hist.pct_change()
     
 
     return daily_returns
