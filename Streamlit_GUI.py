@@ -105,8 +105,10 @@ with tab1:
             st.write("Error getting efficient frontier:: " + str(e))
 
         try:
+
             # get wiki info
             wiki_info = get_wiki_info(info['longName'] + " company")
+            
         except Exception as e:
             st.write("Error getting wiki info:: " + str(e))
 
@@ -119,17 +121,26 @@ with tab1:
             
             try:
                 with col1.container():
+
+                    # print company info
+                    print(info)
+
+                    # display sector
                     if info["sector"]:
                         st.write("Sector: "+info["sector"])
 
+                    # display industry
                     if info["industry"]:
                         st.write("Industry: " + info["industry"])
 
+                    # display legal type
                     if info["legalType"]:
                         st.write("Legal Type: " + info["legalType"])
 
+                    # display category
                     if info.category:
                         st.write("Category: " + info["category"])
+
 
                 with col2.container():
                     if info['longBusinessSummary']:
