@@ -4,6 +4,7 @@ from tqdm import tqdm
 import plotly.graph_objects as go
 import yfinance as yf
 from datetime import datetime, timedelta
+import math
 
 # calculate ytd return
 def get_ytd_return(ticker_symbols, start_of_year):
@@ -60,18 +61,17 @@ def get_daily_returns(ticker, start_date, end_date):
 
 
 def get_mean_returns_and_covariance(daily_returns):
-
-    # -- Get annualised mean returns
-    mus = (1+daily_returns.mean())**252 - 1
+    # -- Get annualized mean returns
+    mus = daily_returns.mean() * 252
 
     # -- Get covariances
-    cov = daily_returns.cov()*252
+    cov = daily_returns.covariance() * 252
 
     return mus, cov
 
 
 def set_randomness(n_assets, n_portfolios):
-    # - How many assests to include in each portfolio
+    # - How many assets to include in each portfolio
     n_assets = n_assets
     # -- How many portfolios to generate
     n_portfolios = n_portfolios
