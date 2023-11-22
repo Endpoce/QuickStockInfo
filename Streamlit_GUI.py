@@ -73,86 +73,77 @@ with tab1:
     if fetch_button:
 
         # try to get basic company info
+        # try:
+
+        # display company info
+        ticker, info, hist, file, legalType = get_stock_data(primary_ticker, start_date, end_date)
+        
+        # get ytd data
+        ytd_data = ticker.history(period="ytd")
+        
+        # get ytd returns and save to csv
+        ytd_returns = ytd_data.pct_change()
+        ytd_returns.to_csv(str(primary_ticker) + '_YTD_Returns.csv')
+
+        # get daily returns
+        daily_returns = get_daily_returns(
+            primary_ticker, start_date, end_date)
+
+        # get mean returns and covariance
+        mus, cov = get_mean_returns_and_covariance(daily_returns)
+
+        # set randomness
+        n_assets, n_portfolios = set_randomness(5, 1000)
+
+        # get random portfolios
+        mean_variance_pairs = get_random_portfolios(
+            n_assets, n_portfolios, daily_returns, mus, cov)
+
+        # get efficient frontier
+        efficient_frontier = get_efficient_frontier(
+            mean_variance_pairs, mus, cov)
+
+
         try:
-
-            # display company info
-            ticker, info, hist, file, legalType = get_stock_data(primary_ticker, start_date, end_date)
-            
-            # get ytd data
-            ytd_data = ticker.history(period="ytd")
-            
-            # get ytd returns and save to csv
-            ytd_returns = ytd_data.pct_change()
-            ytd_returns.to_csv(str(primary_ticker) + '_YTD_Returns.csv')
-
-            # get daily returns
-            daily_returns = get_daily_returns(
-                primary_ticker, start_date, end_date)
-
-            # get mean returns and covariance
-            mus, cov = get_mean_returns_and_covariance(daily_returns)
-
-            # set randomness
-            n_assets, n_portfolios = set_randomness(5, 1000)
-
-            # get random portfolios
-            mean_variance_pairs = get_random_portfolios(
-                n_assets, n_portfolios, daily_returns, mus, cov)
-
-            # get efficient frontier
-            efficient_frontier = get_efficient_frontier(
-                mean_variance_pairs, mus, cov)
-
-
-            try:
-                # get wiki info
-                wiki_info = get_wiki_info(info['longName'] + " company")
-            except Exception as e:
-                st.write("Error getting wiki info:: " + str(e))
-
+            # get wiki info
+            wiki_info = get_wiki_info(info['longName'] + " company")
         except Exception as e:
-            st.write("Error getting company info:: " + str(e))
+            st.write("Error getting wiki info:: " + str(e))
 
         # try to display company info
         with st.container():
 
-            try:
-                st.subheader("Company Info:")
+            st.subheader("Company Info:")
 
-                st.subheader(info['longName'], color="blue")
-                
-                with col1.container():
-                    if info["sector"]:
-                        st.write("Sector: "+info["sector"])
+            st.subheader(info['longName'], color="blue")
+            
+            with col1.container():
+                if info["sector"]:
+                    st.write("Sector: "+info["sector"])
 
-                    if info["industry"]:
-                        st.write("Industry: " + info["industry"])
+                if info["industry"]:
+                    st.write("Industry: " + info["industry"])
 
-                    if info["legalType"]:
-                        st.write("Legal Type: " + info["legalType"])
+                if info["legalType"]:
+                    st.write("Legal Type: " + info["legalType"])
 
-                    if info.category:
-                        st.write("Category: " + info["category"])
+                if info.category:
+                    st.write("Category: " + info["category"])
 
-                with col2.container():
-                    if info['longBusinessSummary']:
-                        st.write("Summary:")
-                        st.markdown(info['longBusinessSummary'])
+            with col2.container():
+                if info['longBusinessSummary']:
+                    st.write("Summary:")
+                    st.markdown(info['longBusinessSummary'])
 
-                # display wiki info
-                if wiki_info:
-                    st.write("Wikipedia URL:")
-                    st.write(wiki_info['url'])
+            # display wiki info
+            if wiki_info:
+                st.write("Wikipedia URL:")
+                st.write(wiki_info['url'])
 
-                    st.write("Wikipedia Summary:")
-                    st.markdown(wiki_info['summary'])
-
-            except Exception as e:
-                st.write("Error :: " + str(e))
+                st.write("Wikipedia Summary:")
+                st.markdown(wiki_info['summary'])
 
         with st.container():
-
-
 
             try:
                 # plot price stock data
