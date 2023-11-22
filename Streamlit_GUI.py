@@ -79,32 +79,32 @@ with tab1:
         
         # get ytd data
         ytd_data = ticker.history(period="ytd")
-        
-        # get ytd returns
-        ytd_returns = ytd_data.pct_change()
 
         # get daily returns
         daily_returns = get_daily_returns(
             symbol, start_date, end_date)
-        
-        print('got here 1')
-        print('Type daily returns: ' +str(type(daily_returns)))
-        print(daily_returns)
 
-        # get mean returns and covariance
-        mus, cov = get_mean_returns_and_covariance(daily_returns)
+        try:
+                   
+            # get ytd returns
+            ytd_returns = ytd_data.pct_change()
 
-        # set randomness
-        n_assets, n_portfolios = set_randomness(1, 1000)
+            # get mean returns and covariance
+            mus, cov = get_mean_returns_and_covariance(daily_returns)
 
-        # get random portfolios
-        mean_variance_pairs = get_random_portfolios(
-            n_assets, n_portfolios, daily_returns, mus, cov)
+            # set randomness
+            n_assets, n_portfolios = set_randomness(1, 1000)
 
-        # get efficient frontier
-        efficient_frontier = get_efficient_frontier(
-            n_assets, n_portfolios, mean_variance_pairs, mus, cov)
+            # get random portfolios
+            mean_variance_pairs = get_random_portfolios(
+                n_assets, n_portfolios, daily_returns, mus, cov)
 
+            # get efficient frontier
+            efficient_frontier = get_efficient_frontier(
+                n_assets, n_portfolios, mean_variance_pairs, mus, cov)
+            
+        except Exception as e:
+            st.write("Error getting efficient frontier:: " + str(e))
 
         try:
             # get wiki info
@@ -146,7 +146,7 @@ with tab1:
                     st.write("Wikipedia Summary:")
                     st.markdown(wiki_info['summary'])
             except Exception as e:
-                st.write("Error displaying company info:: " + str(e))
+                st.write("Error displaying company info :: " + str(e))
 
         with st.container():
 
