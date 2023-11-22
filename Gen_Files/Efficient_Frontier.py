@@ -51,8 +51,9 @@ def get_estimated_1y_return(info, ticker):
 
 def get_daily_returns(hist, start_date, end_date):
 
-    # -- Get daily returns
-    daily_returns = hist['Close'].pct_change()[1:]    
+    # -- Get each daily return for the historical data
+    daily_returns = hist.loc[start_date:end_date, 'Close'].pct_change()
+
 
     return daily_returns
 
