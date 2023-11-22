@@ -82,12 +82,6 @@ with tab1:
         daily_returns = get_daily_returns(
             symbol, start_date, end_date)
 
-        try:
-                   
-
-            
-        except Exception as e:
-            st.write("Error getting efficient frontier:: " + str(e))
 
         try:
 
