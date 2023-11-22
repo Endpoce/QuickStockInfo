@@ -55,7 +55,7 @@ def get_daily_returns(ticker, start_date, end_date):
     daily_returns = pd.DataFrame()
 
     # -- Loop through and download the data for each ticker
-    df = yf.download(ticker, start=start_date, end=end_date)
+    df = ticker.history(start=start_date, end=end_date)
     df['daily_return'] = df['Adj Close'].pct_change()
     daily_returns[ticker] = df['daily_return']
 
