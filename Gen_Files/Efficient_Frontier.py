@@ -166,7 +166,7 @@ def get_efficient_frontier(n_assets, n_portfolios, daily_returns, mus, cov, ):
         while True:
             # - Choose assets randomly without replacement
             assets = np.random.choice(
-                list(daily_returns.columns), n_assets, replace=False)
+                list(daily_returns), n_assets, replace=False)
             # - Choose weights randomly ensuring they sum to one
             weights = np.random.rand(n_assets)
             weights = weights/sum(weights)
