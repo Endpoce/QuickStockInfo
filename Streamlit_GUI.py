@@ -76,18 +76,17 @@ with tab1:
         # try:
 
         # display company info
-        ticker, info, hist, file = get_stock_data(primary_ticker, start_date, end_date)
+        ticker, info, hist = get_stock_data(primary_ticker, start_date, end_date)
         
         # get ytd data
         ytd_data = ticker.history(period="ytd")
         
-        # get ytd returns and save to csv
+        # get ytd returns
         ytd_returns = ytd_data.pct_change()
-        ytd_returns.to_csv(str(primary_ticker) + '_YTD_Returns.csv')
 
         # get daily returns
         daily_returns = get_daily_returns(
-            hist, start_date, end_date)
+            ticker, start_date, end_date)
 
         # get mean returns and covariance
         mus, cov = get_mean_returns_and_covariance(daily_returns)

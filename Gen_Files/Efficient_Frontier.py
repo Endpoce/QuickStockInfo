@@ -49,11 +49,11 @@ def get_estimated_1y_return(info, ticker):
     return estimated_return
 
 
-def get_daily_returns(hist, start_date, end_date):
+def get_daily_returns(ticker, start_date, end_date):
 
     # -- Get each daily return for the historical data
-    df = hist.loc[start_date:end_date]
-    daily_returns = df['Close'].pct_change().dropna()
+    data = yf.download(str(ticker), start=start_date, end=end_date)
+    daily_returns = data['Adj Close'].pct_change().dropna()
 
     return daily_returns
 
