@@ -116,7 +116,7 @@ with tab1:
         with st.container():
 
             # display company info
-            st.subheader(info['longName'])
+            st.title(info['longName'])
             
             try:
                 with col1.container():
@@ -133,12 +133,16 @@ with tab1:
                         st.write("Industry: " + info["industry"])
 
                     # display legal type
-                    if info["legalType"]:
-                        st.write("Legal Type: " + info["legalType"])
+                    # if info["legalType"]:
+                    #     st.write("Legal Type: " + info["legalType"])
 
                     # display category
                     if info.category:
                         st.write("Category: " + info["category"])
+
+                    # display year founded
+                    if info["yearBorn"]:
+                        st.write("Year Founded: " + str(info["yearBorn"]))
 
 
                 with col2.container():
