@@ -133,12 +133,12 @@ with tab1:
                         st.write("Industry: " + info["industry"])
 
                     # display legal type
-                    # if info["legalType"]:
-                    #     st.write("Legal Type: " + info["legalType"])
+                    if info["legalType"]:
+                        st.write("Legal Type: " + info["legalType"])
 
                     # display category
-                    # if info['Category']:
-                    #     st.write("Category: " + info["category"])
+                    if info['Category']:
+                        st.write("Category: " + info["category"])
 
                     # display year founded
                     if info["yearBorn"]:
@@ -150,13 +150,13 @@ with tab1:
                         st.write("Summary:")
                         st.markdown(info['longBusinessSummary'])
 
-                # display wiki info
-                if wiki_info:
-                    st.write("Wikipedia URL:")
-                    st.write(wiki_info['url'])
+                    # display wiki info
+                    if wiki_info:
+                        st.write("Wikipedia URL:")
+                        st.write(wiki_info['url'])
 
-                    st.write("Wikipedia Summary:")
-                    st.markdown(wiki_info['summary'])
+                        st.write("Wikipedia Summary:")
+                        st.markdown(wiki_info['summary'])
             except Exception as e:
                 st.write("Error displaying company info :: " + str(e))
 
@@ -168,12 +168,7 @@ with tab1:
                     primary_ticker), use_container_width=True)
             except Exception as e:
                 st.write("Error plotting stock data:: " + str(e))
-            try:
-                # plot efficient frontier
-                st.plotly_chart(plot_efficient_frontier(
-                    efficient_frontier), use_container_width=True)
-            except Exception as e:
-                st.write("Error ::" + str(e)) 
+
 
 
 with tab2:
@@ -211,12 +206,14 @@ with tab3:
 
     with st.container():
         try:
+
             # Define comparative_tickers or remove the if statement if not needed
 
             # Check if comparative_tickers is not empty
-            if comparative_tickers:
+            if comparative_tickers >= 1:
                 # set randomness
-                n_assets, n_portfolios = set_randomness(5, 1000)
+                n_assets = len(comparative_tickers.split(",")) + 1
+                n_portfolios = 1000
                         
                 # get daily returns
                 daily_returns = get_daily_returns(primary_ticker, start_date, end_date)
@@ -228,6 +225,7 @@ with tab3:
                 # plot efficient frontier
                 st.plotly_chart(plot_efficient_frontier(
                     efficient_frontier), use_container_width=True)
+            
         except Exception as e:
             st.write("Error plotting efficient frontier ::" + str(e))
 
