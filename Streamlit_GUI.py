@@ -142,9 +142,12 @@ with tab1:
         with st.container():
 
             try:
+
                 # plot price stock data
+                
                 st.plotly_chart(plot_stock_with_interactive_chart(
                     primary_ticker), use_container_width=True)
+            
             except Exception as e:
                 st.write("Error plotting stock data:: " + str(e))
 

@@ -164,9 +164,10 @@ def plot_stock_with_moving_averages_from_csv(filename, short_window=15, long_win
     return fig
 
 
-def plot_stock_with_interactive_chart(filename, short_window=15, long_window=100):
+def plot_stock_with_interactive_chart(ticker, short_window=15, long_window=100):
     # Read data from CSV file
-    df = pd.read_csv(filename, parse_dates=['Date'], index_col='Date')
+    df = ticker.history(period="4y")
+    
 
     # Calculate short and long moving averages
     df['ShortMA'] = df['Close'].rolling(window=short_window).mean()
