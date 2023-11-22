@@ -87,7 +87,7 @@ with tab1:
 
         # get daily returns
         daily_returns = get_daily_returns(
-            primary_ticker, start_date, end_date)
+            hist, start_date, end_date)
 
         # get mean returns and covariance
         mus, cov = get_mean_returns_and_covariance(daily_returns)

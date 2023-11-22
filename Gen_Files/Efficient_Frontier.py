@@ -49,16 +49,15 @@ def get_estimated_1y_return(info, ticker):
     return estimated_return
 
 
-def get_daily_returns(tickers, start_date, end_date):
+def get_daily_returns(ticker, start_date, end_date):
 
     # -- calculate the daily returns
     daily_returns = pd.DataFrame()
 
     # -- Loop through and download the data for each ticker
-    for ticker in tqdm(tickers):
-        df = yf.download(ticker, start=start_date, end=end_date)
-        df['daily_return'] = df['Adj Close'].pct_change()
-        daily_returns[ticker] = df['daily_return']
+    df = yf.download(ticker, start=start_date, end=end_date)
+    df['daily_return'] = df['Adj Close'].pct_change()
+    daily_returns[ticker] = df['daily_return']
 
     return daily_returns
 
