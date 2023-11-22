@@ -53,7 +53,8 @@ def get_daily_returns(ticker, start_date, end_date):
 
     # -- Get each daily return for the historical data
     data = yf.download(str(ticker), start=start_date, end=end_date)
-    daily_returns = data['Adj Close'].pct_change().dropna()
+    daily_returns = data['Adj Close'].dropna()
+    daily_returns = data['Adj Close'].pct_change()
 
     return daily_returns
 
