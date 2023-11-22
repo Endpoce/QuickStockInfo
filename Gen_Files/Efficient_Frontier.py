@@ -52,7 +52,10 @@ def get_estimated_1y_return(info, ticker):
 def get_daily_returns(hist, start_date, end_date):
 
     # -- Get the daily returns
-    daily_returns = hist.pct_change()
+    daily_returns = hist.loc[start_date:end_date, 'Close'].pct_change()
+
+    # -- Drop the first row of NaNs
+    daily_returns = daily_returns.dropna()
     
 
     return daily_returns
@@ -161,7 +164,7 @@ def get_efficient_frontier(n_assets, n_portfolios, daily_returns, mus, cov, ):
         while True:
             # - Choose assets randomly without replacement
             assets = np.random.choice(
-                list(daily_returns), n_assets, replace=False)
+                list(daily_returns.columns), n_assets, replace=False)
             # - Choose weights randomly ensuring they sum to one
             weights = np.random.rand(n_assets)
             weights = weights/sum(weights)
