@@ -51,13 +51,10 @@ def get_estimated_1y_return(info, ticker):
 
 def get_daily_returns(ticker, start_date, end_date):
 
-    # -- calculate the daily returns
-    daily_returns = pd.DataFrame()
-
-    # -- Loop through and download the data for each ticker
-    df = ticker.history(start=start_date, end=end_date)
-    df['daily_return'] = df['Adj Close'].pct_change()
-    daily_returns[ticker] = df['daily_return']
+    # -- Get the daily returns
+    daily_returns = ticker.history(
+        start=start_date, end=end_date)['Adj Close'].pct_change()
+    
 
     return daily_returns
 
