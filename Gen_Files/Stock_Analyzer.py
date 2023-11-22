@@ -14,11 +14,13 @@ load_dotenv()
 def get_stock_data(symbol, start_date, end_date):
     ticker = yf.Ticker(symbol)
 
+    symbol = ticker.ticker
+
     info = ticker.info
 
     hist = ticker.history(period="1d", start=start_date, end=end_date)
 
-    return ticker, info, hist
+    return ticker, info, hist, symbol
 
 
 def analyze_stock(filename, ticker):
