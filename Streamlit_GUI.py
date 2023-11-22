@@ -76,7 +76,7 @@ with tab1:
         try:
 
             # display company info
-            ticker, info, hist, file, legalType = get_stock_data(primary_ticker)
+            ticker, info, hist, file, legalType = get_stock_data(primary_ticker, start_date, end_date)
             
             # get ytd data
             ytd_data = ticker.history(period="ytd")
@@ -120,6 +120,7 @@ with tab1:
                 st.subheader("Company Info:")
 
                 st.subheader(info['longName'], color="blue")
+                
                 with col1.container():
                     if info["sector"]:
                         st.write("Sector: "+info["sector"])
@@ -132,6 +133,7 @@ with tab1:
 
                     if info.category:
                         st.write("Category: " + info["category"])
+
                 with col2.container():
                     if info['longBusinessSummary']:
                         st.write("Summary:")
