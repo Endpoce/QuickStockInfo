@@ -93,7 +93,7 @@ with tab1:
         mus, cov = get_mean_returns_and_covariance(daily_returns)
 
         # set randomness
-        n_assets, n_portfolios = set_randomness(5, 1000)
+        n_assets, n_portfolios = set_randomness(1, 1000)
 
         # get random portfolios
         mean_variance_pairs = get_random_portfolios(
