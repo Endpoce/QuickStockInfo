@@ -111,14 +111,6 @@ with tab1:
                     if info["industry"]:
                         st.write("Industry: " + info["industry"])
 
-                    # display legal type
-                    if info["legalType"] in info:
-                        st.write("Legal Type: " + info["legalType"])
-
-                    # display category
-                    if info['Category'] in info:
-                        st.write("Category: " + info["category"])
-
                 with col2.container():
                     if info['longBusinessSummary']:
                         st.write("Summary:")
