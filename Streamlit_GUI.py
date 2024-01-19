@@ -70,11 +70,12 @@ with tab1:
     # if button is pressed
     if fetch_button:
 
-        # try to get basic company info
-
         # display company info
         ticker, info, hist, symbol = get_stock_data(primary_ticker, start_date, end_date)
         
+        # display company info
+        st.title(info['longName'])
+
         # get ytd data
         ytd_data = ticker.history(period="ytd")
 
@@ -83,19 +84,9 @@ with tab1:
             symbol, start_date, end_date)
 
 
-        try:
-
-            # get wiki info
-            wiki_info = get_wiki_info(info['longName'] + " company")
-
-        except Exception as e:
-            st.write("Error getting wiki info:: " + str(e))
-
         # try to display company info
         with st.container():
 
-            # display company info
-            st.title(info['longName'])
             
             try:
                 with col1.container():
