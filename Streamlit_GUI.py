@@ -64,8 +64,6 @@ start_of_year = datetime.today().strftime('%Y-01-01')
 # tab 1
 with tab1:
 
-    # Columns
-    col1, col2 = st.columns((1, 1))
 
     # if button is pressed
     if fetch_button:
@@ -73,8 +71,6 @@ with tab1:
         # display company info
         ticker, info, hist, symbol = get_stock_data(primary_ticker, start_date, end_date)
         
-        # display company info
-        st.title(info['longName'])
 
         # get ytd data
         ytd_data = ticker.history(period="ytd")
@@ -87,12 +83,17 @@ with tab1:
         # try to display company info
         with st.container():
 
+            # set container title
+            st.subheader(info['longName'] + " (" + primary_ticker + ")")
+            
+
+            # Columns
+            col1, col2 = st.columns((1, 1))
+
+
             
             try:
                 with col1.container():
-
-                    # print company info
-                    print(info)
 
                     # display sector
                     if info["sector"]:
@@ -108,12 +109,14 @@ with tab1:
                         st.markdown(info['longBusinessSummary'])
 
                     # display wiki info
-                    if wiki_info:
-                        st.write("Wikipedia URL:")
-                        st.write(wiki_info['url'])
+                    st.write("Wiki Info:")
+                    
+                    # get wiki info
+                    wiki_info = get_wiki_info(primary_ticker)
 
-                        st.write("Wikipedia Summary:")
-                        st.markdown(wiki_info['summary'])
+                    # display wiki info
+                    st.markdown(wiki_info)
+
             except Exception as e:
                 st.write("Error displaying company info :: " + str(e))
 
