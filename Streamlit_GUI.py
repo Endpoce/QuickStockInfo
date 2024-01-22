@@ -102,6 +102,10 @@ with tab1:
                     # display industry
                     if info["industry"]:
                         st.write("Industry: " + info["industry"])
+                    
+                    # plot price stock data
+                    st.plotly_chart(plot_stock_with_interactive_chart(
+                        primary_ticker), use_container_width=True)
 
                 with col2.container():
                     if info['longBusinessSummary']:
