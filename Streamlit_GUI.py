@@ -21,7 +21,7 @@ load_dotenv()
 yf.pdr_override()
 
 # Page config (Title at top and icon at top )
-st.set_page_config(page_title="Quick Stock Info", page_icon="chart_with_upwards_trend",
+st.set_page_config(page_icon="chart_with_upwards_trend",
                    layout='wide', initial_sidebar_state="expanded")
 
 # set openai api key
@@ -105,7 +105,7 @@ with tab1:
                     
                     # plot price stock data
                     st.plotly_chart(plot_stock_with_interactive_chart(
-                        primary_ticker), use_container_width=True)
+                        hist), use_container_width=True)
 
                 with col2.container():
                     if info['longBusinessSummary']:
