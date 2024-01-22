@@ -70,6 +70,9 @@ with tab1:
 
         # display company info
         ticker, info, hist, symbol = get_stock_data(primary_ticker, start_date, end_date)
+
+        # hist to dataframe
+        hist_df = hist.to_frame()
         
 
         # get ytd data
@@ -104,8 +107,8 @@ with tab1:
                         st.write("Industry: " + info["industry"])
                     
                     # plot price stock data
-                    st.plotly_chart(plot_stock_with_interactive_chart(
-                        hist), use_container_width=True)
+                    st.plotly_chart(plot_stock_with_interactive_chart(hist_df['Close']), use_container_width=True)
+
 
                 with col2.container():
                     if info['longBusinessSummary']:
