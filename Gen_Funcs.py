@@ -3,6 +3,7 @@
 import yfinance as yf
 import streamlit as st
 import plotly.graph_objects as go
+import google.generativeai as gai
 
 def get_stock_info(symbol):
     """
