@@ -67,20 +67,23 @@ with tab1:
 
     # if button is pressed
     if fetch_button:
+        try:
+            # display company info
+            ticker, info, hist, symbol = get_stock_data(primary_ticker, start_date, end_date)
 
-        # display company info
-        ticker, info, hist, symbol = get_stock_data(primary_ticker, start_date, end_date)
+            # # hist to dataframe
+            # hist_df = hist.to_frame()
+            
 
-        # hist to dataframe
-        hist_df = hist.to_frame()
+            # get ytd data
+            ytd_data = ticker.history(period="ytd")
+
+            # get daily returns
+            daily_returns = get_daily_returns(
+                symbol, start_date, end_date)
         
-
-        # get ytd data
-        ytd_data = ticker.history(period="ytd")
-
-        # get daily returns
-        daily_returns = get_daily_returns(
-            symbol, start_date, end_date)
+        except Exception as e:
+            st.write("Error fetching stock data:: " + str(e))
 
 
         # try to display company info
@@ -107,7 +110,7 @@ with tab1:
                         st.write("Industry: " + info["industry"])
                     
                     # plot price stock data
-                    st.plotly_chart(plot_stock_with_interactive_chart(hist_df['Close']), use_container_width=True)
+                    st.plotly_chart(plot_stock_with_interactive_chart(hist['Close']), use_container_width=True)
 
 
                 with col2.container():
