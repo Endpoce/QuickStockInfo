@@ -8,6 +8,7 @@ import yfinance as yf
 import plotly.graph_objects as go
 import google.generativeai as gai
 import os
+import google.generativeai as gai
 
 
 load_dotenv()
