@@ -71,7 +71,7 @@ def main():
         df = pd.read_csv(filename)
 
         # analyze stock data
-        analyze_result = analyze_stock(filename)
+        analyze_result = stock_response(filename)
         analyze_label['text'] = analyze_result
 
         analyze_label.insert(tk.END, analyze_result)

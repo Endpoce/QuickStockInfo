@@ -13,6 +13,7 @@ from Gen_Files.GetArticles import *
 from Gen_Files.Stock_Analyzer import *
 from Gen_Files.Efficient_Frontier import *
 import streamlit as st
+from Gen_Funcs import *
 
 # set env vars
 load_dotenv()
@@ -97,13 +98,9 @@ with tab1:
             try:
                 with col1.container():
 
-                    # display sector
-                    if info["sector"]:
-                        st.write("Sector: "+info["sector"])
-
-                    # display industry
-                    if info["industry"]:
-                        st.write("Industry: " + info["industry"])
+                    # display company info
+                    st.write("Company Info:")
+                    display_stock_info(info)
                     
                     # plot price stock data
                     st.plotly_chart(plot_stock_with_interactive_chart(hist['Close']), use_container_width=True)
@@ -124,7 +121,7 @@ with tab1:
                     st.markdown(wiki_info)
 
             except Exception as e:
-                st.write("Error displaying company info :: " + str(e))
+                st.write("Error displaying company info :: " + str(e.with_traceback()))
 
         with st.container():
 
@@ -136,7 +133,7 @@ with tab1:
                     primary_ticker), use_container_width=True)
             
             except Exception as e:
-                st.write("Error plotting stock data:: " + str(e))
+                st.write("Error plotting stock data:: " + str(e.with_traceback()))
 
 
 

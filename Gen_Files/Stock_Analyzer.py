@@ -6,35 +6,25 @@ import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 import yfinance as yf
 import plotly.graph_objects as go
+import google.generativeai as gai
+import os
 
 
 load_dotenv()
 
+# get stock info and feed to it to google ai, get response
+def stock_response(filename, ticker):
 
-def get_stock_data(symbol, start_date, end_date):
-    ticker = yf.Ticker(symbol)
-
-    symbol = ticker.ticker
-
-    info = ticker.info
-
-    hist = ticker.history(period="1d", start=start_date, end=end_date)
-
-    return ticker, info, hist, symbol
+    # Configure the Generative AI model
+    
 
 
-def analyze_stock(filename, ticker):
 
     # read and Load the CSV data into a DataFrame
     df = pd.read_csv(filename)
 
     # Ensure the data is sorted by date
     df = df.sort_values('Date')
-
-    # # Get the latest date in the dataset
-    # latest_date = df['Date'].iloc[-1]
-    # # assuming the date is in this format
-    # latest_date = datetime.strptime(latest_date, '%Y-%m-%d')
 
     # Get the latest closing price
     latest_close = df['Close'].iloc[-1]
@@ -108,15 +98,7 @@ def analyze_stock(filename, ticker):
     # Construct the ChatGPT prompt
     prompt = f"{summary} What could these figures suggest about the stock's performance and potential future trends?"
 
-    # Use the OpenAI API to generate a response
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[{"role": "system", "content": "You are analyzing a stock."},
-                  {"role": "user", "content": prompt}],
-        max_tokens=500
-    )
-
-    return response['choices'][0]['message']['content']
+    # Use the google AI model to generate a response
 
 
 def plot_stock_with_moving_averages_from_csv(filename, short_window=15, long_window=100):

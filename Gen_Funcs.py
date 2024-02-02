@@ -2,6 +2,7 @@
 
 import yfinance as yf
 import streamlit as st
+import plotly.graph_objects as go
 
 def get_stock_info(symbol):
     """
@@ -10,6 +11,17 @@ def get_stock_info(symbol):
     stock = yf.Ticker(symbol)
     info = stock.info
     return info
+
+def get_stock_data(symbol, start_date, end_date):
+    ticker = yf.Ticker(symbol)
+
+    symbol = ticker.ticker
+
+    info = ticker.info
+
+    hist = ticker.history(period="1d", start=start_date, end=end_date)
+
+    return ticker, info, hist, symbol
 
 def display_stock_info(info):
     """
@@ -23,16 +35,24 @@ def display_stock_info(info):
     st.write("Price:", info['regularMarketPrice'])
     st.write("Volume:", info['regularMarketVolume'])
 
-def main():
-    """
-    Main function to run the Streamlit app.
-    """
-    st.title("Stock Information App")
-    symbol = st.text_input("Enter a stock symbol:")
-    
-    if st.button("Get Info"):
-        info = get_stock_info(symbol)
-        display_stock_info(info)
+# plot stock data on an interactive chart
+def plot_Stock(info):
 
-if __name__ == "__main__":
-    main()
+    hist = info.history(period="5d")
+
+    fig = go.Figure(data=[go.Candlestick(x=hist.index,
+                                         open=hist['Open'],
+                                         high=hist['High'],
+                                         low=hist['Low'],
+                                         close=hist['Close'])])
+
+    fig.update_layout(
+        title='Stock Price Chart',
+        xaxis_title='Date',
+        yaxis_title='Price',
+        xaxis_rangeslider_visible=False
+    )
+
+    st.plotly_chart(fig)
+
+
