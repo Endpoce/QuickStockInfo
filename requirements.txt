@@ -12,6 +12,5 @@ praw
 regex
 plotly
 google
-google.generativeai
-
+generativeai
 
