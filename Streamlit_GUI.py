@@ -35,38 +35,34 @@ end_date = datetime.today().strftime('%Y-%m-%d')
 # Title
 st.title("Quick Stock Info")
 
+# set tabs
 tab1, tab2, tab3, tab4 = st.tabs(
     ["Quick Stock Info", "Investor Info", "Efficient Frontier", "GPT-4 Analysis"])
 
 # Sidebar
 st.sidebar.header("User Input")
 
-# get user input for multiple tickers
+# get user input for primary ticker
 primary_ticker = st.sidebar.text_input("Ticker Symbol:").upper()
 
+# get user input for comparative tickers
 comparative_tickers = st.sidebar.text_input(
     "Comparative Ticker Symbols (separated by commas)").upper()
 
-# get start and end date
-start_date = st.sidebar.date_input(
-    "Start date", value=pd.to_datetime("2014-01-01"))
-end_date = st.sidebar.date_input(
-    "End date", value=pd.to_datetime(datetime.today().strftime('%Y-%m-%d')))
+# get start and end date, start of year
+start_date = st.sidebar.date_input("Start date", value=pd.to_datetime("2020-01-01"))
+end_date = st.sidebar.date_input("End date", value=pd.to_datetime(datetime.today().strftime('%Y-%m-%d')))
+start_of_year = datetime.today().strftime('%Y-01-01')
 
 # fetch button
 fetch_button = st.sidebar.button("Get Stock Data")
-
-# set vars and calculate returns
-# get start of year date
-start_of_year = datetime.today().strftime('%Y-01-01')
-
 
 # tab 1
 with tab1:
 
 
     # if button is pressed
-    if fetch_button:
+    if fetch_button or primary_ticker != "":
         try:
             # display company info
             ticker, info, hist, symbol = get_stock_data(primary_ticker, start_date, end_date)
