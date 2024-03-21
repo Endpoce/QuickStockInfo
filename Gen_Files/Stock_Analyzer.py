@@ -178,10 +178,10 @@ def plot_stock_with_interactive_chart(ticker, hist, short_window=15, long_window
 
     # Add arrows for crossover points
     for i in df[df['ShortCrossesAboveLong']].index:
-        fig.add_annotation(x=i, y=df['ShortMA'][i], text='', arrowhead=1, arrowsize=1, arrowwidth=2, arrowcolor='purple')
+        fig.add_annotation(x=i, y=df['ShortMA'][i], text='', arrowhead=1, arrowsize=1, arrowwidth=2, arrowcolor='green')
 
     for i in df[df['LongCrossesAboveShort']].index:
-        fig.add_annotation(x=i, y=df['LongMA'][i], text='', arrowhead=1, arrowsize=1, arrowwidth=2, arrowcolor='purple')
+        fig.add_annotation(x=i, y=df['LongMA'][i], text='', arrowhead=1, arrowsize=1, arrowwidth=2, arrowcolor='red')
 
     fig.update_layout(title=f'Close Price with {short_window}-Day & {long_window}-Day Moving Averages',
                       xaxis_title='Date', yaxis_title='Close Price ($)', autosize=False, width=1200, height=800, plot_bgcolor='white')
