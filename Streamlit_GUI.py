@@ -80,7 +80,7 @@ with tab1:
                 symbol, start_date, end_date)
         
         except Exception as e:
-            st.write("Error fetching stock data:: " + str(e))
+            st.error("Error fetching stock data:: " + str(e))
 
         # try to display company info
         with st.container():
@@ -101,7 +101,7 @@ with tab1:
                     st.plotly_chart(plot_stock_with_interactive_chart(hist['Close']), use_container_width=True)
 
                 except Exception as e:
-                    st.write("Error displaying company info :: " + error_message(e))
+                    st.error("Error displaying company info :: " + error_message(e))
 
             with col2.container():
                 try:
