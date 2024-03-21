@@ -95,9 +95,8 @@ with tab1:
 
 
             
-            try:
-                with col1.container():
-
+            with col1.container():
+                try:
                     # display company info
                     st.write("Company Info:")
                     display_stock_info(info)
@@ -105,32 +104,26 @@ with tab1:
                     # plot price stock data
                     st.plotly_chart(plot_stock_with_interactive_chart(hist['Close']), use_container_width=True)
 
+                except Exception as e:
+                    st.write("Error displaying company info :: " + error_message(e))
 
-                with col2.container():
-                    if info['longBusinessSummary']:
-                        st.write("Summary:")
-                        st.markdown(info['longBusinessSummary'])
-
+            with col2.container():
+                try:
                     # display wiki info
                     st.write("Wiki Info:")
-                    
-                    # get wiki info
                     wiki_info = get_wiki_info(primary_ticker)
-
-                    # display wiki info
                     st.markdown(wiki_info)
 
-            except Exception as e:
-                st.write("Error displaying company info :: " + error_message(e))
+                except Exception as e:
+                    st.write("Error displaying wiki info :: " + error_message(e))
+
 
         with st.container():
 
             try:
 
-                # plot price stock data
-                
-                st.plotly_chart(plot_stock_with_interactive_chart(
-                    primary_ticker), use_container_width=True)
+                # plot price stock data                
+                st.plotly_chart(plot_stock_with_interactive_chart(primary_ticker), use_container_width=True)
             
             except Exception as e:
                 st.write("Error plotting stock data:: " + str(e.with_traceback()))
@@ -214,14 +207,13 @@ with tab3:
 
 with tab4:
     try:
-        st.title("GPT-4 Analysis")
+        st.title("Analysis")
 
         st, st = st.columns((1, 2))
 
         with st:
             # display finance info
             st.subheader("Summary:")
-
             
             # read stock price data from csv
             filename = str(primary_ticker) + '_Price_Data.csv'

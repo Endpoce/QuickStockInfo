@@ -1,15 +1,15 @@
-import plotly.graph_objects as go
-import pandas as pd
-import openai
-from datetime import datetime
-import matplotlib.pyplot as plt
+import os
 from dotenv import load_dotenv
 import yfinance as yf
+import pandas as pd
+from datetime import datetime
+import sys
+
+import plotly.graph_objects as go
+import openai
+import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import google.generativeai as gai
-import os
-import google.generativeai as gai
-
 
 load_dotenv()
 
@@ -101,7 +101,7 @@ def stock_response(filename, ticker):
 
     # Use the google AI model to generate a response
 
-
+# 
 def plot_stock_with_moving_averages_from_csv(filename, short_window=15, long_window=100):
     # Read data from CSV file
     df = pd.read_csv(filename, parse_dates=['Date'], index_col='Date')
@@ -146,7 +146,7 @@ def plot_stock_with_moving_averages_from_csv(filename, short_window=15, long_win
 
     return fig
 
-
+# plot stock data on an interactive chart
 def plot_stock_with_interactive_chart(ticker, short_window=15, long_window=100):
     # Read data from CSV file
     df = ticker.history(period="4y")

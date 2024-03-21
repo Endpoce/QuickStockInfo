@@ -30,8 +30,8 @@ def display_stock_info(info):
     """
     Display stock information using the Streamlit API.
     """
-    st.write("Company Name:", info['longName'])
-    st.write("Symbol:", info['symbol'])
+
+    st.write(info["longBusinessSummary"])
     st.write("Sector:", info['sector'])
     st.write("Industry:", info['industry'])
     st.write("Market Cap:", info['marketCap'])
