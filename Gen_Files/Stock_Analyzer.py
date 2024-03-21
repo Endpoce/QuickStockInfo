@@ -176,14 +176,12 @@ def plot_stock_with_interactive_chart(ticker, hist, short_window=15, long_window
     fig.add_trace(go.Scatter(
         x=df.index, y=df['LongMA'], mode='lines', name=f'{long_window} Day MA'))
 
-    # Add vertical lines for crossover points
+    # Add arrows for crossover points
     for i in df[df['ShortCrossesAboveLong']].index:
-        fig.add_shape(type="line", xref="x", yref="y", x0=i, y0=0, x1=i, y1=1,
-                      line=dict(color="purple", width=1))
+        fig.add_annotation(x=i, y=df['ShortMA'][i], text='', arrowhead=1, arrowsize=1, arrowwidth=2, arrowcolor='purple')
 
     for i in df[df['LongCrossesAboveShort']].index:
-        fig.add_shape(type="line", xref="x", yref="y", x0=i, y0=0, x1=i, y1=1,
-                      line=dict(color="purple", width=1))
+        fig.add_annotation(x=i, y=df['LongMA'][i], text='', arrowhead=1, arrowsize=1, arrowwidth=2, arrowcolor='purple')
 
     fig.update_layout(title=f'Close Price with {short_window}-Day & {long_window}-Day Moving Averages',
                       xaxis_title='Date', yaxis_title='Close Price ($)', autosize=False, width=1200, height=800, plot_bgcolor='white')
