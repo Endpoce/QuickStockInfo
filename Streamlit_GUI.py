@@ -103,7 +103,7 @@ with tab1:
 
             try:
                 # plot price stock data
-                st.plotly_chart(plot_stock_with_interactive_chart(hist['Close']), use_container_width=True)
+                st.plotly_chart(plot_stock_with_interactive_chart(primary_ticker, hist), use_container_width=True)
             
             except Exception as e:
                 error_message(e)
