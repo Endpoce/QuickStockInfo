@@ -54,7 +54,7 @@ def display_stock_info(info, hist):
     st.write("Industry:", info['industry'])
     st.write("Market Cap:", info['marketCap'])
     st.write("Recent Close Price:", hist['Close'][-1])
-    st.write("Recent Daily Volume:", info['volume'][-1])
+    st.write("Recent Daily Volume:", hist['volume'][-1])
 
 
 
