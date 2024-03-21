@@ -101,7 +101,7 @@ with tab1:
                 st.plotly_chart(plot_stock_with_interactive_chart(hist['Close']), use_container_width=True)
 
             except Exception as e:
-                st.error("Error displaying company info :: " + error_message(e))
+                error_message(e)
 
         with col2.container():
             try:
