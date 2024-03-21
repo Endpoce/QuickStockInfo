@@ -90,6 +90,14 @@ with tab1:
         
         # Columns
         col1, col2 = st.columns((1, 1))
+
+        try:
+
+            # plot price stock data                
+            st.plotly_chart(plot_stock_with_interactive_chart(primary_ticker), use_container_width=True)
+        
+        except Exception as e:
+            error_message(e)
         
         with col1.container():
             try:
@@ -119,15 +127,8 @@ with tab1:
                 st.write("Error displaying wiki info :: " + error_message(e))
 
 
-        with st.container():
 
-            try:
 
-                # plot price stock data                
-                st.plotly_chart(plot_stock_with_interactive_chart(primary_ticker), use_container_width=True)
-            
-            except Exception as e:
-                error_message(e)
 
 with tab2:
     try:
