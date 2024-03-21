@@ -85,15 +85,15 @@ with tab1:
         # set container title
         st.subheader(info['longName'] + " (" + primary_ticker + ")")
         
-        # Columns
-        col1, col2 = st.columns((1, 1))
-
         try:
             # plot price stock data                
             plot_stock_with_interactive_chart(primary_ticker, hist)
 
         except Exception as e:
             error_message(e)
+        
+        # Columns
+        col1, col2 = st.columns((1, 1))
         
         with col1:
             try:
