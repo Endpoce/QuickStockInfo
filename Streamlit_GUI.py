@@ -121,7 +121,7 @@ with tab1:
                     st.markdown(wiki_info)
 
             except Exception as e:
-                st.write("Error displaying company info :: " + str(e.with_traceback()))
+                st.write("Error displaying company info :: " + error_message(e))
 
         with st.container():
 

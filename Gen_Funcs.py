@@ -4,6 +4,8 @@ import yfinance as yf
 import streamlit as st
 import plotly.graph_objects as go
 import google.generativeai as gai
+import sys
+import linecache
 
 def get_stock_info(symbol):
     """
@@ -33,8 +35,8 @@ def display_stock_info(info):
     st.write("Sector:", info['sector'])
     st.write("Industry:", info['industry'])
     st.write("Market Cap:", info['marketCap'])
-    st.write("Price:", info['regularMarketPrice'])
-    st.write("Volume:", info['regularMarketVolume'])
+    st.write("Price:", info['marketPrice'])
+    st.write("Volume:", info['volume'])
 
 # plot stock data on an interactive chart
 def plot_Stock(info):
@@ -55,5 +57,19 @@ def plot_Stock(info):
     )
 
     st.plotly_chart(fig)
+
+def error_message(message):
+    """
+    Display an error message using the Streamlit API.
+    """
+    exc_type, exc_obj, tb = sys.exc_info()
+    f = tb.tb_frame
+    lineno = tb.tb_lineno
+    filename = f.f_code.co_filename
+    linecache.checkcache(filename)
+    line = linecache.getline(filename, lineno, f.f_globals)
+    response = ('EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj))
+        
+    st.error(response)
 
 
