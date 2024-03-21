@@ -147,9 +147,9 @@ def plot_stock_with_moving_averages_from_csv(filename, short_window=15, long_win
     return fig
 
 # plot stock data on an interactive chart
-def plot_stock_with_interactive_chart(ticker, short_window=15, long_window=100):
+def plot_stock_with_interactive_chart(ticker, hist, short_window=15, long_window=100):
     # Read data from CSV file
-    df = ticker.history(period="4y")
+    df = hist
     
 
     # Calculate short and long moving averages
