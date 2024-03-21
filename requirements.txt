@@ -11,6 +11,6 @@ tweepy
 praw
 regex
 plotly
+google.generativeai
 google
-generativeai
 
