@@ -35,7 +35,7 @@ def display_stock_info(info):
     st.write("Sector:", info['sector'])
     st.write("Industry:", info['industry'])
     st.write("Market Cap:", info['marketCap'])
-    st.write("Price:", info['marketPrice'])
+    st.write("Price:", info['regularMarketPrice'])
     st.write("Volume:", info['volume'])
 
 # plot stock data on an interactive chart
