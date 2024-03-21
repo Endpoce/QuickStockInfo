@@ -122,7 +122,7 @@ with tab1:
                 st.plotly_chart(plot_stock_with_interactive_chart(primary_ticker), use_container_width=True)
             
             except Exception as e:
-                st.write("Error plotting stock data:: " + str(e.with_traceback()))
+                error_message(e)
 
 with tab2:
     try:
