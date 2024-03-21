@@ -95,11 +95,16 @@ with tab1:
             try:
                 # display company info
                 st.write("Company Info:")
-                display_stock_info(info)
+                display_stock_info(info, hist)
                 
+
+            except Exception as e:
+                error_message(e)
+
+            try:
                 # plot price stock data
                 st.plotly_chart(plot_stock_with_interactive_chart(hist['Close']), use_container_width=True)
-
+            
             except Exception as e:
                 error_message(e)
 

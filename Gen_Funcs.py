@@ -44,7 +44,7 @@ def get_stock_data(symbol, start_date, end_date):
     return ticker, info, hist, symbol
 
 # display stock information
-def display_stock_info(info):
+def display_stock_info(info, hist):
     """
     Display stock information using the Streamlit API.
     """
@@ -53,8 +53,8 @@ def display_stock_info(info):
     st.write("Sector:", info['sector'])
     st.write("Industry:", info['industry'])
     st.write("Market Cap:", info['marketCap'])
-    st.write("Price:", info['regularMarketPrice'])
-    st.write("Volume:", info['volume'])
+    st.write("Recent Close Price:", hist['Close'][-1])
+    st.write("Recent Daily Volume:", info['volume'][-1])
 
 
 
