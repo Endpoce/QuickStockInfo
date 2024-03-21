@@ -105,12 +105,7 @@ with tab1:
             except Exception as e:
                 error_message(e)
 
-            try:
-                # plot price stock data
-                st.plotly_chart(plot_stock_with_interactive_chart(primary_ticker, hist), use_container_width=True)
-            
-            except Exception as e:
-                error_message(e)
+
 
         with col2:
             try:
