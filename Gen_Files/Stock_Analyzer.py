@@ -10,6 +10,7 @@ import openai
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import google.generativeai as gai
+import streamlit as st
 
 load_dotenv()
 
@@ -187,6 +188,6 @@ def plot_stock_with_interactive_chart(ticker, hist, short_window=15, long_window
     fig.update_layout(title=f'Close Price with {short_window}-Day & {long_window}-Day Moving Averages',
                       xaxis_title='Date', yaxis_title='Close Price ($)', autosize=False, width=1200, height=800)
 
-    fig.show()
+    st.plotly_chart(fig)
 
     return fig

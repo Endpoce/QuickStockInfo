@@ -82,9 +82,6 @@ with tab1:
         except Exception as e:
             st.error("Error fetching stock data:: " + str(e))
 
-        # try to display company info
-        # with st.container():
-
         # set container title
         st.subheader(info['longName'] + " (" + primary_ticker + ")")
         
@@ -92,14 +89,13 @@ with tab1:
         col1, col2 = st.columns((1, 1))
 
         try:
-
             # plot price stock data                
-            st.plotly_chart(plot_stock_with_interactive_chart(primary_ticker), use_container_width=True)
-        
+            plot_stock_with_interactive_chart(primary_ticker, hist)
+
         except Exception as e:
             error_message(e)
         
-        with col1.container():
+        with col1:
             try:
                 # display company info
                 st.write("Company Info:")
@@ -116,7 +112,7 @@ with tab1:
             except Exception as e:
                 error_message(e)
 
-        with col2.container():
+        with col2:
             try:
                 # display wiki info
                 st.write("Wiki Info:")
