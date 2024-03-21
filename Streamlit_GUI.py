@@ -37,28 +37,28 @@ end_date = datetime.today().strftime('%Y-%m-%d')
 st.title("Quick Stock Info")
 
 # set tabs
-tab1, tab2, tab3, tab4 = st.tabs(
-    ["Quick Stock Info", "Investor Info", "Efficient Frontier", "GPT-4 Analysis"])
+tab1, tab2, tab3, tab4 = st.tabs(["Quick Stock Info", "Investor Info", "Efficient Frontier", "Analysis"])
 
 # Sidebar
-st.sidebar.header("User Input")
+with st.sidebar:
+    st.header("User Input")
 
-# get user input for primary ticker
-primary_ticker = st.sidebar.text_input("Ticker Symbol:").upper()
+    # get user input for primary ticker
+    primary_ticker = st.sidebar.text_input("Ticker Symbol:").upper()
 
-# get user input for comparative tickers
-comparative_tickers = st.sidebar.text_input(
-    "Comparative Ticker Symbols (separated by commas)").upper()
+    # get user input for comparative tickers
+    # comparative_tickers = st.sidebar.text_input(
+    #     "Comparative Ticker Symbols (separated by commas)").upper()
 
-# get start and end date, start of year
-start_date = st.sidebar.date_input("Start date", value=pd.to_datetime("2020-01-01"))
-end_date = st.sidebar.date_input("End date", value=pd.to_datetime(datetime.today().strftime('%Y-%m-%d')))
-start_of_year = datetime.today().strftime('%Y-01-01')
+    # start and end date, start of year
+    start_date = st.sidebar.date_input("Start date", value=pd.to_datetime("2020-01-01"))
+    end_date = st.sidebar.date_input("End date", value=pd.to_datetime(datetime.today().strftime('%Y-%m-%d')))
+    start_of_year = datetime.today().strftime('%Y-01-01')
 
-# fetch button
-fetch_button = st.sidebar.button("Get Stock Data")
+    ## fetch button
+    fetch_button = st.sidebar.button("Get Stock Data")
 
-# tab 1
+### tab 1
 with tab1:
 
 
@@ -82,18 +82,14 @@ with tab1:
         except Exception as e:
             st.write("Error fetching stock data:: " + str(e))
 
-
         # try to display company info
         with st.container():
 
             # set container title
             st.subheader(info['longName'] + " (" + primary_ticker + ")")
-            
-
+           
             # Columns
             col1, col2 = st.columns((1, 1))
-
-
             
             with col1.container():
                 try:
@@ -127,8 +123,6 @@ with tab1:
             
             except Exception as e:
                 st.write("Error plotting stock data:: " + str(e.with_traceback()))
-
-
 
 with tab2:
     try:
