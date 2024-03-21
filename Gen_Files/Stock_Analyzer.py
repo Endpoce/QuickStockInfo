@@ -186,6 +186,6 @@ def plot_stock_with_interactive_chart(ticker, hist, short_window=15, long_window
     fig.update_layout(title=f'Close Price with {short_window}-Day & {long_window}-Day Moving Averages',
                       xaxis_title='Date', yaxis_title='Close Price ($)', autosize=False, width=1200, height=800, plot_bgcolor='white')
 
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)
 
     return fig
