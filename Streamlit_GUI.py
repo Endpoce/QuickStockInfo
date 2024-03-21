@@ -83,35 +83,35 @@ with tab1:
             st.error("Error fetching stock data:: " + str(e))
 
         # try to display company info
-        with st.container():
+        # with st.container():
 
-            # set container title
-            st.subheader(info['longName'] + " (" + primary_ticker + ")")
-           
-            # Columns
-            col1, col2 = st.columns((1, 1))
-            
-            with col1.container():
-                try:
-                    # display company info
-                    st.write("Company Info:")
-                    display_stock_info(info)
-                    
-                    # plot price stock data
-                    st.plotly_chart(plot_stock_with_interactive_chart(hist['Close']), use_container_width=True)
+        # set container title
+        st.subheader(info['longName'] + " (" + primary_ticker + ")")
+        
+        # Columns
+        col1, col2 = st.columns((1, 1))
+        
+        with col1.container():
+            try:
+                # display company info
+                st.write("Company Info:")
+                display_stock_info(info)
+                
+                # plot price stock data
+                st.plotly_chart(plot_stock_with_interactive_chart(hist['Close']), use_container_width=True)
 
-                except Exception as e:
-                    st.error("Error displaying company info :: " + error_message(e))
+            except Exception as e:
+                st.error("Error displaying company info :: " + error_message(e))
 
-            with col2.container():
-                try:
-                    # display wiki info
-                    st.write("Wiki Info:")
-                    wiki_info = get_wiki_info(primary_ticker)
-                    st.markdown(wiki_info)
+        with col2.container():
+            try:
+                # display wiki info
+                st.write("Wiki Info:")
+                wiki_info = get_wiki_info(primary_ticker)
+                st.markdown(wiki_info)
 
-                except Exception as e:
-                    st.write("Error displaying wiki info :: " + error_message(e))
+            except Exception as e:
+                st.write("Error displaying wiki info :: " + error_message(e))
 
 
         with st.container():
