@@ -1,4 +1,4 @@
-# Authors: Aidan Murphy
+# Authors: Aidan Murphy, Matt Anderson
 # Date Created: 5/15/23
 
 from datetime import timedelta, datetime, time
