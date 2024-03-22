@@ -15,6 +15,8 @@ from Gen_Files.Efficient_Frontier import *
 import streamlit as st
 from Gen_Funcs import *
 import google.generativeai as gai
+import vertexai
+from vertexai.generative_models import GenerativeModel, Part
 
 # set env vars
 load_dotenv()
