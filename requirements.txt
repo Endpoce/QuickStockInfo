@@ -13,4 +13,5 @@ regex
 plotly
 google.generativeai
 google
+vertexai
 
