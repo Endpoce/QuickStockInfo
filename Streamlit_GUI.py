@@ -14,6 +14,7 @@ from Gen_Files.Stock_Analyzer import *
 from Gen_Files.Efficient_Frontier import *
 import streamlit as st
 from Gen_Funcs import *
+import google.generativeai as gai
 
 # set env vars
 load_dotenv()
@@ -22,15 +23,8 @@ load_dotenv()
 yf.pdr_override()
 
 # Page config (Title at top and icon at top )
-st.set_page_config(page_icon="chart_with_upwards_trend",
-                   layout='wide', initial_sidebar_state="expanded")
+st.set_page_config(layout='wide', initial_sidebar_state="expanded")
 
-# set openai api key
-openai.api_key = os.environ.get('API_KEY')
-
-# set dates
-start_date = pd.to_datetime("2020-01-01")
-end_date = datetime.today().strftime('%Y-%m-%d')
 
 # set page parameters
 # Title
@@ -46,9 +40,7 @@ with st.sidebar:
     # get user input for primary ticker
     primary_ticker = st.sidebar.text_input("Ticker Symbol:").upper()
 
-    # get user input for comparative tickers
-    # comparative_tickers = st.sidebar.text_input(
-    #     "Comparative Ticker Symbols (separated by commas)").upper()
+    secondary_tickers = st.sidebar.text_input("Comparative Tickers (comma separated):").upper()
 
     # start and end date, start of year
     start_date = st.sidebar.date_input("Start date", value=pd.to_datetime("2020-01-01"))
@@ -58,7 +50,7 @@ with st.sidebar:
     ## fetch button
     fetch_button = st.sidebar.button("Get Stock Data")
 
-### tab 1
+### tab 1: Info
 with tab1:
 
 
@@ -68,16 +60,11 @@ with tab1:
             # display company info
             ticker, info, hist, symbol = get_stock_data(primary_ticker, start_date, end_date)
 
-            # # hist to dataframe
-            # hist_df = hist.to_frame()
-            
-
             # get ytd data
             ytd_data = ticker.history(period="ytd")
 
             # get daily returns
-            daily_returns = get_daily_returns(
-                symbol, start_date, end_date)
+            # daily_returns = get_daily_returns(symbol, start_date, end_date)
         
         except Exception as e:
             st.error("Error fetching stock data:: " + str(e))
@@ -117,10 +104,7 @@ with tab1:
             except Exception as e:
                 st.write("Error displaying wiki info :: " + error_message(e))
 
-
-
-
-
+### tab 2: Investors
 with tab2:
     try:
         st.title("Investor Info")
@@ -149,6 +133,7 @@ with tab2:
     except Exception as e:
         st.write("Error: Cant find investor info")
 
+### tab 3: Portfolio Analysis
 with tab3:
     st.subheader("Efficient Frontier")
 
@@ -156,7 +141,7 @@ with tab3:
 
     with st.container():
         try:
-            if comparative_tickers == 0:
+            if secondary_tickers == 0:
                 # get ytd returns
                 ytd_returns = ytd_data.pct_change()
 
@@ -177,9 +162,9 @@ with tab3:
             # Define comparative_tickers or remove the if statement if not needed
 
             # Check if comparative_tickers is not empty
-            if comparative_tickers >= 1:
+            if secondary_tickers >= 1:
                 # set randomness
-                n_assets = len(comparative_tickers.split(",")) + 1
+                n_assets = len(secondary_tickers.split(",")) + 1
                 n_portfolios = 1000
                         
                 # get daily returns
@@ -196,80 +181,14 @@ with tab3:
         except Exception as e:
             st.write("Error plotting efficient frontier ::" + str(e))
 
+### tab 4: AI Analysis
 with tab4:
     try:
         st.title("Analysis")
 
-        st, st = st.columns((1, 2))
-
-        with st:
-            # display finance info
-            st.subheader("Summary:")
-            
-            # read stock price data from csv
-            filename = str(primary_ticker) + '_Price_Data.csv'
-            df = pd.read_csv(filename)
-
-            # get stock price data
-            hist = df[['Date', 'Close']]
-            hist = hist.set_index('Date')
-
-            # display current price
-            st.metric(label="Current Price: ",
-                      value=round(hist['Close'].iloc[-1], 2))
-
-            # display estimated 52 return
-            st.write("Estimated 52 Week Return: " +
-                     str(get_estimated_1y_return(info, primary_ticker)) + "%")
-
-            # display ytd return
-            ytdReturn = get_ytd_return(primary_ticker, start_of_year)
-            st.metric(label="Estimated YTD Return", value=ytdReturn,
-                      delta=ytdReturn)
-
-            # list of indicators I don't want to display
-            not_displayed = ['longName', 'sector', 'category', 'currentPrice', 'regularMarketPrice',
-                             'industry', 'longBusinessSummary', 'symbol', 'shortName',
-                             'underlyingSymbol', 'underlyingExchangeSymbol', 'headquartersCity',
-                             'headquartersCountry', 'quoteType', 'city', 'state',
-                             'country', 'website', 'address1', 'address2', 'zip', 'phone',
-                             'numberOfEmployees', 'fullTimeEmployees', 'averageDailyVolume10Day',
-                             'averageVolume10days', 'boardRiskGovernanceExperience', 'boardRisk',
-                             'currency', 'firstTradeDateEpochUtc', 'gmtOffSetMilliseconds',
-                             'governanceEpochDate', 'impliedSharesOutstanding', 'zip', 'uuid',
-                             'maxAge', 'logo_url', 'compensationAsOfEpochDate', 'compensationRisk',
-                             'compensationRank', 'compensationScore', 'compensationDescription',
-                             'compensationCalendarDate', 'compensationPeerGroup', 'compensationPeerGroupDescription',
-                             'messageBoardId', 'maxAge', 'logo_url', 'compensationAsOfEpochDate',
-                             'navPrice', 'priceHint', 'shortName', 'exchangeTimezoneName', 'trailingPegRatio',
-                             'twoHundredDayAverage', 'twoHundredDayAverageChange', 'twoHundredDayAverageChangePercent',
-                             'yield', 'ytdReturn', 'trailingAnnualDividendRate', 'trailingAnnualDividendYield',
-                             'SandP52WeekChange', 'regularMarketDayHigh', 'regularMarketDayLow', 'regularMarketOpen',
-                             'regularMarketPreviousClose', 'regularMarketVolume', 'regularMarketChange',
-                             'timeZoneShortName', 'exchangeTimezoneShortName', 'gmtOffSetMilliseconds', 'maxAge',
-                             'fundFamily', 'fundInceptionDate', 'open', 'previousClose', 'regularMarketChangePercent',
-                             'auditRisk', 'boardRisk', 'compensationRisk', 'shareHolderRightsRisk', 'overallRisk',
-                             'companyOfficers', 'maxAge', 'logo_url', 'compensationAsOfEpochDate', 'compensationRisk',
-                             'dateShortInterest', 'daysToCover', 'daylow', 'dayhigh', 'exDividendDate',
-                             'earningsquarterlyGrowth', 'enterpriseToEbitda', 'enterpriseToRevenue', 'enterpriseValue',
-                             'financialCurrency', 'floatShares', 'freeCashflow', 'fundFamily', 'fundInceptionDate',
-                             'industrydisplayName', 'lastfiscalYearEnd', 'numberOfAnalystOpinions', 'netIncomeToCommon',
-                             'nextFiscalYearEnd', 'payoutratio', 'pricetosalestrailing12months', 'sectordisplayname',
-                             'sectorkey', 'shareholderRightsRisk', 'sharesshort', 'sharesshortpriormonth',
-                             'shortPercentFloat', ' shortPercentOutstanding', 'sharesoutstanding', 'sharespercentsharesout',
-                             'targetHighPrice', 'targetLowPrice', 'targetMeanPrice', 'targetMedianPrice', 'totalAssets',
-                             'timeZoneShortName', 'exchangeTimezoneShortName', 'gmtOffSetMilliseconds', 'maxAge'
-                             ]
-
-            indicators = [
-                indicator for indicator in info if indicator not in not_displayed]
-            sorted_indicators = sorted(indicators)
-
-            for indicator in sorted_indicators:
-                st.write(indicator + ": " + str(info[indicator]))
-
-        with st:
-
+        filename = str(primary_ticker) + '_Price_Data.csv'
+        
+        with st.container():
             st.subheader("Analysis:")
 
             # plot price stock data
@@ -277,8 +196,8 @@ with tab4:
                 filename), use_container_width=True)
 
             # analyze stock data
-            # col2.write(analyze_stock(filename, ticker))
-            st.write("Placeholder text for stock analysis")
+            col2.write(google_summary(filename, ticker))
+            # st.write("Placeholder text for stock analysis")
             time.sleep(5)
 
             # get articles
@@ -287,12 +206,10 @@ with tab4:
             # display articles
             st.write("Articles:")
 
-            time.sleep(5)
-
             # display articles
-            # for article in articles[:5]:
-            #     col2.write(article['title'])
-            #     col2.write(article['url'])
+            for article in articles[:5]:
+                col2.write(article['title'])
+                col2.write(article['url'])
             #     col2.markdown(summarize_article(article))
             #     time.sleep(5)
             st.write("Placeholder text for article analysis")

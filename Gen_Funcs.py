@@ -6,6 +6,9 @@ import plotly.graph_objects as go
 import google.generativeai as gai
 import sys
 import linecache
+import pandas as pd
+from datetime import datetime, timedelta
+import wikipedia
 
 # error message
 def error_message(message):
@@ -56,5 +59,54 @@ def display_stock_info(info, hist):
     st.write("Recent Close Price:", hist['Close'][-1])
     st.write("Recent Daily Volume:", hist['Volume'][-1])
 
+def get_long_info(info, hist, primary_ticker, start_of_year):
+        # display finance info
+        st.subheader("Summary:")
+        
+        # read stock price data from csv
+        filename = str(primary_ticker) + '_Price_Data.csv'
+        df = pd.read_csv(filename)
 
 
+        # display current price
+        st.metric(label="Current Price: ",
+                    value=round(hist['Close'].iloc[-1], 2))
+        
+        # display latest volume
+        st.metric(label="Latest Volume: ",
+                    value=hist['Volume'].iloc[-1])
+
+        # display high price
+        st.metric(label="High Price: ",
+                    value=round(df['High'].max(), 2))
+        
+        # display low price
+        st.metric(label="Low Price: ",
+                    value=round(df['Low'].min(), 2))
+        
+        # display average price
+        st.metric(label="Average Price: ",
+                    value=round(df['Close'].mean(), 2))
+        
+        # average volume
+        st.metric(label="Average Volume: ",
+                    value=round(df['Volume'].mean(), 2))
+        
+        # 
+
+def get_wiki_info(query):
+    results = wikipedia.search(query)
+    if results != None:
+        first_result = results[0]  # get the first result
+        try:
+            # get the page of the first result
+            page = wikipedia.page(first_result)
+            url = page.url  # get the url of the page
+            return url, page  # return the content of the page
+        except wikipedia.DisambiguationError as e:
+            print(
+                f"Disambiguation page found, consider choosing a specific title from: {e.options}")
+        except wikipedia.PageError:
+            print("Page not found on Wikipedia")
+    else:
+        return None  # return None if no results found

@@ -72,7 +72,7 @@ def main():
         doc.add_heading('Stock Analysis', 1)
         # doc.add_paragraph(get_stock_indicators(
         #     ticker_symbol, start_date, end_date))
-        doc.add_paragraph(stock_response(
+        doc.add_paragraph(google_summary(
             ticker_symbol, start_date, end_date))
 
         # plot stock data

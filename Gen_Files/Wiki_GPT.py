@@ -5,24 +5,11 @@ from Gen_Files.GetArticles import *
 import os
 from dotenv import load_dotenv
 import yfinance as yf
+import google.generativeai as gai
 
 
-def get_wiki_info(query):
-    results = wikipedia.search(query)
-    if results != None:
-        first_result = results[0]  # get the first result
-        try:
-            # get the page of the first result
-            page = wikipedia.page(first_result)
-            url = page.url  # get the url of the page
-            return url  # return the content of the page
-        except wikipedia.DisambiguationError as e:
-            print(
-                f"Disambiguation page found, consider choosing a specific title from: {e.options}")
-        except wikipedia.PageError:
-            print("Page not found on Wikipedia")
-    else:
-        return None  # return None if no results found
+
+
 
 def summarize_article(url):
     # Initialize a new chat model

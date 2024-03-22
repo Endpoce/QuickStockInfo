@@ -11,16 +11,13 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import google.generativeai as gai
 import streamlit as st
+import vertexai
+from vertexai.generative_models import GenerativeModel, Part
 
 load_dotenv()
 
 # get stock info and feed to it to google ai, get response
-def stock_response(filename, ticker):
-
-    # Configure the Generative AI model
-    
-
-
+def google_summary(filename, ticker):
 
     # read and Load the CSV data into a DataFrame
     df = pd.read_csv(filename)
@@ -100,9 +97,26 @@ def stock_response(filename, ticker):
     # Construct the ChatGPT prompt
     prompt = f"{summary} What could these figures suggest about the stock's performance and potential future trends?"
 
-    # Use the google AI model to generate a response
+    # load the model
+    # Initialize Vertex AI
+    vertexai.init(project=project_id, location=location)
+    # Load the model
+    multimodal_model = GenerativeModel("gemini-1.0-pro-vision")
+    # Query the model
+    response = multimodal_model.generate_content(
+        [
+            # Add an example image
+            Part.from_uri(
+                "gs://generativeai-downloads/images/scones.jpg", mime_type="image/jpeg"
+            ),
+            # Add an example query
+            "what is shown in this image?",
+        ]
+    )
+    print(response)
+    return response.text
 
-# 
+# plot from csv
 def plot_stock_with_moving_averages_from_csv(filename, short_window=15, long_window=100):
     # Read data from CSV file
     df = pd.read_csv(filename, parse_dates=['Date'], index_col='Date')
