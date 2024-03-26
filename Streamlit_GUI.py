@@ -150,15 +150,19 @@ with tab3:
     try:
         # get stock data for the input tickers
         tickers = [primary_ticker] + secondary_tickers.split(",")
-        hist = get_stock_data(tickers, start_date, end_date)
 
-        # calculate the covariance matrix
-        cov_matrix = get_mean_returns_and_covariance(hist)
+        # get stock data for the input tickers
+        for ticker in tickers:
+            # get stock data
+            stock_data = yf.download(ticker, start=start_date, end=end_date)
+            stock_data.to_csv(str(ticker) + '_Price_Data.csv')
         
         # display the efficient frontier
-        st.plotly_chart(get_efficient_frontier(10000, hist, cov_matrix))
+        st.plotly_chart(get_efficient_frontier(10000, hist))
 
-
+        # delete the stock data files
+        for ticker in tickers:
+            os.remove(str(ticker) + '_Price_Data.csv')
 
     
     except Exception as e:
