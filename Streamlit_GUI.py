@@ -70,43 +70,42 @@ if fetch_button or primary_ticker != "":
 ### tab 1: Info
 with tab1:
 
+        if fetch_button or primary_ticker != "":    
 
-
-
-        # set container title
-        st.subheader(info['longName'] + " (" + primary_ticker + ")")
-        
-        try:
-            # plot price stock data                
-            plot_stock_with_interactive_chart(primary_ticker, hist)
-
-        except Exception as e:
-            error_message(e)
-        
-        # Columns
-        col1, col2 = st.columns((1, 1))
-        
-        with col1:
+            # set container title
+            st.subheader(info['longName'] + " (" + primary_ticker + ")")
+            
             try:
-                # display company info
-                st.write("Company Info:")
-                display_stock_info(info, hist)
-                
+                # plot price stock data                
+                plot_stock_with_interactive_chart(primary_ticker, hist)
 
             except Exception as e:
                 error_message(e)
+            
+            # Columns
+            col1, col2 = st.columns((1, 1))
+            
+            with col1:
+                try:
+                    # display company info
+                    st.write("Company Info:")
+                    display_stock_info(info, hist)
+                    
+
+                except Exception as e:
+                    error_message(e)
 
 
 
-        with col2:
-            try:
-                # display wiki info
-                st.write("Wiki Info:")
-                wiki_info = get_wiki_info(primary_ticker)
-                st.markdown(wiki_info)
+            with col2:
+                try:
+                    # display wiki info
+                    st.write("Wiki Info:")
+                    wiki_info = get_wiki_info(primary_ticker)
+                    st.markdown(wiki_info)
 
-            except Exception as e:
-                st.write("Error displaying wiki info :: " + error_message(e))
+                except Exception as e:
+                    st.write("Error displaying wiki info :: " + error_message(e))
 
 ### tab 2: Investors
 with tab2:
