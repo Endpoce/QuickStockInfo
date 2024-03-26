@@ -145,12 +145,20 @@ with tab3:
         # get stock data for the input tickers
         tickers = [primary_ticker] + portfolio_tickers.split(",")
 
+        # create a dict to store stock data
+        stock_data = {}
 
         # get stock data
-        stock_data = yf.download(tickers, start=start_date, end=end_date)
-        stock_data = stock_data['Adj Close']
+        for ticker in tickers:
+            stock_data = yf.download(ticker, start_date, end_date)
+            stock_data[ticker] = stock_data
+        
+        stock_data = pd.DataFrame(stock_data)
 
+        # display stock data
         print(stock_data)
+
+
 
         
         # display the efficient frontier
