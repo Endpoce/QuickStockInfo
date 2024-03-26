@@ -154,6 +154,8 @@ with tab3:
         stock_data = yf.download(tickers, start=start_date, end=end_date)
         stock_data = stock_data['Adj Close']
 
+        print(stock_data)
+
         
         # display the efficient frontier
         st.plotly_chart(get_efficient_frontier(10000, stock_data))
