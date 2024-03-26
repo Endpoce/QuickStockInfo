@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 import wikipedia
 import dotenv
 import numpy as np
+import matplotlib.pyplot as plt
 
 # set env vars
 dotenv.load_dotenv()
@@ -156,8 +157,15 @@ def get_cov_matrix(hist):
     
     return cov_matrix
 
-def get_efficient_frontier(num_portfolios, hist, cov_matrix):
-    
+def get_efficient_frontier(num_portfolios, hist):
+
+    # process historical data
+    data = {}
+
+    # Calculate expected returns and covariance matrix
+    expected_returns = get_expected_returns(hist)
+    cov_matrix = get_cov_matrix(hist)
+
     # Generate random portfolios
     results = np.zeros((3, num_portfolios))
     weights = np.zeros((len(get_expected_returns(hist)), num_portfolios))
@@ -167,7 +175,7 @@ def get_efficient_frontier(num_portfolios, hist, cov_matrix):
         w /= np.sum(w)
         
         # Calculate portfolio statistics
-        portfolio_return = np.dot(w, get_expected_returns(hist))
+        portfolio_return = np.dot(w, expected_returns)
         portfolio_std_dev = np.sqrt(np.dot(w.T, np.dot(cov_matrix, w)))
         portfolio_sharpe_ratio = portfolio_return / portfolio_std_dev
         
@@ -189,4 +197,5 @@ def get_efficient_frontier(num_portfolios, hist, cov_matrix):
     ax.set_title('Efficient Frontier')
     ax.set_xlabel('Standard Deviation')
     ax.set_ylabel('Return')
-    st.pyplot(fig)
+    
+    return fig
