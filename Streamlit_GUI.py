@@ -153,10 +153,8 @@ with tab4:
         error_message(e)
 
     try:
-            st.subheader("Analysis:")
-
-            # analyze stock data
-            st.write(google_summary(ticker, hist))
+        # analyze stock data
+        st.write(google_summary(ticker, hist))
     
     except Exception as e:
         error_message(e)
