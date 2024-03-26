@@ -174,9 +174,10 @@ def get_efficient_frontier(num_portfolios, hist):
     # Set the number of combinations for imaginary portfolios
     num_portfolios = num_portfolios
 
+    # set random seed for reproducibility
+    np.random.seed(101)
 
-
-    # Populate the empty lists with each portfolios returns, risk and weights
+    # populate the empty dicts with each portfolio's returns, volatility and weights
     for single_portfolio in range(num_portfolios):
         weights = np.random.random(num_assets)
         weights /= np.sum(weights)
@@ -186,9 +187,9 @@ def get_efficient_frontier(num_portfolios, hist):
         port_volatility[single_portfolio] = volatility
         stock_weights[single_portfolio] = weights
     
-    # Create a dictionary for returns, volatility and weights
+    # Create a dictionary to store the returns, volatility and weights of each portfolio
     portfolio = {'Returns': port_returns, 'Volatility': port_volatility}
-    
+
     # Extend original dictionary to accomodate each ticker and weight in the portfolio
     for counter, symbol in enumerate(hist.columns):
         portfolio[symbol + ' Weight'] = [weight[counter] for weight in stock_weights.values()]
