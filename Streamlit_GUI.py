@@ -158,10 +158,6 @@ with tab3:
         # display the efficient frontier
         st.plotly_chart(get_efficient_frontier(10000, stock_data))
 
-        # delete the stock data files
-        for ticker in tickers:
-            os.remove(str(ticker) + '_Price_Data.csv')
-
     
     except Exception as e:
         error_message(e)
