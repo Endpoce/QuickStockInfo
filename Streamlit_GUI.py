@@ -11,7 +11,6 @@ import os
 from Gen_Files.Wiki_GPT import *
 from Gen_Files.GetArticles import *
 from Gen_Files.Stock_Analyzer import *
-from Gen_Files.Efficient_Frontier import *
 import streamlit as st
 from Gen_Files.Gen_Funcs import *
 import google.generativeai as gai
@@ -104,8 +103,7 @@ with tab1:
                     st.markdown(wiki_info)
 
                 except Exception as e:
-                    st.write("Error displaying wiki info :: " + error_message(e))
-
+                    error_message(e)
 ### tab 2: Investors
 with tab2:
     try:
