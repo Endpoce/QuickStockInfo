@@ -151,8 +151,8 @@ with tab3:
         # get stock data
         for ticker in tickers:
             stock_data = yf.download(ticker, start_date, end_date)
-            st.write(stock_data)
-            stock_data[ticker] = stock_data
+            st.write(stock_data.type())
+            stock_data[ticker] = stock_data["Close"]
         
         stock_data = pd.DataFrame(stock_data)
 
