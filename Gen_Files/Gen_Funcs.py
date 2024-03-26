@@ -159,20 +159,16 @@ def get_efficient_frontier(num_portfolios, hist):
     stock_weights = {}
 
     # Calculate daily returns of each 'close' column in the DataFrame
-    for column in hist.columns:
-        hist[column] = hist[column].pct_change()
+    daily_returns = hist.pct_change().dropna()
 
     # Calculate expected returns
-    expected_returns = hist.mean()
+    expected_returns = daily_returns.mean()
 
     # Calculate the covariance matrix
-    cov_matrix = hist.cov()
+    cov_matrix = daily_returns.cov()
 
-    # set number of assets
+    # set the number of assets
     num_assets = len(hist.columns)
-
-    # Set the number of combinations for imaginary portfolios
-    num_portfolios = num_portfolios
 
     # set random seed for reproducibility
     np.random.seed(101)
