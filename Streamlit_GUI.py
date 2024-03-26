@@ -52,24 +52,26 @@ with st.sidebar:
     ## fetch button
     fetch_button = st.sidebar.button("Get Stock Data")
 
+    # if button is pressed
+if fetch_button or primary_ticker != "":
+    try:
+        # display company info
+        ticker, info, hist, symbol = get_stock_data(primary_ticker, start_date, end_date)
+
+        # get ytd data
+        ytd_data = ticker.history(period="ytd")
+
+        # get daily returns
+        # daily_returns = get_daily_returns(symbol, start_date, end_date)
+    
+    except Exception as e:
+        st.error("Error fetching stock data:: " + str(e))
+
 ### tab 1: Info
 with tab1:
 
 
-    # if button is pressed
-    if fetch_button or primary_ticker != "":
-        try:
-            # display company info
-            ticker, info, hist, symbol = get_stock_data(primary_ticker, start_date, end_date)
 
-            # get ytd data
-            ytd_data = ticker.history(period="ytd")
-
-            # get daily returns
-            # daily_returns = get_daily_returns(symbol, start_date, end_date)
-        
-        except Exception as e:
-            st.error("Error fetching stock data:: " + str(e))
 
         # set container title
         st.subheader(info['longName'] + " (" + primary_ticker + ")")
@@ -201,22 +203,22 @@ with tab4:
             st.subheader("Analysis:")
 
             # analyze stock data
-            col2.write(google_summary(filename, ticker))
+            col2.write(google_summary(ticker, hist))
     
     except Exception as e:
         error_message(e)
     
     try:
             # get articles
-            articles = get_MW_Articles(primary_ticker, 5)
+            # articles = get_MW_Articles(primary_ticker, 5)
 
-            # display articles
-            st.write("Articles:")
+            # # display articles
+            # st.write("Articles:")
 
-            # display articles
-            for article in articles[:5]:
-                col2.write(article['title'])
-                col2.write(article['url'])
+            # # display articles
+            # for article in articles[:5]:
+            #     col2.write(article['title'])
+            #     col2.write(article['url'])
 
             st.write("Placeholder text for article analysis")
     except Exception as e:
