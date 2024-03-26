@@ -13,7 +13,7 @@ from Gen_Files.GetArticles import *
 from Gen_Files.Stock_Analyzer import *
 from Gen_Files.Efficient_Frontier import *
 import streamlit as st
-from Gen_Funcs import *
+from Gen_Files.Gen_Funcs import *
 import google.generativeai as gai
 import vertexai
 from vertexai.generative_models import GenerativeModel, Part
@@ -41,8 +41,6 @@ with st.sidebar:
 
     # get user input for primary ticker
     primary_ticker = st.sidebar.text_input("Ticker Symbol:").upper()
-
-    secondary_tickers = st.sidebar.text_input("Comparative Tickers (comma separated):").upper()
 
     # start and end date, start of year
     start_date = st.sidebar.date_input("Start date", value=pd.to_datetime("2020-01-01"))
@@ -139,7 +137,37 @@ with tab2:
 
 ### tab 3: Portfolio Analysis
 with tab3:
+    """
+    This tab will display the efficient frontier for the selected stock plus the portfolio of the input stocks. First, it will download the stock data for the input stocks,
+    then it will calculate the efficient frontier and display it.
+    """
+
     st.subheader("Efficient Frontier")
+
+    secondary_tickers = st.text_input("Comparative Tickers (comma separated):").upper()
+
+    # get stock data for the input tickers
+    try:
+        # get stock data for the input tickers
+        tickers = [primary_ticker] + secondary_tickers.split(",")
+        hist = get_stock_data(tickers, start_date, end_date)
+
+        # calculate the covariance matrix
+        cov_matrix = get_mean_returns_and_covariance(hist)
+        
+        # display the efficient frontier
+        st.plotly_chart(get_efficient_frontier(10000, hist, cov_matrix))
+
+
+
+    
+    except Exception as e:
+        error_message(e)
+
+
+
+
+
 
 ### tab 4: AI Analysis
 with tab4:
