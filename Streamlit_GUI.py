@@ -143,48 +143,6 @@ with tab3:
 
     st, st = st.columns((2, 1))
 
-    with st.container():
-        try:
-            if secondary_tickers == 0:
-                # get ytd returns
-                ytd_returns = ytd_data.pct_change()
-
-                # get mean returns and covariance
-                mus, cov = get_mean_returns_and_covariance(daily_returns)
-
-                # set randomness
-                n_assets, n_portfolios = set_randomness(1, 1000)
-
-                # get random portfolios
-                mean_variance_pairs = get_random_portfolios(
-                    n_assets, n_portfolios, daily_returns, mus, cov)
-
-                # get efficient frontier
-                efficient_frontier = get_efficient_frontier(
-                    n_assets, n_portfolios, mean_variance_pairs, mus, cov)
-            
-            # Define comparative_tickers or remove the if statement if not needed
-
-            # Check if comparative_tickers is not empty
-            if secondary_tickers >= 1:
-                # set randomness
-                n_assets = len(secondary_tickers.split(",")) + 1
-                n_portfolios = 1000
-                        
-                # get daily returns
-                daily_returns = get_daily_returns(primary_ticker, start_date, end_date)
-
-                # get random portfolios
-                mean_variance_pairs = get_random_portfolios(
-                    n_assets, n_portfolios, daily_returns, mus, cov)
-
-                # plot efficient frontier
-                st.plotly_chart(plot_efficient_frontier(
-                    efficient_frontier), use_container_width=True)
-            
-        except Exception as e:
-            st.write("Error plotting efficient frontier ::" + str(e))
-
 ### tab 4: AI Analysis
 with tab4:
     try:        
