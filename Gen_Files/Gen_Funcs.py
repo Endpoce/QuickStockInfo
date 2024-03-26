@@ -168,7 +168,7 @@ def get_efficient_frontier(num_portfolios, hist):
 
     # Generate random portfolios
     results = np.zeros((3, num_portfolios))
-    weights = np.zeros((len(get_expected_returns(hist)), num_portfolios))
+    weights = np.zeros((len(expected_returns), num_portfolios))
     for i in range(num_portfolios):
         # Generate random weights
         w = np.random.random(len(get_expected_returns(hist)))
