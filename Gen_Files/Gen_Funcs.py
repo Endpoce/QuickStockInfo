@@ -10,6 +10,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 import wikipedia
 import dotenv
+import numpy as np
 
 # set env vars
 dotenv.load_dotenv()
@@ -102,6 +103,7 @@ def get_long_info(info, hist, primary_ticker, start_of_year):
         # 
 
 def get_wiki_info(query):
+
     results = wikipedia.search(query)
     if results != None:
         first_result = results[0]  # get the first result
@@ -117,3 +119,74 @@ def get_wiki_info(query):
             print("Page not found on Wikipedia")
     else:
         return None  # return None if no results found
+    
+def get_expected_returns(hist):
+    """
+    Calculate the expected returns from historical data of stocks.
+    
+    Parameters:
+        historical_data (DataFrame): Historical prices of stocks where each column represents a stock.
+        
+    Returns:
+        expected_returns (array): Array of expected returns for each stock.
+    """
+    # Calculate daily returns
+    daily_returns = hist.pct_change().dropna()
+    
+    # Calculate mean returns
+    mean_returns = daily_returns.mean()
+    
+    return mean_returns
+
+def get_cov_matrix(hist):
+    """
+    Calculate the covariance matrix from historical data of stocks.
+    
+    Parameters:
+        historical_data (DataFrame): Historical prices of stocks where each column represents a stock.
+        
+    Returns:
+        cov_matrix (array): Covariance matrix of the stocks.
+    """
+    # Calculate daily returns
+    daily_returns = hist.pct_change().dropna()
+    
+    # Calculate covariance matrix
+    cov_matrix = daily_returns.cov()
+    
+    return cov_matrix
+
+def get_efficient_frontier(num_portfolios, hist, cov_matrix):
+    
+    # Generate random portfolios
+    results = np.zeros((3, num_portfolios))
+    weights = np.zeros((len(get_expected_returns(hist)), num_portfolios))
+    for i in range(num_portfolios):
+        # Generate random weights
+        w = np.random.random(len(get_expected_returns(hist)))
+        w /= np.sum(w)
+        
+        # Calculate portfolio statistics
+        portfolio_return = np.dot(w, get_expected_returns(hist))
+        portfolio_std_dev = np.sqrt(np.dot(w.T, np.dot(cov_matrix, w)))
+        portfolio_sharpe_ratio = portfolio_return / portfolio_std_dev
+        
+        # Save results
+        results[0,i] = portfolio_return
+        results[1,i] = portfolio_std_dev
+        results[2,i] = portfolio_sharpe_ratio
+        weights[:,i] = w
+    
+    # Calculate portfolios on the efficient frontier
+    max_sharpe_idx = np.argmax(results[2])
+    min_vol_idx = np.argmin(results[1])
+
+    # Plot the efficient frontier
+    fig, ax = plt.subplots()
+    ax.scatter(results[1,:], results[0,:], c=results[2,:], cmap='viridis', marker='o')
+    ax.scatter(results[1,max_sharpe_idx], results[0,max_sharpe_idx], c='red', marker='*', s=100)
+    ax.scatter(results[1,min_vol_idx], results[0,min_vol_idx], c='blue', marker='*', s=100)
+    ax.set_title('Efficient Frontier')
+    ax.set_xlabel('Standard Deviation')
+    ax.set_ylabel('Return')
+    st.pyplot(fig)
