@@ -175,7 +175,7 @@ def get_efficient_frontier(num_portfolios, stock_data):
     
     # calculate expected returns
     for stock in stock_data.keys():
-        stock_data[stock + " Daily Return"] = stock_data[stock]["Close"].pct_change()
+        stock_data[stock + " Daily Return"] = stock_data[stock]["Adj Close"].pct_change()
         stock_data[stock + " Expected Return"] = stock_data[stock + " Daily Return"].mean()
     
     # calculate covariance matrix
