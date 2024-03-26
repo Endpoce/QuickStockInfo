@@ -142,20 +142,21 @@ with tab3:
 
     st.subheader("Efficient Frontier")
 
-    secondary_tickers = st.text_input("Comparative Tickers (comma separated):").upper()
+    portfolio_tickers = st.text_input("Comparative Tickers (comma separated):").upper()
 
     # get stock data for the input tickers
     try:
         # get stock data for the input tickers
-        tickers = [primary_ticker] + secondary_tickers.split(",")
+        tickers = [primary_ticker] + portfolio_tickers.split(",")
 
 
         # get stock data
         stock_data = yf.download(tickers, start=start_date, end=end_date)
+        stock_data = stock_data['Adj Close']
 
         
         # display the efficient frontier
-        st.plotly_chart(get_efficient_frontier(10000, hist))
+        st.plotly_chart(get_efficient_frontier(10000, stock_data))
 
         # delete the stock data files
         for ticker in tickers:
