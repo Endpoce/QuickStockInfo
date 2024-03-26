@@ -153,14 +153,20 @@ def get_efficient_frontier(num_portfolios, hist):
 
     print(hist)
 
+    # Create empty dicts to store returns for each, volatility and weights of the imaginary portfolios
+    port_returns = {}
+    port_volatility = {}
+    stock_weights = {}
+
     # Calculate daily returns of each 'close' column in the DataFrame
-    daily_returns = hist.pct_change().dropna()
+    for column in hist.columns:
+        hist[column] = hist[column].pct_change()
 
     # Calculate expected returns
-    expected_returns = daily_returns.mean()
+    expected_returns = hist.mean()
 
     # Calculate the covariance matrix
-    cov_matrix = daily_returns.cov()
+    cov_matrix = hist.cov()
 
     # set number of assets
     num_assets = len(hist.columns)
@@ -168,29 +174,40 @@ def get_efficient_frontier(num_portfolios, hist):
     # Set the number of combinations for imaginary portfolios
     num_portfolios = num_portfolios
 
+
+
     # Populate the empty lists with each portfolios returns, risk and weights
     for single_portfolio in range(num_portfolios):
         weights = np.random.random(num_assets)
         weights /= np.sum(weights)
-        returns = np.dot(weights, get_expected_returns(hist)) * 252
-        volatility = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights))) * np.sqrt(252)
-        port_returns.append(returns)
-        port_volatility.append(volatility)
-        stock_weights.append(weights)
+        returns = np.dot(weights, expected_returns)
+        volatility = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
+        port_returns[single_portfolio] = returns
+        port_volatility[single_portfolio] = volatility
+        stock_weights[single_portfolio] = weights
     
     # Create a dictionary for returns, volatility and weights
-    portfolio = {'Returns': port_returns,
-                 'Volatility': port_volatility}
+    portfolio = {'Returns': port_returns, 'Volatility': port_volatility}
     
     # Extend original dictionary to accomodate each ticker and weight in the portfolio
-    for counter,symbol in enumerate(hist.columns):
-        portfolio[symbol+' Weight'] = [weight[counter] for weight in stock_weights]
+    for counter, symbol in enumerate(hist.columns):
+        portfolio[symbol + ' Weight'] = [weight[counter] for weight in stock_weights.values()]
 
     # Create a DataFrame from the extended dictionary
     df = pd.DataFrame(portfolio)
 
     # Create scatter plot coloured by Sharpe Ratio
-    fig = go.Figure(data=[go.Scatter(x=df['Volatility'], y=df['Returns'], mode='markers', marker=dict(color=df['Returns'], colorscale='Viridis', showscale=True))])
+    fig = go.Figure(data=[go.Scatter(
+        x=df['Volatility'],
+        y=df['Returns'],
+        mode='markers',
+        marker=dict(
+            size=10,
+            color=df['Returns'],  # Set color equal to a variable
+            colorscale='Viridis',  # One of plotly colorscales
+            showscale=True
+        )
+    )])
 
     return fig
 
