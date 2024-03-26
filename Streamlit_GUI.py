@@ -186,22 +186,28 @@ with tab3:
 ### tab 4: AI Analysis
 with tab4:
     try:
-        st.title("Analysis")
+        st.header("AI Analysis: " + primary_ticker)
 
         filename = str(primary_ticker) + '_Price_Data.csv'
         
         with st.container():
-            st.subheader("Analysis:")
-
             # plot price stock data
             st.plotly_chart(plot_stock_with_interactive_chart(
                 filename), use_container_width=True)
+        
+    except Exception as e:
+        error_message(e)
+
+    try:
+            st.subheader("Analysis:")
 
             # analyze stock data
             col2.write(google_summary(filename, ticker))
-            # st.write("Placeholder text for stock analysis")
-            time.sleep(5)
-
+    
+    except Exception as e:
+        error_message(e)
+    
+    try:
             # get articles
             articles = get_MW_Articles(primary_ticker, 5)
 
@@ -212,8 +218,7 @@ with tab4:
             for article in articles[:5]:
                 col2.write(article['title'])
                 col2.write(article['url'])
-            #     col2.markdown(summarize_article(article))
-            #     time.sleep(5)
+
             st.write("Placeholder text for article analysis")
     except Exception as e:
         st.write("Error: Cant find GPT-4 analysis")
