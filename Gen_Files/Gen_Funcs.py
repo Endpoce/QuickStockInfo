@@ -152,64 +152,58 @@ def get_cov_matrix(hist):
 
 def get_efficient_frontier(num_portfolios, hist):
 
-    # Create empty dicts to store returns for each, volatility and weights of the imaginary portfolios
-    port_returns = {}
-    port_volatility = {}
-    stock_weights = {}
+    ### Efficient Frontier
+    # Calculate expected returns and covariance matrix
+    expected_returns = get_expected_returns(hist)
+    cov_matrix = get_cov_matrix(hist)
 
-    # Calculate daily returns of each 'close' column in the DataFrame
-    daily_returns = hist.pct_change().dropna()
+    # Number of assets
+    num_assets = len(expected_returns)
 
-    # Calculate expected returns
-    expected_returns = daily_returns.mean()
+    # Empty lists to store returns, volatility and weights of the portfolios
+    portfolio_returns = []
+    portfolio_volatilities = []
+    portfolio_weights = []
 
-    # Calculate the covariance matrix
-    cov_matrix = daily_returns.cov()
-
-    # set the number of assets
-    num_assets = len(hist.columns)
-
-    # set random seed for reproducibility
-    np.random.seed(101)
-
-    # populate the empty dicts with each portfolio's returns, volatility and weights
-    for single_portfolio in range(num_portfolios):
+    # Loop to generate portfolios
+    for _ in range(num_portfolios):
+        # Generate random weights
         weights = np.random.random(num_assets)
         weights /= np.sum(weights)
-        returns = np.dot(weights, expected_returns)
-        volatility = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
-        port_returns[single_portfolio] = returns
-        port_volatility[single_portfolio] = volatility
-        stock_weights[single_portfolio] = weights
+
+        # Calculate expected return
+        portfolio_return = np.dot(weights, expected_returns)
+
+        # Calculate expected volatility
+        portfolio_volatility = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
+
+        # Append to the lists
+        portfolio_returns.append(portfolio_return)
+        portfolio_volatilities.append(portfolio_volatility)
+        portfolio_weights.append(weights)
     
-    # Create a dictionary to store the returns, volatility and weights of each portfolio
-    portfolio = {'Returns': port_returns, 'Volatility': port_volatility}
+    # Convert the lists to NumPy arrays
+    portfolio_returns = np.array(portfolio_returns)
+    portfolio_volatilities = np.array(portfolio_volatilities)
+    portfolio_weights = np.array(portfolio_weights)
 
-    # Extend original dictionary to accomodate each ticker and weight in the portfolio
-    for counter, symbol in enumerate(hist.columns):
-        portfolio[symbol + ' Weight'] = [weight[counter] for weight in stock_weights.values()]
+    # Create a dictionary to store the data
+    data = {
+        "Returns": portfolio_returns,
+        "Volatility": portfolio_volatilities
+    }
 
-    # Create a DataFrame from the extended dictionary
-    df = pd.DataFrame(portfolio)
+    # Add the weights to the dictionary
+    for i, symbol in enumerate(hist.columns):
+        data[symbol] = portfolio_weights[:, i]
+    
+    # Create a DataFrame from the dictionary
+    df = pd.DataFrame(data)
 
-    # Create scatter plot coloured by Sharpe Ratio
-    fig = go.Figure(data=[go.Scatter(
-        x=df['Volatility'],
-        y=df['Returns'],
-        mode='markers',
-        marker=dict(
-            size=10,
-            color=df['Returns'],  # Set color equal to a variable
-            colorscale='Viridis',  # One of plotly colorscales
-            showscale=True
-        )
-    )])
-
-    fig.update_layout(
-        title='Efficient Frontier',
-        xaxis=dict(title='Volatility'),
-        yaxis=dict(title='Returns')
-    )
+    # plot efficient frontier
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=df["Volatility"], y=df["Returns"], mode="markers", marker=dict(size=5)))
+    fig.update_layout(title="Efficient Frontier", xaxis_title="Volatility", yaxis_title="Returns")
 
     return fig
 

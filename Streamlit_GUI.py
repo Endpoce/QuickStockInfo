@@ -135,10 +135,6 @@ with tab2:
 
 ### tab 3: Portfolio Analysis
 with tab3:
-    """
-    This tab will display the efficient frontier for the selected stock plus the portfolio of the input stocks. First, it will download the stock data for the input stocks,
-    then it will calculate the efficient frontier and display it.
-    """
 
     st.subheader("Efficient Frontier")
 
@@ -163,9 +159,6 @@ with tab3:
     
     except Exception as e:
         error_message(e)
-
-
-
 
 
 
