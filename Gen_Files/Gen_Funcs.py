@@ -123,37 +123,35 @@ def get_wiki_info(query):
     
 def get_expected_returns(hist):
 
-    # Calculate daily returns of each 'close' column in the DataFrame
-    daily_returns = hist.pct_change().dropna()
-    
-    # Calculate expected returns
-    expected_returns = daily_returns.mean()
-    
+    # create new column for daily returns for each stock
+    for stock in hist.columns:
+        hist[stock + " Daily Return"] = hist[stock].pct_change()
+
+    # calculate expected returns
+    for stock in hist.columns:
+        hist[stock + " Expected Return"] = hist[stock + " Daily Return"].mean()
+
+    # get expected returns
+    expected_returns = hist[[stock + " Expected Return" for stock in hist.columns]].iloc[-1]
+
     return expected_returns
 
 def get_cov_matrix(hist):
-    """
-    Calculate the covariance matrix from historical data of stocks.
     
-    Parameters:
-        historical_data (DataFrame): Historical prices of stocks where each column represents a stock.
-        
-    Returns:
-        cov_matrix (array): Covariance matrix of the stocks.
-    """
-    # Calculate daily returns
-    daily_returns = hist.pct_change().dropna()
-    
-    # Calculate covariance matrix
-    cov_matrix = daily_returns.cov()
-    
+    # create new column for daily returns for each stock
+    for stock in hist.columns:
+        hist[stock + " Daily Return"] = hist[stock].pct_change()
+
+    # calculate covariance matrix
+    cov_matrix = hist[[stock + " Daily Return" for stock in hist.columns]].cov()
+
     return cov_matrix
 
 
 def get_efficient_frontier(num_portfolios, hist):
 
     ### Efficient Frontier
-    # Calculate expected returns and covariance matrix
+    # Calculate expected returns and covariance matrix for all stocks in historical data
     expected_returns = get_expected_returns(hist)
     cov_matrix = get_cov_matrix(hist)
 
