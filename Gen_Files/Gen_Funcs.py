@@ -151,16 +151,18 @@ def get_cov_matrix(hist):
 
 def get_efficient_frontier(num_portfolios, hist):
 
-    # Calculate daily returns
+    print(hist)
+
+    # Calculate daily returns of each 'close' column in the DataFrame
     daily_returns = hist.pct_change().dropna()
-    cov_matrix = get_cov_matrix(hist)
 
-    # Empty lists to store returns, volatility and weights of imiginary portfolios
-    port_returns = []
-    port_volatility = []
-    stock_weights = []
+    # Calculate expected returns
+    expected_returns = daily_returns.mean()
 
-    # Set the number of assets to equal the number of columns in the historical data
+    # Calculate the covariance matrix
+    cov_matrix = daily_returns.cov()
+
+    # set number of assets
     num_assets = len(hist.columns)
 
     # Set the number of combinations for imaginary portfolios
