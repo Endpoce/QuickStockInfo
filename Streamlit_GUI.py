@@ -149,11 +149,10 @@ with tab3:
         # get stock data for the input tickers
         tickers = [primary_ticker] + secondary_tickers.split(",")
 
-        # get stock data for the input tickers
-        for ticker in tickers:
-            # get stock data
-            stock_data = yf.download(ticker, start=start_date, end=end_date)
-            stock_data.to_csv(str(ticker) + '_Price_Data.csv')
+
+        # get stock data
+        stock_data = yf.download(tickers, start=start_date, end=end_date)
+
         
         # display the efficient frontier
         st.plotly_chart(get_efficient_frontier(10000, hist))

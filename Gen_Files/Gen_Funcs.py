@@ -122,22 +122,14 @@ def get_wiki_info(query):
         return None  # return None if no results found
     
 def get_expected_returns(hist):
-    """
-    Calculate the expected returns from historical data of stocks.
-    
-    Parameters:
-        historical_data (DataFrame): Historical prices of stocks where each column represents a stock.
-        
-    Returns:
-        expected_returns (array): Array of expected returns for each stock.
-    """
-    # Calculate daily returns
+
+    # Calculate daily returns of each 'close' column in the DataFrame
     daily_returns = hist.pct_change().dropna()
     
-    # Calculate mean returns
-    mean_returns = daily_returns.mean()
+    # Calculate expected returns
+    expected_returns = daily_returns.mean()
     
-    return mean_returns
+    return expected_returns
 
 def get_cov_matrix(hist):
     """
@@ -158,9 +150,6 @@ def get_cov_matrix(hist):
     return cov_matrix
 
 def get_efficient_frontier(num_portfolios, hist):
-
-    # process historical data
-    data = {}
 
     # Calculate expected returns and covariance matrix
     expected_returns = get_expected_returns(hist)
