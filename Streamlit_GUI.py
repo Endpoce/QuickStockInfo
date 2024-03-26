@@ -187,14 +187,9 @@ with tab3:
 
 ### tab 4: AI Analysis
 with tab4:
-    try:
-        st.header("AI Analysis: " + primary_ticker)
-
-        filename = str(primary_ticker) + '_Price_Data.csv'
-        
-        with st.container():
-            # plot price stock data                
-            plot_stock_with_interactive_chart(primary_ticker, hist)
+    try:        
+        # plot price stock data                
+        plot_stock_with_interactive_chart(primary_ticker, hist)
         
     except Exception as e:
         error_message(e)
@@ -203,7 +198,7 @@ with tab4:
             st.subheader("Analysis:")
 
             # analyze stock data
-            col2.write(google_summary(ticker, hist))
+            st.write(google_summary(ticker, hist))
     
     except Exception as e:
         error_message(e)
@@ -222,5 +217,4 @@ with tab4:
 
             st.write("Placeholder text for article analysis")
     except Exception as e:
-        st.write("Error: Cant find GPT-4 analysis")
-
+        error_message(e)
