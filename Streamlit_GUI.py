@@ -53,19 +53,19 @@ with st.sidebar:
     fetch_button = st.sidebar.button("Get Stock Data")
 
     # if button is pressed
-if fetch_button or primary_ticker != "":
-    try:
-        # display company info
-        ticker, info, hist, symbol = get_stock_data(primary_ticker, start_date, end_date)
+    if fetch_button or primary_ticker != "":
+        try:
+            # display company info
+            ticker, info, hist, symbol = get_stock_data(primary_ticker, start_date, end_date)
 
-        # get ytd data
-        ytd_data = ticker.history(period="ytd")
+            # get ytd data
+            ytd_data = ticker.history(period="ytd")
 
-        # get daily returns
-        # daily_returns = get_daily_returns(symbol, start_date, end_date)
-    
-    except Exception as e:
-        st.error("Error fetching stock data:: " + str(e))
+            # get daily returns
+            # daily_returns = get_daily_returns(symbol, start_date, end_date)
+        
+        except Exception as e:
+            error_message(e)
 
 ### tab 1: Info
 with tab1:
