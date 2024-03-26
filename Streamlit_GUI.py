@@ -56,6 +56,7 @@ with st.sidebar:
     if fetch_button or primary_ticker != "":
         try:
             # display company info
+            global ticker, info, hist, symbol
             ticker, info, hist, symbol = get_stock_data(primary_ticker, start_date, end_date)
 
             # get ytd data
