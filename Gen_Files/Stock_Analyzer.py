@@ -17,23 +17,17 @@ from vertexai.generative_models import GenerativeModel, Part
 load_dotenv()
 
 # get stock info and feed to it to google ai, get response
-def google_summary(filename, ticker, hist):
-
-    # read and Load the CSV data into a DataFrame
-    df = pd.read_csv(filename)
-
-    # Ensure the data is sorted by date
-    df = df.sort_values('Date')
+def google_summary(ticker, hist):
 
     # Get the latest closing price
-    latest_close = df['Close'].iloc[-1]
+    latest_close = hist['Close'].iloc[-1]
 
     # Get the highest and lowest closing prices
-    high_close = df['Close'].max()
-    low_close = df['Close'].min()
+    high_close = hist['Close'].max()
+    low_close = hist['Close'].min()
 
     # Calculate the average closing price
-    avg_close = df['Close'].mean()
+    avg_close = hist['Close'].mean()
 
     stock_data = {}
 
