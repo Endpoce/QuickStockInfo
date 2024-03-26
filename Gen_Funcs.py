@@ -9,6 +9,13 @@ import linecache
 import pandas as pd
 from datetime import datetime, timedelta
 import wikipedia
+import dotenv
+
+# set env vars
+dotenv.load_dotenv()
+
+# set pandas override
+yf.pdr_override()
 
 # error message
 def error_message(message):

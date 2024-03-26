@@ -191,9 +191,8 @@ with tab4:
         filename = str(primary_ticker) + '_Price_Data.csv'
         
         with st.container():
-            # plot price stock data
-            st.plotly_chart(plot_stock_with_interactive_chart(
-                filename), use_container_width=True)
+            # plot price stock data                
+            plot_stock_with_interactive_chart(primary_ticker, hist)
         
     except Exception as e:
         error_message(e)

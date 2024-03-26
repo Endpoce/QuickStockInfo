@@ -17,7 +17,7 @@ from vertexai.generative_models import GenerativeModel, Part
 load_dotenv()
 
 # get stock info and feed to it to google ai, get response
-def google_summary(filename, ticker):
+def google_summary(filename, ticker, hist):
 
     # read and Load the CSV data into a DataFrame
     df = pd.read_csv(filename)
@@ -40,8 +40,6 @@ def google_summary(filename, ticker):
     # Get basic info
     info = ticker.info
 
-    # Get historical market data
-    hist = ticker.history(period="5d")
 
     # Technical Indicators
     stock_data['P/E Ratio'] = info.get('trailingPE')
@@ -97,24 +95,14 @@ def google_summary(filename, ticker):
     # Construct the ChatGPT prompt
     prompt = f"{summary} What could these figures suggest about the stock's performance and potential future trends?"
 
-    # load the model
-    # Initialize Vertex AI
-    vertexai.init(project=project_id, location=location)
-    # Load the model
-    multimodal_model = GenerativeModel("gemini-1.0-pro-vision")
-    # Query the model
-    response = multimodal_model.generate_content(
-        [
-            # Add an example image
-            Part.from_uri(
-                "gs://generativeai-downloads/images/scones.jpg", mime_type="image/jpeg"
-            ),
-            # Add an example query
-            "what is shown in this image?",
-        ]
-    )
-    print(response)
-    return response.text
+    gai.configure(api_key=os.environ['API_KEY'])
+
+    # Generate a response using the google gemini model
+    model = gai.GenerativeModel('gemini-pro')
+
+    response = model.generate_content(prompt)
+
+    return response
 
 # plot from csv
 def plot_stock_with_moving_averages_from_csv(filename, short_window=15, long_window=100):
