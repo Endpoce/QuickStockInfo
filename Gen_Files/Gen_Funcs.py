@@ -149,9 +149,8 @@ def get_cov_matrix(hist):
     
     return cov_matrix
 
-def get_efficient_frontier(num_portfolios, hist):
 
-    print(hist)
+def get_efficient_frontier(num_portfolios, hist):
 
     # Create empty dicts to store returns for each, volatility and weights of the imaginary portfolios
     port_returns = {}
@@ -205,6 +204,12 @@ def get_efficient_frontier(num_portfolios, hist):
             showscale=True
         )
     )])
+
+    fig.update_layout(
+        title='Efficient Frontier',
+        xaxis=dict(title='Volatility'),
+        yaxis=dict(title='Returns')
+    )
 
     return fig
 
