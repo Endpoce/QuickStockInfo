@@ -96,7 +96,7 @@ def google_summary(ticker, hist):
 
     response = model.generate_content(prompt)
 
-    return response
+    return response.text
 
 # plot from csv
 def plot_stock_with_moving_averages_from_csv(filename, short_window=15, long_window=100):
