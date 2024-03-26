@@ -89,7 +89,7 @@ def google_summary(ticker, hist):
     # Construct the ChatGPT prompt
     prompt = f"{summary} What could these figures suggest about the stock's performance and potential future trends?"
 
-    gai.configure(api_key=os.environ['API_KEY'])
+    gai.configure(api_key=os.environ['google_api_key'])
 
     # Generate a response using the google gemini model
     model = gai.GenerativeModel('gemini-pro')
