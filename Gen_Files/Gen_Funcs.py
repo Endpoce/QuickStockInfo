@@ -127,12 +127,13 @@ def get_efficient_frontier(num_portfolios, stock_data):
     
     # for each stock, calculate and create a column for the expected returns and covariance matrix
     try:
-        # calculate expected returns
-        expected_returns = stock_data.pct_change().mean()
-        
-        # calculate covariance matrix
-        cov_matrix = stock_data.pct_change().cov()
-        
+        # calculate expected returns, ignore the first column
+        for col in stock_data.columns[1:]:
+            stock_data[col + ' Return'] = stock_data[col].pct_change()
+
+            # calculate covariance matrix
+            cov_matrix = stock_data.pct_change().cov()
+
     except Exception as e:
         error_message(e)
 
