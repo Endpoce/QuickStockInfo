@@ -130,7 +130,7 @@ def get_efficient_frontier(num_portfolios, stock_data):
         # calculate expected returns, ignore the first column
         for col in stock_data.columns[1:]:
             stock_data[col + ' Expected Returns'] = stock_data[col].pct_change().mean()
-            expected_returns = stock_data.iloc[:, 1:]
+            expected_returns = stock_data.iloc[1:, 1:]
 
         # calculate covariance matrix
         cov_matrix = stock_data.iloc[:, 1:].pct_change().cov()
