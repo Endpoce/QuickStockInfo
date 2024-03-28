@@ -176,7 +176,7 @@ def get_efficient_frontier(num_portfolios, stock_data):
             all_weights[i, :] = weights
 
             # expected return
-            ret_arr[i] = np.sum((expected_returns * weights) * 252)
+            ret_arr[i] = np.sum((expected_returns[1:,:] * weights) * 252)
 
             # expected volatility
             vol_arr[i] = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)) * 252)
