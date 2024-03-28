@@ -176,6 +176,8 @@ def get_efficient_frontier(num_portfolios, stock_data):
         # create arrays for plotting
         ret_arr = np.array(port_returns)
         vol_arr = np.array(port_volatility)
+
+        results = [ret_arr, vol_arr, sharpe_ratio]
     except Exception as e:
         error_message(e)
 
