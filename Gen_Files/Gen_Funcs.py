@@ -140,92 +140,88 @@ def get_efficient_frontier(num_portfolios, stock_data):
     
     try:
 
+        # set random seed
+        np.random.seed(42)
+
         # set number of portfolios
         num_portfolios = num_portfolios
 
-        # set random seed
-        np.random.seed(101)
-
-        # set array to hold results
+        # create empty arrays to store returns, volatility, and sharpe ratio
         results = np.zeros((3, num_portfolios))
 
-        # set array to hold weights
-        all_weights = np.zeros((num_portfolios, len(stock_data.columns)))
+        # create empty arrays to store weights
+        weights_arr = []
 
-        # set array to hold returns
-        ret_arr = np.zeros(num_portfolios)
+        # create empty arrays to store returns and volatility
+        ret_arr = []
+        vol_arr = []
 
-        # set array to hold volatility
-        vol_arr = np.zeros(num_portfolios)
+        # create empty arrays to store sharpe ratio
+        sharpe_arr = []
 
-        # set array to hold sharpe ratio
-        sharpe_arr = np.zeros(num_portfolios)
-
-        # set array to hold risk free rate
-        risk_free_rate = 0.01
-
-        # create a loop to simulate random portfolio allocations
+        # create loop to generate portfolios
         for i in range(num_portfolios):
-            
-            # set random weights
-            weights = np.array(np.random.random(len(stock_data.columns)))
-        
-            # normalize weights
-            weights = weights / np.sum(weights)
-        
-            # save weights
-            all_weights[i, :] = weights
-        
+            weights = np.random.random(len(stock_data.columns[1:]))
+            weights /= np.sum(weights)
+            weights_arr.append(weights)
+
             # calculate expected returns
-            ret_arr[i] = np.sum((expected_returns.mean() * weights) * 252)
-        
-            # calculate expected volatility
-            vol_arr[i] = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights))) * np.sqrt(252)
-        
+            ret = np.dot(weights, expected_returns) * 252
+            ret_arr.append(ret)
+
+            # calculate volatility
+            vol = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights))) * np.sqrt(252)
+            vol_arr.append(vol)
+
             # calculate sharpe ratio
-            sharpe_arr[i] = (ret_arr[i] - risk_free_rate) / vol_arr[i]
+            sharpe = ret / vol
+            sharpe_arr.append(sharpe)
+        
+        # convert arrays to numpy arrays
+        ret_arr = np.array(ret_arr)
+        vol_arr = np.array(vol_arr)
+        sharpe_arr = np.array(sharpe_arr)
 
         # get max sharpe ratio
         max_sharpe_ratio = sharpe_arr.max()
 
-        # get index of max sharpe ratio
-        max_sharpe_ratio_index = sharpe_arr.argmax()
-
-        # get weights of max sharpe ratio
-        max_sharpe_ratio_weights = all_weights[max_sharpe_ratio_index]
-
         # get max return
         max_return = ret_arr.max()
-
-        # get index of max return
-        max_return_index = ret_arr.argmax()
-
-        # get weights of max return
-        max_return_weights = all_weights[max_return_index]
 
         # get min volatility
         min_volatility = vol_arr.min()
 
-        # get index of min volatility
+        # get max sharpe ratio index
+        max_sharpe_ratio_index = sharpe_arr.argmax()
+
+        # get max return index
+        max_return_index = ret_arr.argmax()
+
+        # get min volatility index
         min_volatility_index = vol_arr.argmin()
 
-        # get weights of min volatility
-        min_volatility_weights = all_weights[min_volatility_index]
-
-        # set efficient frontier
+        # store results in results array
         results[0] = ret_arr
         results[1] = vol_arr
         results[2] = sharpe_arr
-        results[3] = max_sharpe_ratio
-        results[4] = max_sharpe_ratio_index
-        results[5] = max_sharpe_ratio_weights
-        results[6] = max_return
-        results[7] = max_return_index
-        results[8] = max_return_weights
-        results[9] = min_volatility
-        results[10] = min_volatility_index
-        results[11] = min_volatility_weights
+        
+        # plot efficient frontier
+        fig.add_trace(go.Scatter(x=results[1], y=results[0], mode='markers', marker=dict(size=10, color=results[2], colorscale='Viridis', showscale=True)))
 
+        # add max sharpe ratio
+        fig.add_trace(go.Scatter(x=[vol_arr[max_sharpe_ratio_index]], y=[ret_arr[max_sharpe_ratio_index]], mode='markers', marker=dict(size=15, color='red')))
+        fig.add_annotation(text="Max Sharpe Ratio", x=vol_arr[max_sharpe_ratio_index], y=ret_arr[max_sharpe_ratio_index], showarrow=True, arrowhead=1)
+
+        # add max return
+        fig.add_trace(go.Scatter(x=[vol_arr[max_return_index]], y=[ret_arr[max_return_index]], mode='markers', marker=dict(size=15, color='green')))
+        fig.add_annotation(text="Max Return", x=vol_arr[max_return_index], y=ret_arr[max_return_index], showarrow=True, arrowhead=1)
+
+        # add min volatility
+        fig.add_trace(go.Scatter(x=[vol_arr[min_volatility_index]], y=[ret_arr[min_volatility_index]], mode='markers', marker=dict(size=15, color='blue')))
+        fig.add_annotation(text="Min Volatility", x=vol_arr[min_volatility_index], y=ret_arr[min_volatility_index], showarrow=True, arrowhead=1)
+
+        # set layout
+        fig.update_layout(title='Efficient Frontier', xaxis_title='Volatility', yaxis_title='Return')
     except Exception as e:
         error_message(e)
 
