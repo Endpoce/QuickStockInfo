@@ -68,7 +68,8 @@ def display_stock_info(info, hist):
     st.write("Recent Close Price:", hist['Close'][-1])
     st.write("Recent Daily Volume:", hist['Volume'][-1])
 
-def get_long_info(info, hist, primary_ticker, start_of_year):
+# get price info
+def get_price_info(info, hist, primary_ticker, start_of_year):
         # display finance info
         st.subheader("Summary:")
         
@@ -146,15 +147,17 @@ def get_cov_matrix(hist):
 
 def get_efficient_frontier(num_portfolios, stock_data):
     # calculate efficient fronteir for multiple stocks with historical data for each
-    # stock in the stock_data dataframe
+    # for each stock, calculate and create a column for the expected returns and covariance matrix
     for stock in stock_data.columns:
-        stock_data[stock + " Daily Return"] = stock_data[stock].pct_change()
-
-    # calculate expected returns
-    expected_returns = stock_data[[col for col in stock_data.columns]].mean()
+        stock_data[stock + " Daily Returns"] = stock_data[stock].pct_change()
+        stock_data[stock + " Expected Returns"] = stock_data[stock + " Daily Returns"].mean()
+        stock_data[stock + " Covariance Matrix"] = stock_data[stock + " Daily Returns"].cov()
     
-    # calculate covariance matrix
-    cov_matrix = stock_data[[col + " Daily Return" for col in stock_data.columns]].cov()
+    # create a list of expected returns
+    expected_returns = stock_data[[(stock + " Expected Returns") for stock in stock_data.columns]]
+
+    # create a list of covariance matrices
+    cov_matrix = stock_data[[(stock + " Covariance Matrix") for stock in stock_data.columns]]
 
     # set number of portfolios
     num_portfolios = num_portfolios
