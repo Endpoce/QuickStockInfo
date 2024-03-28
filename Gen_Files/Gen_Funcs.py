@@ -166,24 +166,24 @@ def get_efficient_frontier(num_portfolios, stock_data):
 
         # create a loop to simulate random portfolio allocations
         for i in range(num_portfolios):
-                
-                # set random weights
-                weights = np.array(np.random.random(len(stock_data.columns)))
-    
-                # normalize weights
-                weights = weights / np.sum(weights)
-    
-                # save weights
-                all_weights[i, :] = weights
-    
-                # calculate expected returns
-                ret_arr[i] = np.sum((expected_returns.mean() * weights) * 252)
-    
-                # calculate expected volatility
-                vol_arr[i] = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights))) * np.sqrt(252)
-    
-                # calculate sharpe ratio
-                sharpe_arr[i] = (ret_arr[i] - risk_free_rate) / vol_arr[i]
+            
+            # set random weights
+            weights = np.array(np.random.random(len(stock_data.columns)))
+        
+            # normalize weights
+            weights = weights / np.sum(weights)
+        
+            # save weights
+            all_weights[i, :] = weights
+        
+            # calculate expected returns
+            ret_arr[i] = np.sum((expected_returns.mean() * weights) * 252)
+        
+            # calculate expected volatility
+            vol_arr[i] = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights))) * np.sqrt(252)
+        
+            # calculate sharpe ratio
+            sharpe_arr[i] = (ret_arr[i] - risk_free_rate) / vol_arr[i]
 
         # get max sharpe ratio
         max_sharpe_ratio = sharpe_arr.max()
