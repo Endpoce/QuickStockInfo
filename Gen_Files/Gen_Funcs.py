@@ -130,7 +130,7 @@ def get_efficient_frontier(num_portfolios, stock_data):
         # calculate expected returns, ignore the first column
         for col in stock_data.columns[1:]:
             stock_data[col + ' Expected Returns'] = stock_data[col].pct_change().mean()
-            expected_returns = stock_data.iloc[1:, 1:]
+            expected_returns = stock_data.iloc[:, 1:]
 
         # calculate covariance matrix
         cov_matrix = stock_data.iloc[:, 1:].pct_change().cov()
@@ -161,16 +161,17 @@ def get_efficient_frontier(num_portfolios, stock_data):
 
         # create loop to generate portfolios
         for i in range(num_portfolios):
+            # generate random weights
             weights = np.random.random(len(stock_data.columns[1:]))
             weights /= np.sum(weights)
             weights_arr.append(weights)
 
             # calculate expected returns
-            ret = np.dot(weights, expected_returns) * 252
+            ret = np.dot(weights, expected_returns)
             ret_arr.append(ret)
 
             # calculate volatility
-            vol = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights))) * np.sqrt(252)
+            vol = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
             vol_arr.append(vol)
 
             # calculate sharpe ratio
