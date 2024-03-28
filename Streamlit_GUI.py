@@ -138,9 +138,10 @@ with tab2:
 with tab3:
 
     st.subheader("Efficient Frontier")
-
-    portfolio_tickers = st.text_input("Portfolio Tickers (comma separated):").upper()
-
+    try:
+        portfolio_tickers = st.text_input("Portfolio Tickers (comma separated):").upper()
+    except Exception as e:
+        pass
     # get stock data for the input tickers
     try:
         # get stock data for the input tickers
