@@ -140,7 +140,7 @@ def get_cov_matrix(hist):
     
     # create new column for daily returns for each stock
     for stock in hist.columns:
-        hist[stock + " Daily Return"] = hist[stock].pct_change()
+        hist[stock + " Daily Returns"] = hist[stock].pct_change()
 
     # calculate covariance matrix
     cov_matrix = hist[[(stock + " Daily Return") for stock in hist.columns]].cov()
