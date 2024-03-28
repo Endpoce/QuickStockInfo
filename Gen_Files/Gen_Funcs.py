@@ -60,13 +60,18 @@ def display_stock_info(info, hist):
     """
     Display stock information using the Streamlit API.
     """
-
-    st.write(info["longBusinessSummary"])
+    ytd = pd.DataFrame(hist['Close'])
+    ytd_start = ytd.loc['2024-01-02 00:00:00-05:00', 'Close']
+    ytd_end = ytd['Close'][-1]
+    ytd = (ytd_end - ytd_start) / ytd_start * 100
+    st.write("YTD", ytd)
+    st.write("Recommendation:", info['recommendationKey'])
     st.write("Sector:", info['sector'])
     st.write("Industry:", info['industry'])
     st.write("Market Cap:", info['marketCap'])
     st.write("Recent Close Price:", hist['Close'][-1])
     st.write("Recent Daily Volume:", hist['Volume'][-1])
+    
 
 def get_long_info(info, hist, primary_ticker, start_of_year):
         # display finance info
@@ -110,9 +115,10 @@ def get_wiki_info(query):
         first_result = results[0]  # get the first result
         try:
             # get the page of the first result
+            #summary = wikipedia.summary(first_result, sentences = 1)
             page = wikipedia.page(first_result)
             url = page.url  # get the url of the page
-            return url, page  # return the content of the page
+            return "Check out the [Wikipedia](%s)" % url # return the content of the page
         except wikipedia.DisambiguationError as e:
             print(
                 f"Disambiguation page found, consider choosing a specific title from: {e.options}")

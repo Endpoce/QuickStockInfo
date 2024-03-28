@@ -11,7 +11,7 @@ import os
 from Gen_Files.Wiki_GPT import *
 from Gen_Files.GetArticles import *
 from Gen_Files.Stock_Analyzer import *
-from Gen_Files.Efficient_Frontier import *
+#from Gen_Files.Efficient_Frontier import *
 import streamlit as st
 from Gen_Files.Gen_Funcs import *
 import google.generativeai as gai
@@ -88,7 +88,8 @@ with tab1:
                 try:
                     # display company info
                     st.write("Company Info:")
-                    display_stock_info(info, hist)
+                    st.write(info["longBusinessSummary"])
+                    
                     
 
                 except Exception as e:
@@ -97,14 +98,16 @@ with tab1:
 
 
             with col2:
-                try:
-                    # display wiki info
-                    st.write("Wiki Info:")
-                    wiki_info = get_wiki_info(primary_ticker)
-                    st.markdown(wiki_info)
+                st.markdown(display_stock_info(info, hist))
 
-                except Exception as e:
-                    st.write("Error displaying wiki info :: " + error_message(e))
+                # try:
+                #     # display wiki info
+                #     st.write("Wiki Info:")
+                #     wiki_info = get_wiki_info(primary_ticker)
+                #     st.markdown(wiki_info)
+
+                # except Exception as e:
+                #     st.write("Error displaying wiki info :: " + error_message(e))
 
 ### tab 2: Investors
 with tab2:
