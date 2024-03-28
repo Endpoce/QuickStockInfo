@@ -104,6 +104,7 @@ with tab1:
 
                 except Exception as e:
                     error_message(e)
+
 ### tab 2: Investors
 with tab2:
     try:
@@ -157,18 +158,16 @@ with tab3:
 
         # display stock data
         print(stock_data)
-
-
-
-        
+    except Exception as e:
+        error_message(e)
+    
+    try:
         # display the efficient frontier
         st.plotly_chart(get_efficient_frontier(10000, stock_data))
 
     
     except Exception as e:
         error_message(e)
-
-
 
 ### tab 4: AI Analysis
 with tab4:
