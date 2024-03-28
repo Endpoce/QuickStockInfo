@@ -139,90 +139,43 @@ def get_efficient_frontier(num_portfolios, stock_data):
         error_message(e)
     
     try:
+        # calculate portfolio returns and volatility
+        port_returns = []
+        port_volatility = []
+        stock_weights = []
 
-        # set random seed
-        np.random.seed(42)
-
-        # set number of portfolios
-        num_portfolios = num_portfolios
-
-        # create empty arrays to store returns, volatility, and sharpe ratio
-        results = np.zeros((3, num_portfolios))
-
-        # create empty arrays to store weights
-        weights_arr = []
-
-        # create empty arrays to store returns and volatility
-        ret_arr = []
-        vol_arr = []
-
-        # create empty arrays to store sharpe ratio
-        sharpe_arr = []
-
-        # create loop to generate portfolios
-        for i in range(num_portfolios):
-            # generate random weights
+        # generate random weights for the stocks
+        for portfolio in range(num_portfolios):
             weights = np.random.random(len(stock_data.columns[1:]))
             weights /= np.sum(weights)
-            weights_arr.append(weights)
+            stock_weights.append(weights)
 
-            # calculate expected returns
-            ret = np.dot(weights, expected_returns)
-            ret_arr.append(ret)
+            # calculate portfolio returns and volatility
+            returns = np.dot(weights, expected_returns.T)
+            volatility = np.sqrt(np.dot(weights, np.dot(cov_matrix, weights.T)))
 
-            # calculate volatility
-            vol = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
-            vol_arr.append(vol)
+            port_returns.append(returns)
+            port_volatility.append(volatility)
 
-            # calculate sharpe ratio
-            sharpe = ret / vol
-            sharpe_arr.append(sharpe)
-        
-        # convert arrays to numpy arrays
-        ret_arr = np.array(ret_arr)
-        vol_arr = np.array(vol_arr)
-        sharpe_arr = np.array(sharpe_arr)
+        # convert lists to arrays
+        port_returns = np.array(port_returns)
+        port_volatility = np.array(port_volatility)
 
-        # get max sharpe ratio
-        max_sharpe_ratio = sharpe_arr.max()
+        # calculate the sharpe ratio for each portfolio
+        sharpe_ratio = port_returns / port_volatility
 
-        # get max return
-        max_return = ret_arr.max()
+        # find the index of the portfolio with the maximum sharpe ratio
+        max_sharpe_ratio_index = np.argmax(sharpe_ratio)
 
-        # get min volatility
-        min_volatility = vol_arr.min()
+        # find the index of the portfolio with the maximum return
+        max_return_index = np.argmax(port_returns)
 
-        # get max sharpe ratio index
-        max_sharpe_ratio_index = sharpe_arr.argmax()
+        # find the index of the portfolio with the minimum volatility
+        min_volatility_index = np.argmin(port_volatility)
 
-        # get max return index
-        max_return_index = ret_arr.argmax()
-
-        # get min volatility index
-        min_volatility_index = vol_arr.argmin()
-
-        # store results in results array
-        results[0] = ret_arr
-        results[1] = vol_arr
-        results[2] = sharpe_arr
-        
-        # plot efficient frontier
-        fig.add_trace(go.Scatter(x=results[1], y=results[0], mode='markers', marker=dict(size=10, color=results[2], colorscale='Viridis', showscale=True)))
-
-        # add max sharpe ratio
-        fig.add_trace(go.Scatter(x=[vol_arr[max_sharpe_ratio_index]], y=[ret_arr[max_sharpe_ratio_index]], mode='markers', marker=dict(size=15, color='red')))
-        fig.add_annotation(text="Max Sharpe Ratio", x=vol_arr[max_sharpe_ratio_index], y=ret_arr[max_sharpe_ratio_index], showarrow=True, arrowhead=1)
-
-        # add max return
-        fig.add_trace(go.Scatter(x=[vol_arr[max_return_index]], y=[ret_arr[max_return_index]], mode='markers', marker=dict(size=15, color='green')))
-        fig.add_annotation(text="Max Return", x=vol_arr[max_return_index], y=ret_arr[max_return_index], showarrow=True, arrowhead=1)
-
-        # add min volatility
-        fig.add_trace(go.Scatter(x=[vol_arr[min_volatility_index]], y=[ret_arr[min_volatility_index]], mode='markers', marker=dict(size=15, color='blue')))
-        fig.add_annotation(text="Min Volatility", x=vol_arr[min_volatility_index], y=ret_arr[min_volatility_index], showarrow=True, arrowhead=1)
-
-        # set layout
-        fig.update_layout(title='Efficient Frontier', xaxis_title='Volatility', yaxis_title='Return')
+        # create arrays for plotting
+        ret_arr = np.array(port_returns)
+        vol_arr = np.array(port_volatility)
     except Exception as e:
         error_message(e)
 
