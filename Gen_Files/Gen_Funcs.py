@@ -125,14 +125,10 @@ def get_expected_returns(hist):
 
     # create new column for daily returns for each stock
     for stock in hist.columns:
-        hist[stock + " Daily Return"] = hist[stock].pct_change()
-
+        hist[stock + " Daily Returns"] = hist[stock].pct_change()
+    
     # calculate expected returns
-    for stock in hist.columns:
-        hist[stock + " Expected Return"] = hist[stock + " Daily Return"].mean()
-
-    # get expected returns
-    expected_returns = hist[[stock + " Expected Return" for stock in hist.columns]].iloc[-1]
+    expected_returns = hist[[(stock + " Daily Returns") for stock in hist.columns]].mean()
 
     return expected_returns
 
