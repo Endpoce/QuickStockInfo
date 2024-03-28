@@ -138,7 +138,7 @@ with tab3:
 
     st.subheader("Efficient Frontier")
 
-    portfolio_tickers = st.text_input("Comparative Tickers (comma separated):").upper()
+    portfolio_tickers = st.text_input("Portfolio Tickers (comma separated):").upper()
 
     # get stock data for the input tickers
     try:
@@ -151,9 +151,8 @@ with tab3:
         # get stock data
         for ticker in tickers:
             stock_data = yf.download(ticker, start_date, end_date)
-            st.write(stock_data)
             stock_data[ticker] = stock_data["Close"]
-        
+
         stock_data = pd.DataFrame(stock_data)
 
         # display stock data
@@ -182,7 +181,7 @@ with tab4:
 
     try:
         # analyze stock data
-        st.write(google_summary(ticker, hist))
+        st.write(google_summary(hist, info))
     
     except Exception as e:
         error_message(e)

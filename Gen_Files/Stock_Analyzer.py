@@ -17,7 +17,7 @@ from vertexai.generative_models import GenerativeModel, Part
 load_dotenv()
 
 # get stock info and feed to it to google ai, get response
-def google_summary(ticker, hist, info):
+def google_summary(hist, info):
 
     # Get the latest closing price
     latest_close = hist['Close'].iloc[-1]
