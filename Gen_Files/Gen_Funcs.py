@@ -139,15 +139,16 @@ def get_cov_matrix(hist):
         hist[stock + " Daily Returns"] = hist[stock].pct_change()
 
     # calculate covariance matrix
-    cov_matrix = hist[[(stock + " Daily Return") for stock in hist.columns]].cov()
+    cov_matrix = hist[[(stock + " Daily Returns") for stock in hist.columns]].cov()
 
     return cov_matrix
 
 
 def get_efficient_frontier(num_portfolios, stock_data):
     # calculate efficient fronteir for multiple stocks with historical data for each
-    for col in stock_data.columns:
-        stock_data[col + " Daily Return"] = stock_data[col].pct_change()
+    # stock in the stock_data dataframe
+    for stock in stock_data.columns:
+        stock_data[stock + " Daily Return"] = stock_data[stock].pct_change()
 
     # calculate expected returns
     expected_returns = stock_data[[col + " Daily Return" for col in stock_data.columns]].mean()
