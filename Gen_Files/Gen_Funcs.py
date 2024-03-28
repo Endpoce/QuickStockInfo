@@ -139,50 +139,40 @@ def get_efficient_frontier(num_portfolios, stock_data):
         error_message(e)
     
     try:
-        # calculate portfolio returns and volatility
-        port_returns = []
-        port_volatility = []
-        stock_weights = []
-
-        # generate random weights for the stocks
-        for portfolio in range(num_portfolios):
+        # create a loop to generate random weights for each stock
+        # calculate the expected returns and volatility for each portfolio
+        # calculate the Sharpe ratio for each portfolio
+        # store the results in a dataframe
+        results = np.zeros((3, num_portfolios))
+        weights_record = []
+        for i in range(num_portfolios):
             weights = np.random.random(len(stock_data.columns[1:]))
             weights /= np.sum(weights)
-            stock_weights.append(weights)
+            weights_record.append(weights)
+            portfolio_return = np.dot(weights, expected_returns.T)
+            portfolio_volatility = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
+            results[0, i] = portfolio_return
+            results[1, i] = portfolio_volatility
+            results[2, i] = results[0, i] / results[1, i]
+        
+        # create a dataframe to store the results
+        df = pd.DataFrame(results.T, columns=['Returns', 'Volatility', 'Sharpe Ratio'])
 
-            # calculate portfolio returns and volatility
-            returns = np.dot(weights, expected_returns.T)
-            volatility = np.sqrt(np.dot(weights, np.dot(cov_matrix, weights.T)))
-
-            port_returns.append(returns)
-            port_volatility.append(volatility)
-
-        # create a dictionary to store the portfolio returns and volatility
-        portfolio = {'Returns': port_returns, 'Volatility': port_volatility}
-
-        # add the stock weights to the dictionary
-        for counter, symbol in enumerate(stock_data.columns[1:]):
-            portfolio[symbol + ' Weight'] = [weight[counter] for weight in stock_weights]
-
-        # create a DataFrame from the dictionary
-        df = pd.DataFrame(portfolio)
-
-        # calculate the Sharpe ratio
-        risk_free_rate = 0.0178
-
-        df['Sharpe Ratio'] = (df['Returns'] - risk_free_rate) / df['Volatility']
-
-        # find the minimum volatility and maximum Sharpe ratio
+        # find the index of the portfolio with the minimum volatility
         min_volatility_index = df['Volatility'].idxmin()
+
+        # find the index of the portfolio with the maximum Sharpe ratio
         max_sharpe_ratio_index = df['Sharpe Ratio'].idxmax()
+
+        # find the index of the portfolio with the maximum return
         max_return_index = df['Returns'].idxmax()
 
-        # get the minimum volatility and maximum Sharpe ratio
+        # get the minimum volatility, maximum Sharpe ratio, and maximum return
         min_volatility = df['Volatility'][min_volatility_index]
-
         max_sharpe_ratio = df['Sharpe Ratio'][max_sharpe_ratio_index]
         max_return = df['Returns'][max_return_index]
 
+        # return the dataframe and the indices of the minimum volatility, maximum Sharpe ratio, and maximum return
         return df, min_volatility_index, max_sharpe_ratio_index, max_return_index, min_volatility, max_sharpe_ratio, max_return        
 
 
