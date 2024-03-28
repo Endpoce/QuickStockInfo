@@ -174,7 +174,7 @@ def get_efficient_frontier(num_portfolios, stock_data):
 
         # find the minimum volatility and maximum Sharpe ratio
         min_volatility_index = df['Volatility'].idxmin()
-        max_sharpe_ratio_index = df['Sharpe Ratio'].idxmax()
+        max_sharpe_ratio_index = df['Sharpe Ratio'].idxmax().all()
         max_return_index = df['Returns'].idxmax()
 
         # get the minimum volatility and maximum Sharpe ratio
