@@ -122,42 +122,24 @@ def get_wiki_info(query):
     else:
         return None  # return None if no results found
     
-def get_expected_returns(hist):
-
-    # create new column for daily returns for each stock
-    for stock in hist.columns:
-        hist[stock + " Daily Returns"] = hist[stock].pct_change()
-    
-    # calculate expected returns
-    expected_returns = hist[[(stock + " Daily Returns") for stock in hist.columns]].mean()
-
-    return expected_returns
-
-def get_cov_matrix(hist):
-    
-    # create new column for daily returns for each stock
-    for stock in hist.columns:
-        hist[stock + " Daily Returns"] = hist[stock].pct_change()
-
-    # calculate covariance matrix
-    cov_matrix = hist[[(stock + " Daily Returns") for stock in hist.columns]].cov()
-
-    return cov_matrix
-
-
 def get_efficient_frontier(num_portfolios, stock_data):
     # calculate efficient fronteir for multiple stocks with historical data for each
-    # for each stock, calculate and create a column for the expected returns and covariance matrix
-    for stock in stock_data.columns:
-        stock_data[stock + " Daily Returns"] = stock_data[stock].pct_change()
-        stock_data[stock + " Expected Returns"] = stock_data[stock + " Daily Returns"].mean()
-        stock_data[stock + " Covariance Matrix"] = stock_data[stock + " Daily Returns"].cov()
     
-    # create a list of expected returns
-    expected_returns = stock_data[[(stock + " Expected Returns") for stock in stock_data.columns]]
+    # for each stock, calculate and create a column for the expected returns and covariance matrix
+    try:
+        for stock in stock_data.columns:
+            stock_data[stock + " Daily Returns"] = stock_data[stock].pct_change()
+            stock_data[stock + " Expected Returns"] = stock_data[stock + " Daily Returns"].mean()
+            stock_data[stock + " Covariance Matrix"] = stock_data[stock + " Daily Returns"].cov()
+        
+        # create a list of expected returns
+        expected_returns = stock_data[[(stock + " Expected Returns") for stock in stock_data.columns]]
 
-    # create a list of covariance matrices
-    cov_matrix = stock_data[[(stock + " Covariance Matrix") for stock in stock_data.columns]]
+        # create a list of covariance matrices
+        cov_matrix = stock_data[[(stock + " Covariance Matrix") for stock in stock_data.columns]]
+
+    except Exception as e:
+        error_message(e)
 
     # set number of portfolios
     num_portfolios = num_portfolios
