@@ -165,7 +165,7 @@ with tab3:
     
     try:
         # display the efficient frontier
-        st.plotly_chart(get_efficient_frontier(1000, stock_data))
+        st.plotly_chart(get_efficient_frontier(10000, stock_data))
     
     except Exception as e:
         error_message(e)
