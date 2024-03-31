@@ -123,161 +123,40 @@ def get_wiki_info(query):
         return None  # return None if no results found
     
 def get_efficient_frontier(num_portfolios, stock_data):
-    # calculate efficient fronteir for multiple stocks with historical data for each
+    """
+    Compute and plot the efficient frontier of a portfolio.
+
+    Parameters:
+    - expected_returns: numpy array of shape (n,) containing the expected returns of assets
+    - cov_matrix: numpy array of shape (n, n) containing the covariance matrix of asset returns
+    - num_points: int, number of points to sample along the frontier
+
+    Returns:
+    - weights: numpy array of shape (num_points, n) containing portfolio weights for each point on the frontier
+    - returns: numpy array of shape (num_points,) containing expected returns for each point on the frontier
+    - risks: numpy array of shape (num_points,) containing standard deviations (risks) for each point on the frontier
+    """
+
+    # Get expected returns and covariance matrix
+    expected_returns = stock_data.mean()
+    cov_matrix = stock_data.cov()
     
-    # for each stock, calculate and create a column for the expected returns and covariance matrix
-    try:
-        # calculate expected returns, ignore the first column
-        for col in stock_data.columns[1:]:
-            stock_data[col + ' Expected Returns'] = stock_data[col].pct_change().mean()
-            expected_returns = stock_data.iloc[:, 1:]
+    n = len(expected_returns)
 
-        # calculate covariance matrix
-        cov_matrix = stock_data.iloc[:, 1:].pct_change().cov()
+    # Generate random portfolio weights
+    weights = np.random.rand(num_portfolios, n)
+    weights /= np.sum(weights, axis=1)[:, np.newaxis]
 
-    except Exception as e:
-        error_message(e)
+    # Compute portfolio returns and risks
+    port_returns = np.dot(weights, expected_returns)
+    port_risks = np.zeros(num_portfolios)
+
+    for i in range(num_portfolios):
+        port_risks[i] = np.sqrt(np.dot(weights[i].T, np.dot(cov_matrix, weights[i])))
+
+    # Plot the efficient frontier
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=port_risks, y=port_returns, mode="markers", marker=dict(size=5)))
+    fig.update_layout(title="Efficient Frontier", xaxis_title="Risk (Standard Deviation)", yaxis_title="Return")
     
-    try:
-        # create a loop to generate random weights for each stock
-        # calculate the expected returns and volatility for each portfolio
-        # calculate the Sharpe ratio for each portfolio
-        # store the results in a dataframe
-        results = np.zeros((3, num_portfolios))
-        weights_record = []
-        for i in range(num_portfolios):
-            weights = np.random.random(len(stock_data.columns[1:]))
-            weights /= np.sum(weights)
-            weights_record.append(weights)
-            portfolio_return = np.dot(weights, expected_returns.T)
-            portfolio_volatility = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
-            results[0, i] = portfolio_return
-            results[1, i] = portfolio_volatility
-            results[2, i] = results[0, i] / results[1, i]
-        
-        # create a dataframe to store the results
-        df = pd.DataFrame(results.T, columns=['Returns', 'Volatility', 'Sharpe Ratio'])
-
-        # find the index of the portfolio with the minimum volatility
-        min_volatility_index = df['Volatility'].idxmin()
-
-        # find the index of the portfolio with the maximum Sharpe ratio
-        max_sharpe_ratio_index = df['Sharpe Ratio'].idxmax()
-
-        # find the index of the portfolio with the maximum return
-        max_return_index = df['Returns'].idxmax()
-
-        # get the minimum volatility, maximum Sharpe ratio, and maximum return
-        min_volatility = df['Volatility'][min_volatility_index]
-        max_sharpe_ratio = df['Sharpe Ratio'][max_sharpe_ratio_index]
-        max_return = df['Returns'][max_return_index]
-
-        # return the dataframe and the indices of the minimum volatility, maximum Sharpe ratio, and maximum return
-        return df, min_volatility_index, max_sharpe_ratio_index, max_return_index, min_volatility, max_sharpe_ratio, max_return        
-
-
-
-    except Exception as e:
-        error_message(e)
-
-    try:
-
-        # plot the efficient frontier
-        fig = go.Figure()
-
-        # add scatter plot for each portfolio
-        fig.add_trace(go.Scatter(
-            x=df['Volatility'],
-            y=df['Returns'],
-            mode='markers',
-            marker=dict(
-                size=8,
-                color=df['Sharpe Ratio'],
-                colorscale='Viridis',
-                showscale=True
-            ),
-            text=df.columns[1:],
-            hovertemplate=
-            '<b>Stock</b>: %{text}<br>' +
-            '<b>Volatility</b>: %{x}<br>' +
-            '<b>Returns</b>: %{y}<br>' +
-            '<b>Sharpe Ratio</b>: %{marker.color}<br>',
-        ))
-
-        # add minimum volatility portfolio
-        fig.add_trace(go.Scatter(
-            x=[df['Volatility'][min_volatility_index]],
-            y=[df['Returns'][min_volatility_index]],
-            mode='markers',
-            marker=dict(
-                size=12,
-                color='red',
-                symbol='star'
-            ),
-            name='Minimum Volatility',
-            text=df.columns[1:][min_volatility_index],
-            hovertemplate=
-            '<b>Stock</b>: %{text}<br>' +
-            '<b>Volatility</b>: %{x}<br>' +
-            '<b>Returns</b>: %{y}<br>' +
-            '<b>Sharpe Ratio</b>: Minimum Volatility<br>',
-        ))
-
-        # add maximum Sharpe ratio portfolio
-        fig.add_trace(go.Scatter(
-            x=[df['Volatility'][max_sharpe_ratio_index]],
-            y=[df['Returns'][max_sharpe_ratio_index]],
-            mode='markers',
-            marker=dict(
-                size=12,
-                color='green',
-                symbol='star'
-            ),
-            name='Maximum Sharpe Ratio',
-            text=df.columns[1:][max_sharpe_ratio_index],
-            hovertemplate=
-            '<b>Stock</b>: %{text}<br>' +
-            '<b>Volatility</b>: %{x}<br>' +
-            '<b>Returns</b>: %{y}<br>' +
-            '<b>Sharpe Ratio</b>: Maximum Sharpe Ratio<br>',
-        ))
-
-        # add maximum return portfolio
-        fig.add_trace(go.Scatter(
-            x=[df['Volatility'][max_return_index]],
-            y=[df['Returns'][max_return_index]],
-            mode='markers',
-            marker=dict(
-                size=12,
-                color='blue',
-                symbol='star'
-            ),
-            name='Maximum Return',
-            text=df.columns[1:][max_return_index],
-            hovertemplate=
-            '<b>Stock</b>: %{text}<br>' +
-            '<b>Volatility</b>: %{x}<br>' +
-            '<b>Returns</b>: %{y}<br>' +
-            '<b>Sharpe Ratio</b>: Maximum Return<br>',
-        ))
-
-        # set plot layout
-        fig.update_layout(
-            title='Efficient Frontier',
-            xaxis=dict(title='Volatility'),
-            yaxis=dict(title='Returns'),
-            legend=dict(
-                x=0.7,
-                y=1,
-                traceorder='normal',
-                font=dict(family='sans-serif', size=12, color='black'),
-                bgcolor='rgba(0,0,0,0)'
-            ),
-            hovermode='closest'
-        )
-
-        fig.show()
-    except Exception as e:
-        error_message(e)
-
     return fig
