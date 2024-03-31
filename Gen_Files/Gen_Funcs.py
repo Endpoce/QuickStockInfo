@@ -163,4 +163,4 @@ def get_efficient_frontier(num_portfolios, stock_data):
 
     fig.update_layout(title='Efficient Frontier', xaxis_title='Volatility', yaxis_title='Return')
     
-    return fig, max_sharpe_portfolio, min_volatility_portfolio
+    return fig
