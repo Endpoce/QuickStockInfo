@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 import wikipedia
 import dotenv
 import numpy as np
-import matplotlib.pyplot as plt
+import random
 
 # set env vars
 dotenv.load_dotenv()
@@ -124,39 +124,48 @@ def get_wiki_info(query):
     
 def get_efficient_frontier(num_portfolios, stock_data):
     """
-    Compute and plot the efficient frontier of a portfolio.
-
-    Parameters:
-    - expected_returns: numpy array of shape (n,) containing the expected returns of assets
-    - cov_matrix: numpy array of shape (n, n) containing the covariance matrix of asset returns
-    - num_points: int, number of points to sample along the frontier
-
-    Returns:
-    - weights: numpy array of shape (num_points, n) containing portfolio weights for each point on the frontier
-    - returns: numpy array of shape (num_points,) containing expected returns for each point on the frontier
-    - risks: numpy array of shape (num_points,) containing standard deviations (risks) for each point on the frontier
+    Get the expected returns and covariance matrix of a portfolio using the Efficient Frontier method. The 
+    Efficient Frontier method is a mathematical optimization technique used to find the set of optimal portfolios
+    that offer the highest expected return for a given level of risk or the lowest risk for a given level of expected return.
     """
 
-    # Get expected returns and covariance matrix
-    expected_returns = stock_data.mean()
-    cov_matrix = stock_data.cov()
-    
-    n = len(expected_returns)
+    # calculate the expected returns and covariance matrix
+    expected_returns = stock_data.pct_change().mean() * 252
+    cov_matrix = stock_data.pct_change().cov() * 252
 
-    # Generate random portfolio weights
-    weights = np.random.rand(num_portfolios, n)
-    weights /= np.sum(weights, axis=1)[:, np.newaxis]
+    # create a dict to store the results
+    volatility = []
+    returns = []
+    results = {}
 
-    # Compute portfolio returns and risks
-    port_returns = np.dot(weights, expected_returns)
-    port_risks = np.zeros(num_portfolios)
-
+    # loop through the number of portfolios to create random portfolios
     for i in range(num_portfolios):
-        port_risks[i] = np.sqrt(np.dot(weights[i].T, np.dot(cov_matrix, weights[i])))
-
-    # Plot the efficient frontier
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=port_risks, y=port_returns, mode="markers", marker=dict(size=5)))
-    fig.update_layout(title="Efficient Frontier", xaxis_title="Risk (Standard Deviation)", yaxis_title="Return")
+        weights = np.random.random(len(stock_data.columns))
+        weights /= np.sum(weights)
+        returns = np.dot(weights, expected_returns)
+        volatility = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
+        results[volatility] = returns
     
+    # get max returns and min volatility
+    max_returns = max(results.values())
+    min_volatility = min(results.keys())
+    
+    # store the max returns portfolio and min volatility portfolio in the results dict
+    results[min_volatility] = max_returns
+
+    # create a list to store the results
+    portfolio = []
+
+    # loop through the results dict to get the portfolio data
+    for key, value in results.items():
+        portfolio.append([key, value])
+
+    # create a DataFrame to store the portfolio data
+    portfolio_df = pd.DataFrame(portfolio, columns=["Volatility", "Returns"])
+
+    # create a scatter plot of the portfolio data
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=portfolio_df["Volatility"], y=portfolio_df["Returns"], mode="markers"))
+    fig.update_layout(title="Efficient Frontier", xaxis_title="Volatility", yaxis_title="Returns")
+
     return fig
