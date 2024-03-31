@@ -128,44 +128,39 @@ def get_efficient_frontier(num_portfolios, stock_data):
     Efficient Frontier method is a mathematical optimization technique used to find the set of optimal portfolios
     that offer the highest expected return for a given level of risk or the lowest risk for a given level of expected return.
     """
+    # Calculate daily returns
+    returns = stock_data.pct_change()
+    
+    # Calculate expected returns and covariance matrix
+    expected_returns = returns.mean()
+    cov_matrix = returns.cov()
 
-    # calculate the expected returns and covariance matrix
-    expected_returns = stock_data.pct_change().mean() * 252
-    cov_matrix = stock_data.pct_change().cov() * 252
+    # Simulate random portfolio allocations
+    results = np.zeros((3, num_portfolios))
+    weights_record = []
 
-    # create a dict to store the results
-    volatility = []
-    returns = []
-    results = {}
-
-    # loop through the number of portfolios to create random portfolios
     for i in range(num_portfolios):
         weights = np.random.random(len(stock_data.columns))
         weights /= np.sum(weights)
-        returns = np.dot(weights, expected_returns)
-        volatility = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
-        results[volatility] = returns
-    
-    # get max returns and min volatility
-    max_returns = max(results.values())
-    min_volatility = min(results.keys())
-    
-    # store the max returns portfolio and min volatility portfolio in the results dict
-    results[min_volatility] = max_returns
+        weights_record.append(weights)
+        portfolio_return = np.sum(weights * expected_returns) * 252
+        portfolio_std_dev = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights))) * np.sqrt(252)
+        results[0,i] = portfolio_return
+        results[1,i] = portfolio_std_dev
+        results[2,i] = results[0,i] / results[1,i]
 
-    # create a list to store the results
-    portfolio = []
+    # Convert results array to pandas DataFrame
+    results_df = pd.DataFrame(results.T, columns=['Return', 'Volatility', 'Sharpe Ratio'])
 
-    # loop through the results dict to get the portfolio data
-    for key, value in results.items():
-        portfolio.append([key, value])
+    # Find portfolios with maximum Sharpe ratio and minimum volatility
+    max_sharpe_portfolio = results_df.loc[results_df['Sharpe Ratio'].idxmax()]
+    min_volatility_portfolio = results_df.loc[results_df['Volatility'].idxmin()]
 
-    # create a DataFrame to store the portfolio data
-    portfolio_df = pd.DataFrame(portfolio, columns=["Volatility", "Returns"])
-
-    # create a scatter plot of the portfolio data
+    # Plot the Efficient Frontier
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=portfolio_df["Volatility"], y=portfolio_df["Returns"], mode="markers"))
-    fig.update_layout(title="Efficient Frontier", xaxis_title="Volatility", yaxis_title="Returns")
+    fig.add_trace(go.Scatter(x=results_df['Volatility'], y=results_df['Return'], mode='markers', name='Portfolios'))
+    fig.add_trace(go.Scatter(x=[max_sharpe_portfolio['Volatility']], y=[max_sharpe_portfolio['Return']], mode='markers', marker=dict(color='red', size=10), name='Max Sharpe Ratio Portfolio'))
 
-    return fig
+    fig.update_layout(title='Efficient Frontier', xaxis_title='Volatility', yaxis_title='Return')
+    
+    return fig, max_sharpe_portfolio, min_volatility_portfolio
