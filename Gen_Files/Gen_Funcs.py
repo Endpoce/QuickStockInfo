@@ -128,6 +128,9 @@ def get_efficient_frontier(num_portfolios, stock_data):
     Efficient Frontier method is a mathematical optimization technique used to find the set of optimal portfolios
     that offer the highest expected return for a given level of risk or the lowest risk for a given level of expected return.
     """
+    # add primary ticker to stock data
+    
+
     # Calculate daily returns
     returns = stock_data.pct_change()
     

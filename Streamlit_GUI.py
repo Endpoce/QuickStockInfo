@@ -145,7 +145,7 @@ with tab3:
     # get stock data for the input tickers
     try:
         # get stock data for the input tickers
-        tickers = [primary_ticker] + portfolio_tickers.split(",")
+        tickers = [primary_ticker] +', ' + portfolio_tickers.split(",")
 
         # create a dict to store stock data
         stock_data = {}
@@ -157,8 +157,6 @@ with tab3:
 
         stock_data = pd.DataFrame(stock_data)
 
-        # display stock data
-        print(stock_data)
 
     except Exception as e:
         error_message(e)
