@@ -144,8 +144,8 @@ with tab3:
         pass
     # get stock data for the input tickers
     try:
-        # get stock data for the input tickers
-        tickers = [primary_ticker] +', ' + portfolio_tickers.split(",")
+        # add the primary ticker to the list of tickers
+        tickers = portfolio_tickers.split(",") + [primary_ticker]
 
         # create a dict to store stock data
         stock_data = {}
