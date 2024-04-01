@@ -139,6 +139,7 @@ def get_efficient_frontier(num_portfolios, stock_data):
     results = np.zeros((3, num_portfolios))
     weights_record = []
 
+    # Simulate random portfolio allocations
     for i in range(num_portfolios):
         weights = np.random.random(len(stock_data.columns))
         weights /= np.sum(weights)
@@ -152,16 +153,17 @@ def get_efficient_frontier(num_portfolios, stock_data):
     # Convert results array to pandas DataFrame
     results_df = pd.DataFrame(results.T, columns=['Return', 'Volatility', 'Sharpe Ratio'])
 
-    # Find portfolios with maximum Sharpe ratio and minimum volatility
+    # Find portfolios with maximum Sharpe ratio and min risk
     max_sharpe_portfolio = results_df.loc[results_df['Sharpe Ratio'].idxmax()]
     min_volatility_portfolio = results_df.loc[results_df['Volatility'].idxmin()]
 
     # Plot the Efficient Frontier
     fig = go.Figure()
+
+    # Add trace for portfolios
     fig.add_trace(go.Scatter(x=results_df['Volatility'], y=results_df['Return'], mode='markers', name='Portfolios'))
     fig.add_trace(go.Scatter(x=[max_sharpe_portfolio['Volatility']], y=[max_sharpe_portfolio['Return']], mode='markers', marker=dict(color='red', size=10), name='Max Sharpe Ratio Portfolio'))
     fig.add_trace(go.Scatter(x=[min_volatility_portfolio['Volatility']], y=[min_volatility_portfolio['Return']], mode='markers', marker=dict(color='green', size=10), name='Min Volatility Portfolio'))
-
-    fig.update_layout(title='Efficient Frontier', xaxis_title='Volatility', yaxis_title='Return')
+    fig.update_layout(title='Efficient Frontier', xaxis_title='Risk', yaxis_title='Return')
     
     return fig
