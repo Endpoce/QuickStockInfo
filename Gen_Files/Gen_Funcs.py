@@ -138,8 +138,8 @@ def get_efficient_frontier(num_portfolios, stock_data):
     expected_returns = returns.mean()
     cov_matrix = returns.cov()
 
-    # Simulate random portfolio allocations
-    results = np.zeros((3, num_portfolios))
+    # Initialize results array
+    results = np.zeros((3,num_portfolios))
     weights_record = []
 
     # Simulate random portfolio allocations

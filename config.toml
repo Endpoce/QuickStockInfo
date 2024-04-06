@@ -1,6 +1,6 @@
 [theme]
 base = 'light'
-primary_color = 'blue'
+primary_color = 'green'
 secondary_color = 'purple'
 tertiary_color = 'green'
 quaternary_color = 'orange'
