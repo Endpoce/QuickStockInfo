@@ -166,9 +166,11 @@ with tab3:
 
         st.write("Max Sharpe Portfolio:")
         st.write(max_sharpe_portfolio)
+        st.write("Tickers: ", max_sharpe_portfolio.index.tolist())
 
         st.write("Min Volatility Portfolio:")
         st.write(min_volatility_portfolio)
+        st.write("Tickers: ", min_volatility_portfolio.index.tolist())
     
     except Exception as e:
         error_message(e)
