@@ -166,17 +166,35 @@ with tab3:
 
         # display the max sharpe portfolio
         st.write("Max Sharpe Portfolio:")
+
+        st.write("Return:")
         st.write(max_sharpe_portfolio['Return'])
+
+        st.write("Volatility:")
         st.write(max_sharpe_portfolio['Volatility'])
+
+        st.write("Sharpe Ratio:")
         st.write(max_sharpe_portfolio['Sharpe Ratio'])
-        st.write(max_sharpe_portfolio['Weights'])
+
+        st.write("Weights:")
+        for key, value in max_sharpe_portfolio['Weights'].items():
+            st.write(key + ": " + str(value))
 
         # display the min volatility portfolio
         st.write("Min Volatility Portfolio:")
+
+        st.write("Return:")
         st.write(min_volatility_portfolio['Return'])
+
+        st.write("Volatility:")
         st.write(min_volatility_portfolio['Volatility'])
+
+        st.write("Sharpe Ratio:")
         st.write(min_volatility_portfolio['Sharpe Ratio'])
-        st.write(min_volatility_portfolio['Weights'])
+
+        st.write("Weights:")
+        for key, value in min_volatility_portfolio['Weights'].items():
+            st.write(key + ": " + str(value))
     
     except Exception as e:
         error_message(e)
