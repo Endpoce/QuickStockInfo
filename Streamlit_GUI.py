@@ -164,13 +164,19 @@ with tab3:
         # display the efficient frontier
         st.plotly_chart(fig)
 
+        # display the max sharpe portfolio
         st.write("Max Sharpe Portfolio:")
-        st.write(max_sharpe_portfolio)
-        st.write("Tickers: ", max_sharpe_portfolio.index.tolist())
+        st.write(max_sharpe_portfolio['Return'])
+        st.write(max_sharpe_portfolio['Volatility'])
+        st.write(max_sharpe_portfolio['Sharpe Ratio'])
+        st.write(max_sharpe_portfolio['Weights'])
 
+        # display the min volatility portfolio
         st.write("Min Volatility Portfolio:")
-        st.write(min_volatility_portfolio)
-        st.write("Tickers: ", min_volatility_portfolio.index.tolist())
+        st.write(min_volatility_portfolio['Return'])
+        st.write(min_volatility_portfolio['Volatility'])
+        st.write(min_volatility_portfolio['Sharpe Ratio'])
+        st.write(min_volatility_portfolio['Weights'])
     
     except Exception as e:
         error_message(e)
