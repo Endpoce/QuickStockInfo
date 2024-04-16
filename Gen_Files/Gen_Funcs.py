@@ -3,7 +3,6 @@
 import yfinance as yf
 import streamlit as st
 import plotly.graph_objects as go
-import google.generativeai as gai
 import sys
 import linecache
 import pandas as pd
@@ -104,6 +103,7 @@ def get_price_info(info, hist, primary_ticker, start_of_year):
         
         # 
 
+# get wiki paragraphs
 def get_wiki_info(query):
 
     results = wikipedia.search(query)
@@ -121,7 +121,8 @@ def get_wiki_info(query):
             print("Page not found on Wikipedia")
     else:
         return None  # return None if no results found
-    
+
+# Display efficient frontier
 def get_efficient_frontier(num_portfolios, stock_data):
     """
     Get the expected returns and covariance matrix of a portfolio using the Efficient Frontier method. The 
@@ -167,6 +168,6 @@ def get_efficient_frontier(num_portfolios, stock_data):
     fig.add_trace(go.Scatter(x=results_df['Volatility'], y=results_df['Return'], mode='markers', name='Portfolios'))
     fig.add_trace(go.Scatter(x=[max_sharpe_portfolio['Volatility']], y=[max_sharpe_portfolio['Return']], mode='markers', marker=dict(color='red', size=10), name='Max Sharpe Ratio Portfolio'))
     fig.add_trace(go.Scatter(x=[min_volatility_portfolio['Volatility']], y=[min_volatility_portfolio['Return']], mode='markers', marker=dict(color='green', size=10), name='Min Volatility Portfolio'))
-    fig.update_layout(title='Efficient Frontier', xaxis_title='Risk', yaxis_title='Return')
+    fig.update_layout(title='Efficient Frontier', xaxis_title='Risk', yaxis_title='Return', layout_width=1000, layout_height=600)
     
-    return fig
+    return fig, max_sharpe_portfolio, min_volatility_portfolio

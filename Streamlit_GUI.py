@@ -4,7 +4,6 @@
 from datetime import timedelta, datetime, time
 import yfinance as yf
 import pandas as pd
-import openai
 from dotenv import load_dotenv
 import os
 
@@ -13,9 +12,7 @@ from Gen_Files.GetArticles import *
 from Gen_Files.Stock_Analyzer import *
 import streamlit as st
 from Gen_Files.Gen_Funcs import *
-import google.generativeai as gai
-import vertexai
-from vertexai.generative_models import GenerativeModel, Part
+
 
 # set env vars
 load_dotenv()
@@ -162,8 +159,17 @@ with tab3:
         error_message(e)
     
     try:
+        fig, max_sharpe_portfolio, min_volatility_portfolio = get_efficient_frontier(1000, stock_data)
+
         # display the efficient frontier
-        st.plotly_chart(get_efficient_frontier(10000, stock_data))
+        st.plotly_chart(fig)
+
+        with st.container:
+            st.write("Max Sharpe Portfolio:")
+            st.write(max_sharpe_portfolio)
+
+            st.write("Min Volatility Portfolio:")
+            st.write(min_volatility_portfolio)
     
     except Exception as e:
         error_message(e)
