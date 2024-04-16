@@ -164,12 +164,11 @@ with tab3:
         # display the efficient frontier
         st.plotly_chart(fig)
 
-        with st.container:
-            st.write("Max Sharpe Portfolio:")
-            st.write(max_sharpe_portfolio)
+        st.write("Max Sharpe Portfolio:")
+        st.write(max_sharpe_portfolio)
 
-            st.write("Min Volatility Portfolio:")
-            st.write(min_volatility_portfolio)
+        st.write("Min Volatility Portfolio:")
+        st.write(min_volatility_portfolio)
     
     except Exception as e:
         error_message(e)
