@@ -164,13 +164,15 @@ def get_efficient_frontier(num_portfolios, stock_data):
     max_sharpe_portfolio['Return'] = results_df['Return'].max()
     max_sharpe_portfolio['Volatility'] = results_df.loc[results_df['Sharpe Ratio'].idxmax()]['Volatility']
     max_sharpe_portfolio['Sharpe Ratio'] = results_df['Sharpe Ratio'].max()
-    max_sharpe_portfolio['Weights'] = list(zip(stock_data.columns, results_df.loc[results_df['Sharpe Ratio'].idxmax()]))
+    for i, stock in enumerate(stock_data.columns):
+        max_sharpe_portfolio[stock] = results_df.loc[results_df['Sharpe Ratio'].idxmax()][i]
 
     min_volatility_portfolio['Return'] = results_df.loc[results_df['Volatility'].idxmin()]['Return']
     min_volatility_portfolio['Volatility'] = results_df['Volatility'].min()
     min_volatility_portfolio['Sharpe Ratio'] = results_df.loc[results_df['Volatility'].idxmin()]['Sharpe Ratio']
-    min_volatility_portfolio['Weights'] = list(zip(stock_data.columns, results_df.loc[results_df['Volatility'].idxmin()]))
-    
+
+    for i, stock in enumerate(stock_data.columns):
+        min_volatility_portfolio[stock] = results_df.loc[results_df['Volatility'].idxmin()][i]    
 
     # Plot the Efficient Frontier
     fig = go.Figure()
