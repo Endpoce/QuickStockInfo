@@ -178,7 +178,7 @@ with tab3:
 
         # display the weights from the max sharpe portfolio
         st.write("Weights:")
-        for key, value in max_sharpe_portfolio.items():
+        for key, value in max_sharpe_portfolio['tickers'].items():
             if key in tickers:
                 st.write(key + ": " + str(value))
 
@@ -196,7 +196,7 @@ with tab3:
         st.write(min_volatility_portfolio['Sharpe Ratio'])
 
         st.write("Weights:")
-        for key, value in min_volatility_portfolio.items():
+        for key, value in min_volatility_portfolio['tickers'].items():
             if key in tickers:
                 st.write(key + ": " + str(value))
     
