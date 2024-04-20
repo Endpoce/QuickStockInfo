@@ -176,9 +176,11 @@ with tab3:
         st.write("Sharpe Ratio:")
         st.write(max_sharpe_portfolio['Sharpe Ratio'])
 
+        # display the weights
         st.write("Weights:")
         for key, value in max_sharpe_portfolio['Weights']:
             st.write(key + ": " + str(value))
+
 
         # display the min volatility portfolio
         st.write("Min Volatility Portfolio:")
