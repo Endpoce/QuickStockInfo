@@ -178,9 +178,9 @@ with tab3:
 
         # display the weights from the max sharpe portfolio
         st.write("Weights:")
-        for key, value in max_sharpe_portfolio['tickers']:
+        for key in max_sharpe_portfolio['tickers']:
             if key in tickers:
-                st.write(key + ": " + str(value))
+                st.write(key + ": " + str(max_sharpe_portfolio['weights'][key]))
 
 
         # display the min volatility portfolio
