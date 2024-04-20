@@ -180,7 +180,7 @@ with tab3:
         st.write("Weights:")
         for key in max_sharpe_portfolio['tickers']:
             if key in tickers:
-                st.write(key + ": " + str(max_sharpe_portfolio['weights'][key]))
+                st.write(key + ": " + str(max_sharpe_portfolio['tickers'][key]))
 
 
         # display the min volatility portfolio
