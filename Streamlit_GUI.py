@@ -196,8 +196,9 @@ with tab3:
         st.write(min_volatility_portfolio['Sharpe Ratio'])
 
         st.write("Weights:")
-        for key, value in min_volatility_portfolio['Weights']:
-            st.write(key + ": " + str(value))
+        for key, value in min_volatility_portfolio.items():
+            if key in tickers:
+                st.write(key + ": " + str(value))
     
     except Exception as e:
         error_message(e)
