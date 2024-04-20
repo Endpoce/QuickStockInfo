@@ -179,7 +179,7 @@ with tab3:
         # display the weights from the max sharpe portfolio
         st.write("Weights:")
         for key, value in max_sharpe_portfolio.items():
-            if key in stock_data.columns:
+            if key in stock_data:
                 st.write(key + ": " + str(value))
 
 
