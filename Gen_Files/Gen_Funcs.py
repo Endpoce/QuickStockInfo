@@ -129,8 +129,6 @@ def get_efficient_frontier(num_portfolios, stock_data):
     Efficient Frontier method is a mathematical optimization technique used to find the set of optimal portfolios
     that offer the highest expected return for a given level of risk or the lowest risk for a given level of expected return.
     """
-    # add primary ticker to stock data
-    
 
     # Calculate daily returns
     returns = stock_data.pct_change()
@@ -139,7 +137,6 @@ def get_efficient_frontier(num_portfolios, stock_data):
     expected_returns = returns.mean()
     cov_matrix = returns.cov()
 
-    # Initialize results array
     results = np.zeros((3,num_portfolios))
     weights_record = []
 
@@ -157,7 +154,7 @@ def get_efficient_frontier(num_portfolios, stock_data):
     # Convert results array to pandas DataFrame
     results_df = pd.DataFrame(results.T, columns=['Return', 'Volatility', 'Sharpe Ratio'])
 
-    # Find portfolios with maximum Sharpe ratio and min risk and store the weights of each stock in the portfolio
+    # Find portfolios with maximum Sharpe ratio and min risk and store the weights and associated stock names
     max_sharpe_portfolio = {}
     min_volatility_portfolio = {}
 
@@ -165,14 +162,14 @@ def get_efficient_frontier(num_portfolios, stock_data):
     max_sharpe_portfolio['Volatility'] = results_df.loc[results_df['Sharpe Ratio'].idxmax()]['Volatility']
     max_sharpe_portfolio['Sharpe Ratio'] = results_df['Sharpe Ratio'].max()
     for i, stock in enumerate(stock_data.columns):
-        max_sharpe_portfolio[stock] = results_df.loc[results_df['Sharpe Ratio'].idxmax()][i]
+        max_sharpe_portfolio[stock] = weights_record[results_df['Sharpe Ratio'].idxmax()][i] * 100  # weight as percentage
 
     min_volatility_portfolio['Return'] = results_df.loc[results_df['Volatility'].idxmin()]['Return']
     min_volatility_portfolio['Volatility'] = results_df['Volatility'].min()
     min_volatility_portfolio['Sharpe Ratio'] = results_df.loc[results_df['Volatility'].idxmin()]['Sharpe Ratio']
 
     for i, stock in enumerate(stock_data.columns):
-        min_volatility_portfolio[stock] = results_df.loc[results_df['Volatility'].idxmin()][i]    
+        min_volatility_portfolio[stock] = weights_record[results_df['Volatility'].idxmin()][i] * 100  # weight as percentage
 
     # Plot the Efficient Frontier
     fig = go.Figure()
