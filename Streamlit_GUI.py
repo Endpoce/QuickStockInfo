@@ -178,7 +178,7 @@ with tab3:
 
         # display the weights from the max sharpe portfolio
         st.write("Weights:")
-        for key, value in max_sharpe_portfolio:
+        for key, value in max_sharpe_portfolio.items():
             if key != "Return" and key != "Volatility" and key != "Sharpe Ratio":
                 st.write(key + ": " + str(value))
 
