@@ -176,7 +176,7 @@ with tab3:
         st.write("Sharpe Ratio:")
         st.write(max_sharpe_portfolio['Sharpe Ratio'])
 
-        # display the weights
+        # display the weights from the max sharpe portfolio
         st.write("Weights:")
         for key, value in max_sharpe_portfolio['Weights']:
             st.write(key + ": " + str(value))
