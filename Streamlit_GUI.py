@@ -168,37 +168,35 @@ with tab3:
         st.write("Max Sharpe Portfolio:")
 
         st.write("Return:")
-        st.write(max_sharpe_portfolio['Return'])
+        st.markdown(max_sharpe_portfolio['Return'])
 
         st.write("Volatility:")
-        st.write(max_sharpe_portfolio['Volatility'])
+        st.markdown(max_sharpe_portfolio['Volatility'])
 
         st.write("Sharpe Ratio:")
-        st.write(max_sharpe_portfolio['Sharpe Ratio'])
+        st.markdown(max_sharpe_portfolio['Sharpe Ratio'])
 
         # display the weights from the max sharpe portfolio
         st.write("Weights:")
         for key, value in max_sharpe_portfolio['tickers'].items():
-            if key in tickers:
-                st.write(key + ": " + str(value))
+            st.write(key + ": " + str(value))
 
 
         # display the min volatility portfolio
         st.write("Min Volatility Portfolio:")
 
         st.write("Return:")
-        st.write(min_volatility_portfolio['Return'])
+        st.markdown(min_volatility_portfolio['Return'])
 
         st.write("Volatility:")
-        st.write(min_volatility_portfolio['Volatility'])
+        st.markdown(min_volatility_portfolio['Volatility'])
 
         st.write("Sharpe Ratio:")
-        st.write(min_volatility_portfolio['Sharpe Ratio'])
+        st.markdown(min_volatility_portfolio['Sharpe Ratio'])
 
         st.write("Weights:")
         for key, value in min_volatility_portfolio['tickers'].items():
-            if key in tickers:
-                st.write(key + ": " + str(value))
+            st.write(key + ": " + str(value))
     
     except Exception as e:
         error_message(e)
