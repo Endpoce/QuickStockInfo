@@ -138,7 +138,7 @@ def get_efficient_frontier(num_portfolios, stock_data):
     cov_matrix = returns.cov()
 
     results = np.zeros((3,num_portfolios))
-    weights_record = []
+    weights_record = {}
 
     # Simulate random portfolio allocations
     for i in range(num_portfolios):
@@ -156,19 +156,23 @@ def get_efficient_frontier(num_portfolios, stock_data):
 
     # Find portfolios with maximum Sharpe ratio and min risk and store weights and tickers
     max_sharpe_portfolio = {}
+    max_sharpe_portfolio['tickers'] = {}
+    max_sharpe_portfolio['weights'] = {}
     min_volatility_portfolio = {}
+    min_volatility_portfolio['tickers'] = {}
+    min_volatility_portfolio['weights'] = {}
 
     max_sharpe_portfolio['Return'] = results_df['Return'].max()
-    max_sharpe_portfolio['Volatility'] = results_df.loc[results_df['Sharpe Ratio'].idxmax()]['Volatility']
+    max_sharpe_portfolio['Volatility'] = results_df['Volatility'].min()
     max_sharpe_portfolio['Sharpe Ratio'] = results_df['Sharpe Ratio'].max()
-    max_sharpe_portfolio['weights'] = weights_record[results_df['Sharpe Ratio'].idxmax()] * 100  # weights as percentages
-    max_sharpe_portfolio['tickers'] = list(stock_data.columns)  # get tickers from column names
+    max_sharpe_portfolio['tickers'] = stock_data.columns
+    max_sharpe_portfolio['weights'] = weights_record[results_df['Sharpe Ratio'].idxmax()]
 
-    min_volatility_portfolio['Return'] = results_df.loc[results_df['Volatility'].idxmin()]['Return']
+    min_volatility_portfolio['Return'] = results_df['Return'].min()
     min_volatility_portfolio['Volatility'] = results_df['Volatility'].min()
-    min_volatility_portfolio['Sharpe Ratio'] = results_df.loc[results_df['Volatility'].idxmin()]['Sharpe Ratio']
-    min_volatility_portfolio['weights'] = weights_record[results_df['Volatility'].idxmin()] * 100  # weights as percentages
-    min_volatility_portfolio['tickers'] = list(stock_data.columns)  # get tickers from column names
+    min_volatility_portfolio['Sharpe Ratio'] = results_df['Sharpe Ratio'].min()
+    min_volatility_portfolio['tickers'] = stock_data.columns
+    min_volatility_portfolio['weights'] = weights_record[results_df['Volatility'].idxmin()]
 
     # Plot the Efficient Frontier
     fig = go.Figure()
