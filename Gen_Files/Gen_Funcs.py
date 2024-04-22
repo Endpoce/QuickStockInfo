@@ -158,16 +158,16 @@ def get_efficient_frontier(num_portfolios, stock_data):
         max_sharpe_portfolio = results_df.iloc[results_df['Sharpe Ratio'].idxmax()]
         min_volatility_portfolio = results_df.iloc[results_df['Volatility'].idxmin()]
 
-        # get the weights of the max sharpe portfolio
+        # get the weights and stocks of the max sharpe portfolio
         max_sharpe_portfolio_weights = weights_record[results_df['Sharpe Ratio'].idxmax()]
         max_sharpe_portfolio_weights = [(stock_data.columns[i], max_sharpe_portfolio_weights[i]) for i in range(len(max_sharpe_portfolio_weights))]
         max_sharpe_portfolio['Weights'] = max_sharpe_portfolio_weights
 
-        # get the weights of the min volatility portfolio
+        # get the weights and stocks of the min volatility portfolio
         min_volatility_portfolio_weights = weights_record[results_df['Volatility'].idxmin()]
         min_volatility_portfolio_weights = [(stock_data.columns[i], min_volatility_portfolio_weights[i]) for i in range(len(min_volatility_portfolio_weights))]
         min_volatility_portfolio['Weights'] = min_volatility_portfolio_weights
-        
+
 
         # Plot the Efficient Frontier
         fig = go.Figure()

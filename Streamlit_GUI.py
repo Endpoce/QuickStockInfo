@@ -137,6 +137,7 @@ with tab3:
     st.subheader("Efficient Frontier")
     try:
         portfolio_tickers = st.text_input("Portfolio Tickers (comma separated):").upper()
+        col1, col2 = st.columns((1, 1))
     except Exception as e:
         pass
     # get stock data for the input tickers
@@ -161,45 +162,46 @@ with tab3:
     try:
         fig, max_sharpe_portfolio, min_volatility_portfolio = get_efficient_frontier(1000, stock_data)
 
-        # display the efficient frontier
-        st.plotly_chart(fig, use_container_width=True)
+        with col1:
+            # display the efficient frontier
+            st.plotly_chart(fig, use_container_width=True)
 
-        # display the max sharpe portfolio
-        st.write("Max Sharpe Portfolio:")
+            # display the max sharpe portfolio
+            st.write("Max Sharpe Portfolio:")
 
-        st.write("Return:")
-        st.markdown(max_sharpe_portfolio['Return'])
+            st.write("Return:")
+            st.markdown(max_sharpe_portfolio['Return'])
 
-        st.write("Volatility:")
-        st.markdown(max_sharpe_portfolio['Volatility'])
+            st.write("Volatility:")
+            st.markdown(max_sharpe_portfolio['Volatility'])
 
-        st.write("Sharpe Ratio:")
-        st.markdown(max_sharpe_portfolio['Sharpe Ratio'])
+            st.write("Sharpe Ratio:")
+            st.markdown(max_sharpe_portfolio['Sharpe Ratio'])
 
-        # display the weights from the max sharpe portfolio
-        st.write("Weights:")
-        for key, value in max_sharpe_portfolio['Weights']:
-            if key in tickers or key in portfolio_tickers:
+            # display the weights from the max sharpe portfolio
+            st.write("Weights:")
+            for key, value in max_sharpe_portfolio['Weights']:
                 st.write(key + ": " + str(value))
             
 
+        with col2:
+            # display the min volatility portfolio
+            st.write("Min Volatility Portfolio:")
 
-        # display the min volatility portfolio
-        st.write("Min Volatility Portfolio:")
+            st.write("Return:")
+            st.markdown(min_volatility_portfolio['Return'])
 
-        st.write("Return:")
-        st.markdown(min_volatility_portfolio['Return'])
+            st.write("Volatility:")
+            st.markdown(min_volatility_portfolio['Volatility'])
 
-        st.write("Volatility:")
-        st.markdown(min_volatility_portfolio['Volatility'])
+            st.write("Sharpe Ratio:")
+            st.markdown(min_volatility_portfolio['Sharpe Ratio'])
 
-        st.write("Sharpe Ratio:")
-        st.markdown(min_volatility_portfolio['Sharpe Ratio'])
-
-        st.write("Weights:")
-        for key, value in min_volatility_portfolio['Weights']:
-            if key in tickers or key in portfolio_tickers:
+            # display the weights of each stock from the min volatility portfolio
+            st.write("Weights:")
+            for key, value in min_volatility_portfolio['Weights']:
                 st.write(key + ": " + str(value))
+
     
     except Exception as e:
         error_message(e)
