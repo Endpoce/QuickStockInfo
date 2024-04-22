@@ -175,7 +175,7 @@ def get_efficient_frontier(num_portfolios, stock_data):
         min_volatility_portfolio['weights'] = weights_record[results_df['Volatility'].idxmin()]
 
         # identify the max sharpe portfolio
-        max_sharpe_portfolio['tickers'] = {max_sharpe_portfolio['tickers'][i]: max_sharpe_portfolio['weights'][i] for i in range(len(max_sharpe_portfolio['tickers']))}
+        max_sharpe_portfolio['tickers'] = {max_sharpe_portfolio['tickers'][i]: max_sharpe_portfolio['weights'][i] for i in range(len(max_sharpe_portfolio['tickers']) )}
 
         # identify the min volatility portfolio
         min_volatility_portfolio['tickers'] = {min_volatility_portfolio['tickers'][i]: min_volatility_portfolio['weights'][i] for i in range(len(min_volatility_portfolio['tickers']) )}
