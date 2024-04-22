@@ -162,7 +162,7 @@ with tab3:
         fig, max_sharpe_portfolio, min_volatility_portfolio = get_efficient_frontier(1000, stock_data)
 
         # display the efficient frontier
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, use_container_width=True)
 
         # display the max sharpe portfolio
         st.write("Max Sharpe Portfolio:")
