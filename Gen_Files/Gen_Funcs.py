@@ -174,13 +174,19 @@ def get_efficient_frontier(num_portfolios, stock_data):
     min_volatility_portfolio['tickers'] = stock_data.columns
     min_volatility_portfolio['weights'] = weights_record[results_df['Volatility'].idxmin()]
 
+    # identify the max sharpe portfolio
+    max_sharpe_portfolio['tickers'] = {max_sharpe_portfolio['tickers'][i]: max_sharpe_portfolio['weights'][i] for i in range(len(max_sharpe_portfolio['tickers']))}
+
+    # identify the min volatility portfolio
+    min_volatility_portfolio['tickers'] = {min_volatility_portfolio['tickers'][i]: min_volatility_portfolio['weights'][i] for i in range(len(min_volatility_portfolio['tickers']) )}
+
     # Plot the Efficient Frontier
     fig = go.Figure()
 
     # Add trace for portfolios
-    fig.add_trace(go.Scatter(x=results_df['Volatility'], y=results_df['Return'], mode='markers', name='Portfolios'))
-    fig.add_trace(go.Scatter(x=[max_sharpe_portfolio['Volatility']], y=[max_sharpe_portfolio['Return']], mode='markers', marker=dict(color='red', size=10), name='Max Sharpe Portfolio'))
-    fig.add_trace(go.Scatter(x=[min_volatility_portfolio['Volatility']], y=[min_volatility_portfolio['Return']], mode='markers', marker=dict(color='green', size=10), name='Min Volatility Portfolio'))
+    fig.add_trace(go.Scatter(x=results_df['Volatility'], y=results_df['Return'], mode='markers', marker=dict(size=8, color=results_df['Sharpe Ratio'], colorscale='Viridis', showscale=True)))
+    fig.add_trace(go.Scatter(x=[max_sharpe_portfolio['Volatility']], y=[max_sharpe_portfolio['Return']], mode='markers', marker=dict(size=12, color='red', line=dict(color='black', width=2)), name='Max Sharpe Portfolio'))
+    fig.add_trace(go.Scatter(x=[min_volatility_portfolio['Volatility']], y=[min_volatility_portfolio['Return']], mode='markers', marker=dict(size=12, color='blue', line=dict(color='black', width=2)), name='Min Volatility Portfolio'))
     fig.update_layout(title='Efficient Frontier', xaxis_title='Risk', yaxis_title='Return')
     
     return fig, max_sharpe_portfolio, min_volatility_portfolio
