@@ -179,7 +179,8 @@ with tab3:
         # display the weights from the max sharpe portfolio
         st.write("Weights:")
         for key, value in max_sharpe_portfolio['tickers'].items():
-            st.write(key + ": " + str(value))
+            if key in stock_data.columns:
+                st.write(key + ": " + str(value))
 
 
         # display the min volatility portfolio
@@ -196,7 +197,8 @@ with tab3:
 
         st.write("Weights:")
         for key, value in min_volatility_portfolio['tickers'].items():
-            st.write(key + ": " + str(value))
+            if key in stock_data.columns:
+                st.write(key + ": " + str(value))
     
     except Exception as e:
         error_message(e)
