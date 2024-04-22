@@ -155,10 +155,21 @@ def get_efficient_frontier(num_portfolios, stock_data):
         results_df = pd.DataFrame(results.T, columns=['Return', 'Volatility', 'Sharpe Ratio'])
 
         # Find portfolios with maximum Sharpe ratio and min risk and store weights and tickers
-        max_sharpe_portfolio = results_df.iloc[results_df['Sharpe Ratio'].idxmax()]
+        max_sharpe_portfolio = {}
+
+        max_sharpe_portfolio['Return'] = results_df['Return'].max()
+        max_sharpe_portfolio['Volatility'] = results_df[results_df['Return'] == max_sharpe_portfolio['Return']]['Volatility'].values[0]
+        max_sharpe_portfolio['Sharpe Ratio'] = results_df['Sharpe Ratio'].idxmax()
         max_sharpe_portfolio['Weights'] = weights_record[results_df['Sharpe Ratio'].idxmax()]
-        min_volatility_portfolio = results_df.iloc[results_df['Volatility'].idxmin()]
-        min_volatility_portfolio['Weights'] = weights_record[results_df['Volatility'].idxmin()]
+
+        min_volatility_portfolio = {}
+
+        min_volatility_portfolio['Return'] = results_df['Return'].min()
+        min_volatility_portfolio['Volatility'] = results_df[results_df['Return'] == min_volatility_portfolio['Return']]['Volatility'].values[0]
+        min_volatility_portfolio['Sharpe Ratio'] = results_df['Sharpe Ratio'].idxmin()
+        min_volatility_portfolio['Weights'] = weights_record[results_df['Return'].idxmin()]
+
+
 
         # Plot the Efficient Frontier
         fig = go.Figure()
