@@ -138,38 +138,31 @@ def get_efficient_frontier(num_portfolios, stock_data):
         cov_matrix = returns.cov()
 
         results = np.zeros((3,num_portfolios))
+        results_dict = {}
         weights_record = {}
 
         # Simulate random portfolio allocations and save results of each portfolio
         for i in range(num_portfolios):
-            # Generate random weights
             weights = np.random.random(len(stock_data.columns))
             weights /= np.sum(weights)
+            returns = np.sum(expected_returns * weights) * 252
+            volatility = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights))) * np.sqrt(252)
+            sharpe_ratio = returns / volatility
+            results[0,i] = returns
+            results[1,i] = volatility
+            results[2,i] = sharpe_ratio
+            results_dict[i] = [returns, volatility, sharpe_ratio]
             weights_record[i] = weights
-
-            # Calculate portfolio return, volatility, and Sharpe ratio
-            portfolio_return = np.sum(expected_returns * weights) * 252
-            portfolio_volatility = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights))) * np.sqrt(252)
-            sharpe_ratio = portfolio_return / portfolio_volatility
-
-            # Save results
-            results = {}
-            results[0] = portfolio_return
-            results[1] = portfolio_volatility
-            results[2] = sharpe_ratio
-
+        
         # Create a DataFrame to store the results
         results_df = pd.DataFrame(results.T, columns=['Return', 'Volatility', 'Sharpe Ratio'])
 
         # Find portfolios with maximum Sharpe ratio and min risk and store weights and tickers
-        max_sharpe_portfolio = results_df.loc[results_df['Sharpe Ratio'].idxmax()]
-        min_volatility_portfolio = results_df.loc[results_df['Volatility'].idxmin()]
+        max_sharpe_portfolio = results_df.iloc[results_df['Sharpe Ratio'].idxmax()]
+        min_volatility_portfolio = results_df.iloc[results_df['Volatility'].idxmin()]
 
-        # get the stock allocations for the max sharpe portfolio
-        max_sharpe_portfolio['Weights'] = [(stock_data.columns[i], max_sharpe_portfolio[i]) for i in range(len(stock_data.columns))]
-        min_volatility_portfolio['Weights'] = [(stock_data.columns[i], min_volatility_portfolio[i]) for i in range(len(stock_data.columns))]
-
-
+        max_sharpe_portfolio['Weights'] = list(zip(stock_data.columns, weights_record[results_df['Sharpe Ratio'].idxmax()]))
+        min_volatility_portfolio['Weights'] = list(zip(stock_data.columns, weights_record[results_df['Volatility'].idxmin()]))
 
         # Plot the Efficient Frontier
         fig = go.Figure()
