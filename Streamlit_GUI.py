@@ -21,7 +21,7 @@ load_dotenv()
 yf.pdr_override()
 
 # Page config (Title at top and icon at top )
-st.set_page_config(layout='wide', initial_sidebar_state="expanded")
+st.set_page_config(layout='wide', initial_sidebar_state="expanded", )
 
 
 # set page parameters
@@ -140,70 +140,73 @@ with tab3:
         col1, col2 = st.columns((1, 1))
     except Exception as e:
         pass
-    # get stock data for the input tickers
-    try:
-        # add the primary ticker to the list of tickers
-        tickers = portfolio_tickers.split(",") + [primary_ticker]
 
-        # create a dict to store stock data
-        stock_data = {}
+    if portfolio_tickers != "":
+        # get stock data for the input tickers
+        try:
+            # add the primary ticker to the list of tickers
+            tickers = portfolio_tickers.split(",") + [primary_ticker]
 
-        # get stock data
-        for ticker in tickers:
-            stock_data = yf.download(ticker, start_date, end_date)
-            stock_data[ticker] = stock_data["Close"]
+            # create a dict to store stock data
+            stock_data = {}
 
-        stock_data = pd.DataFrame(stock_data)
+            # get stock data
+            for ticker in tickers:
+                stock_data = yf.download(ticker, start_date, end_date)
+                stock_data[ticker] = stock_data["Close"]
+
+            stock_data = pd.DataFrame(stock_data)
 
 
-    except Exception as e:
-        error_message(e)
+        except Exception as e:
+            error_message(e)
     
     try:
-        fig, max_sharpe_portfolio, min_volatility_portfolio = get_efficient_frontier(1000, stock_data)
+        if portfolio_tickers != "":
+            fig, max_sharpe_portfolio, min_volatility_portfolio, results_dict = get_efficient_frontier(1000, stock_data)
 
-        # display the efficient frontier
-        st.plotly_chart(fig, use_container_width=True)
+            # display the efficient frontier
+            st.plotly_chart(fig, use_container_width=True)
 
 
-        with col1:
-            # display the max sharpe portfolio
-            st.write("Max Sharpe Portfolio:")
+            with col1:
+                # display the max sharpe portfolio
+                st.write("Max Sharpe Portfolio:")
 
-            st.write("Return:")
-            st.markdown(max_sharpe_portfolio['Return'])
+                st.write("Return:")
+                st.markdown(max_sharpe_portfolio['Return'])
 
-            st.write("Volatility:")
-            st.markdown(max_sharpe_portfolio['Volatility'])
+                st.write("Volatility:")
+                st.markdown(max_sharpe_portfolio['Volatility'])
 
-            st.write("Sharpe Ratio:")
-            st.markdown(max_sharpe_portfolio['Sharpe Ratio'])
+                st.write("Sharpe Ratio:")
+                st.markdown(max_sharpe_portfolio['Sharpe Ratio'])
 
-            # display the weights from the max sharpe portfolio
-            st.write("Weights:")
-            for key, value in max_sharpe_portfolio['Weights']:
-                if key in tickers:
-                    st.write(key + ": " + str(value))
-            
+                # display the weights from the max sharpe portfolio
+                st.write("Weights:")
+                for key, value in results_dict['Weights']:
+                    if key in tickers:
+                        st.write(key + ": " + str(value))
+                
 
-        with col2:
-            # display the min volatility portfolio
-            st.write("Min Volatility Portfolio:")
+            with col2:
+                # display the min volatility portfolio
+                st.write("Min Volatility Portfolio:")
 
-            st.write("Return:")
-            st.markdown(min_volatility_portfolio['Return'])
+                st.write("Return:")
+                st.markdown(min_volatility_portfolio['Return'])
 
-            st.write("Volatility:")
-            st.markdown(min_volatility_portfolio['Volatility'])
+                st.write("Volatility:")
+                st.markdown(min_volatility_portfolio['Volatility'])
 
-            st.write("Sharpe Ratio:")
-            st.markdown(min_volatility_portfolio['Sharpe Ratio'])
+                st.write("Sharpe Ratio:")
+                st.markdown(min_volatility_portfolio['Sharpe Ratio'])
 
-            # display the weights of each stock from the min volatility portfolio
-            st.write("Weights:")
-            for key, value in min_volatility_portfolio['Weights']:
-                if key in tickers:
-                    st.write(key + ": " + str(value))
+                # display the weights of each stock from the min volatility portfolio
+                st.write("Weights:")
+                for key, value in results_dict['Weights']:
+                    if key in tickers:
+                        st.write(key + ": " + str(value))
 
     
     except Exception as e:
@@ -211,16 +214,18 @@ with tab3:
 
 ### tab 4: AI Analysis
 with tab4:
-    try:        
-        # plot price stock data                
-        plot_stock_with_interactive_chart(primary_ticker, hist)
+    try:
+        if primary_ticker != "":            
+            # plot price stock data                
+            plot_stock_with_interactive_chart(primary_ticker, hist)
         
     except Exception as e:
         error_message(e)
 
     try:
-        # analyze stock data
-        st.write(google_summary(hist, info))
+        if primary_ticker != "":
+            # analyze stock data
+            st.write(google_summary(hist, info))
     
     except Exception as e:
         error_message(e)
@@ -237,6 +242,6 @@ with tab4:
             #     col2.write(article['title'])
             #     col2.write(article['url'])
 
-            st.write("Placeholder text for article analysis")
+            st.markdown("***Placeholder text for article analysis***")
     except Exception as e:
         error_message(e)
