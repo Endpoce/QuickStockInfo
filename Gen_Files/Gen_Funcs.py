@@ -123,14 +123,21 @@ def get_wiki_info(query):
 # Display efficient frontier
 def get_efficient_frontier(num_portfolios, stock_data):
     """
-    Get the expected returns and covariance matrix of a portfolio using the Efficient Frontier method. The 
-    Efficient Frontier method is a mathematical optimization technique used to find the set of optimal portfolios
-    that offer the highest expected return for a given level of risk or the lowest risk for a given level of expected return.
+    Get the expected returns and covariance matrix of a portfolio using the Efficient Frontier method.
+
+    Args:
+        num_portfolios: Number of portfolios to simulate.
+        stock_data: Pandas DataFrame containing asset returns.
+
+    Returns:
+        results_dict: Dictionary containing portfolio data.
+        max_sharpe_portfolio: Dictionary containing the maximum Sharpe ratio portfolio.
+        min_volatility_portfolio: Dictionary containing the minimum volatility portfolio.
     """
     try:
         # Calculate daily returns
         returns = stock_data.pct_change()
-        
+
         # Calculate expected returns and covariance matrix
         expected_returns = returns.mean()
         cov_matrix = returns.cov()
@@ -140,7 +147,7 @@ def get_efficient_frontier(num_portfolios, stock_data):
         results_dict = {}
         weights = {}
         max_sharpe = 0
-        min_volatility = 0
+        min_volatility = float('inf')
         max_sharpe_portfolio = {}
         min_volatility_portfolio = {}
 
@@ -161,46 +168,46 @@ def get_efficient_frontier(num_portfolios, stock_data):
             results_dict['Sharpe Ratio'] = sharpe_ratio
             results_dict['Weights'] = weights
 
-            # Store results in a list
+            # Store results in a list (optional)
             results[i] = [returns, volatility, sharpe_ratio, weights]
 
             # Find the portfolio with the minimum volatility
-            min_volatility_portfolio
-            
+            if volatility < min_volatility:
+                min_volatility = volatility
+                min_volatility_portfolio = results_dict.copy()
+
+            # Find the portfolio with the maximum Sharpe ratio
             if sharpe_ratio > max_sharpe:
                 max_sharpe = sharpe_ratio
-                max_sharpe_portfolio = {"Return": returns, "Volatility": volatility, "Sharpe Ratio": sharpe_ratio, "Weights": weights}
+                max_sharpe_portfolio = results_dict.copy()
 
 
+            # Extract data for plotting
+            returns = [result['Returns'] for result in results_dict.values()]
+            volatilities = [result['Volatility'] for result in results_dict.values()]
 
+            # Create the scatter plot
+            fig = go.Figure(data=go.Scatter(
+                x=volatilities,
+                y=returns,
+                mode='markers',
+                marker=dict(
+                    size=8,
+                    color=returns,  # Color points based on returns
+                    colorscale='Viridis',
+                    opacity=0.7
+                )
+            ))
 
-        # Extract data for plotting
-        returns = [result['Returns'] for result in results_dict.values()]
-        volatilities = [result['Volatility'] for result in results_dict.values()]
-
-        # Create the scatter plot
-        fig = go.Figure(data=go.Scatter(
-            x=volatilities,
-            y=returns,
-            mode='markers',
-            marker=dict(
-                size=8,
-                color=returns,  # Color points based on returns
-                colorscale='Viridis',
-                opacity=0.7
+            # Add layout elements
+            fig.update_layout(
+                title='Efficient Frontier',
+                xaxis_title='Volatility',
+                yaxis_title='Expected Return',
+                hovermode='closest'  # Enable hover information
             )
-        ))
 
-        # Add layout elements
-        fig.update_layout(
-            title='Efficient Frontier',
-            xaxis_title='Volatility',
-            yaxis_title='Expected Return',
-            hovermode='closest'  # Enable hover information
-        )
-
-        return fig, max_sharpe_portfolio, min_volatility_portfolio, results_dict
-        
+            return fig, max_sharpe_portfolio, min_volatility_portfolio, results_dict
     except Exception as e:
-        error_message(e)
+      error_message(e)
 
