@@ -170,6 +170,31 @@ def get_efficient_frontier(num_portfolios, stock_data):
             if sharpe_ratio > max_sharpe:
                 max_sharpe = sharpe_ratio
                 max_sharpe_portfolio = {"Return": returns, "Volatility": volatility, "Sharpe Ratio": sharpe_ratio, "Weights": weights}
+
+
+
+            # Create the scatter plot
+            fig = go.Figure(data=go.Scatter(
+                x=volatility,
+                y=returns,
+                mode='markers',
+                marker=dict(
+                    size=8,
+                    color=returns,  # Color points based on returns
+                    colorscale='Viridis',
+                    opacity=0.7
+                )
+            ))
+
+            # Add layout elements
+            fig.update_layout(
+                title='Efficient Frontier',
+                xaxis_title='Volatility',
+                yaxis_title='Expected Return',
+                hovermode='closest'  # Enable hover information
+            )
+
+
     except Exception as e:
         error_message(e)
 
