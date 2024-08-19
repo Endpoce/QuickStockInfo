@@ -17,9 +17,6 @@ from Gen_Files.Gen_Funcs import *
 # set env vars
 load_dotenv()
 
-# set pandas override
-yf.pdr_override()
-
 # Page config (Title at top and icon at top )
 st.set_page_config(layout='wide', initial_sidebar_state="expanded", )
 
