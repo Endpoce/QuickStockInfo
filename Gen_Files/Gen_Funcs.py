@@ -198,7 +198,9 @@ def get_efficient_frontier(num_portfolios, stock_data):
             yaxis_title='Expected Return',
             hovermode='closest'  # Enable hover information
         )
+
+        return fig, max_sharpe_portfolio, min_volatility_portfolio, results_dict
+        
     except Exception as e:
         error_message(e)
 
-    return fig, max_sharpe_portfolio, min_volatility_portfolio, results_dict
