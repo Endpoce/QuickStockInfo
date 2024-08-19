@@ -15,8 +15,6 @@ import random
 # set env vars
 dotenv.load_dotenv()
 
-# set pandas override
-yf.pdr_override()
 
 # error message
 def error_message(message):
