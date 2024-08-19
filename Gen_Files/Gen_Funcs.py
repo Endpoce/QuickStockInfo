@@ -183,7 +183,7 @@ def get_efficient_frontier(num_portfolios, stock_data):
 
 
             # Extract data for plotting
-            returns = [result['Returns'] for result in results_dict["Returns"]]
+            returns = [result['Returns'] for result in results_dict.values["Returns"]]
             volatilities = [result['Volatility'] for result in results_dict["Volatility"]]
 
             # Create the scatter plot
