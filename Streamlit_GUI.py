@@ -148,11 +148,8 @@ with tab3:
 
             # get stock data
             for ticker in tickers:
-                stock_data = yf.download(ticker, start_date, end_date)
-                stock_data[ticker] = stock_data["Close"]
-
-            stock_data = pd.DataFrame(stock_data)
-
+                stock_data[ticker] = yf.Ticker(ticker).history(start=start_date, end=end_date)
+                
 
         except Exception as e:
             error_message(e)
