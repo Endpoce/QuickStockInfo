@@ -149,7 +149,6 @@ with tab3:
             # get stock data
             for ticker in tickers:
                 stock_data[ticker] = yf.Ticker(ticker).history(start=start_date, end=end_date)
-                
 
         except Exception as e:
             error_message(e)
