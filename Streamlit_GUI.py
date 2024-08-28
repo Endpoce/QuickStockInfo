@@ -140,16 +140,8 @@ with tab3:
     if portfolio_tickers != "":
         # get stock data for the input tickers
         try:
-            # add the primary ticker to the list of tickers
-            tickers = portfolio_tickers.split(",") + [primary_ticker]
-
-            # create a dict to store stock data
-            stock_data = {}
-
-            # get stock data
-            for ticker in tickers:
-                stock_data[ticker] = yf.Ticker(ticker).history(start=start_date, end=end_date)
-
+            stock_data = get_stock_data(portfolio_tickers, start_date, end_date)
+            tickers = portfolio_tickers.split(",")
         except Exception as e:
             error_message(e)
     
