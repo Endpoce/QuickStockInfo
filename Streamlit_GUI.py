@@ -149,8 +149,11 @@ with tab3:
         if portfolio_tickers != "":
             fig, max_sharpe_portfolio, min_volatility_portfolio, results_dict = get_efficient_frontier(1000, stock_data)
 
+            container = st.container()
+
             # display the efficient frontier
-            st.plotly_chart(fig, use_container_width=True)
+            with container:
+                st.plotly_chart(fig, use_container_width=True)
 
 
             with col1:
