@@ -12,6 +12,9 @@ from Gen_Files.Stock_Analyzer import *
 import streamlit as st
 from Gen_Files.Gen_Funcs import *
 
+from signal import signal, SIGPIPE, SIG_DFL
+signal(SIGPIPE, SIG_DFL)
+
 
 # set env vars
 load_dotenv()
