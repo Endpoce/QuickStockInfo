@@ -7,7 +7,6 @@ import pandas as pd
 from dotenv import load_dotenv
 import os
 
-from Gen_Files.Wiki_GPT import *
 from Gen_Files.GetArticles import *
 from Gen_Files.Stock_Analyzer import *
 import streamlit as st

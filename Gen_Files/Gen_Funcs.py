@@ -183,29 +183,31 @@ def get_efficient_frontier(num_portfolios, stock_data):
 
 
             # Extract data for plotting
-            returns = [result['Returns'] for result in results_dict.values["Returns"]]
-            volatilities = [result['Volatility'] for result in results_dict["Volatility"]]
+            returns = [result['Returns'] for result in results_dict.values()]
+            volatilities = [result['Volatility'] for result in results_dict.values()]
 
-            # Create the scatter plot
-            fig = go.Figure(data=go.Scatter(
+            # Create efficient frontier plot
+            fig = go.Figure()
+
+            # Add efficient frontier
+            fig.add_trace(go.Scatter
+            (
                 x=volatilities,
                 y=returns,
                 mode='markers',
-                marker=dict(
-                    size=8,
-                    color=returns,  # Color points based on returns
-                    colorscale='Viridis',
-                    opacity=0.7
-                )
+                marker=dict(size=10, color='blue'),
+                name='Portfolios'
             ))
 
-            # Add layout elements
-            fig.update_layout(
-                title='Efficient Frontier',
-                xaxis_title='Volatility',
-                yaxis_title='Expected Return',
-                hovermode='closest'  # Enable hover information
-            )
+            # Add max Sharpe ratio portfolio
+            fig.add_trace(go.Scatter
+            (
+                x=[max_sharpe_portfolio['Volatility']],
+                y=[max_sharpe_portfolio['Returns']],
+                mode='markers',
+                marker=dict(size=12, color='red'),
+                name='Max Sharpe Ratio Portfolio'
+            ))
 
             return fig, max_sharpe_portfolio, min_volatility_portfolio, results_dict
     except Exception as e:

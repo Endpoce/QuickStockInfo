@@ -6,13 +6,9 @@ from datetime import datetime
 import sys
 
 import plotly.graph_objects as go
-import openai
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
-import google.generativeai as gai
 import streamlit as st
-import vertexai
-from vertexai.generative_models import GenerativeModel, Part
 
 load_dotenv()
 
